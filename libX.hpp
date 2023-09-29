@@ -31,6 +31,7 @@ class   String: public std::string
             const char          *cc_str() const;
             int                 wordCount();
             String              getWord(int which);
+            void                bigJoin(char *str1, char *str2, char *str3, char *str4, char *str5);
 };
 
 class   Toolbox

@@ -1,12 +1,40 @@
 #include "Server.hpp"
 
-static void privMsg_toUser()
-{}
+static void privmsg_toUser(Clients *client, String &entry, std::vector<Clients *> clientList)
+{
+    String  destUser;
+    String  msg;
+    int     i = 0;
 
-static void privMsg_toChannel()
-{}
+    if (entry.wordCount() == 2)
+    {
+        if (Utils::findClientFd(entry.getWord(1)) == -1)
+        {
+            msg.bigJoin(":Server 404 ", client.getNickname().c_str(), " : no such user", NULL, NULL);
+            send(client.getFd(), msg.c_str(), msg.size(), 0);//client does not exist
+        }
+        else
+        {
+            msg.bigJoin("", )
+            send(findClientFd(entry.getWord(1)));
+        }
+    }
 
-static int  privMsg_checkFormat(String &entry)
+
+
+    destUser = entry.getWord(1);
+    for (int i = 2; )
+
+    while (clientList[i])
+    {
+
+    }
+}
+
+//static void privmsg_toChannel(Client *client, String &entry)
+//{}
+
+static int  privmsg_checkFormat(String &entry)
 {
     int     type = 0;
     int     nbWords = entry.wordCount();
@@ -24,7 +52,7 @@ static int  privMsg_checkFormat(String &entry)
 
     if (nbWords == 2)
         return (type);
-    
+
     if (entry.getWord(2) != ":")
         return (0);
 
@@ -35,10 +63,10 @@ void    Server::privMsg(Client *client, String &entry)
 {
     entry -= "privmsg ";
 
-    if (privMsg_checkFormat(entry) == 1)
-        privMsg_toChannel();
-    else if (privMsg_checkFormat(entry) == 2)
-        privmsg_toUser();
+    if (privmsg_checkFormat(entry) == 1)
+        privmsg_toChannel(client, entry);
+    else if (privMsg_checkFormat(client, entry) == 2)
+        privmsg_toUser(client, entry, clientList);
     else
         send(client->getFd(), "privmsg: bad input", 18, 0);    
 }

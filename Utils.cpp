@@ -11,3 +11,15 @@ String  Utils::getCmd(String entry)
     return (cmd);
 }
 
+int     Utils::findClientFd(String &nickname, std::vector<Client *> clientList)
+{
+    int i = 0;
+    
+    while(i != clientList.size())
+    {
+        if (clientList[i].getNickname() == nickname)
+            return (clientList[i].getFd());
+        i++;
+    }
+    return (-1);
+}

@@ -177,12 +177,12 @@ int         String::wordCount()
     return (count); 
 }
 
-/*String      String::getWord(int which)
+String      String::getWord(int which)
 {
     String  tmp(*this);
     String  word;
     int     count = 0;
-    int     i;
+    int     i = 0;
     int     e;
 
     while (count != which && tmp[i])
@@ -192,20 +192,37 @@ int         String::wordCount()
         if (tmp[i] != '\0')
             count++;
         if (count != which)
-            for (; tmp[i] != ' ' & tmp[i]; i++);
+            for (; tmp[i] != ' ' && tmp[i]; i++);
     }
 
     if (tmp[i] != '\0')
     {
         e = i;
-        for (; tmp[e] != ' ' && tmp[e]; e++) ;
+        for (; tmp[e] != ' ' && tmp[e]; e++);
 
         word = tmp.substr(i, e - i);
 
         return (word);
     }
     return (tmp);
-}*/
+}
+
+void    String::bigJoin(char *str1, char *str2, char *str3, char *str4, char *str5)
+{
+    String tmp;
+
+    if (str1 != NULL)
+        tmp = str1;
+    if (str2 != NULL)    
+        tmp += str2;
+    if (str3 != NULL)
+        tmp += str3;
+    if (str4 != NULL)
+        tmp += str4;
+    if (str5 != NULL)
+        tmp += str5;
+    *this = tmp;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
