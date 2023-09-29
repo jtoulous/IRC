@@ -2,16 +2,30 @@
 
 #include "Server.hpp"
 
+#define vector          std::vector
+class Server;
+
 class Channel
 {
     public:
             Channel();
+            Channel(String name, String password, int admin);
+            bool        CheckChannelName(String name);
+            //bool        IfChannelExist(String name, int *index);
+            void        AddMembers(String name, String password);
 
+            //String        PrintCommandCanalForUser();
+
+            String      getName();
+            String      getPassword();
+            String      getTopic();
+            bool        getInviteOnly();
     private:
             String  name;
-            String  topic;
             String  password;
-            int     admin;
-            std::vector<int>    members;
-            std::vector<int>    loggingIn;
+            String  topic;
+            int     owner;
+            bool    invite_only;
+            vector<int>    members;
+            vector<int>    users;
 };

@@ -127,10 +127,11 @@ void    Server::servTreatClient(Client *client)
                 nick(client, entry);
             else if (cmd == "USER")
                 user(client, entry);
+            else if (cmd == "JOIN")
+                join(client, cmd, entry);
             //else if (cmd == "PRIVMSG")
             //    privMsg(client, entry);
-            else if (cmd == "JOIN")
-                join(client, entry);
+            
             //else if (CMD == "INVITE")  
         } 
     }
@@ -200,14 +201,6 @@ void    Server::user(Client *client, String &entry)
     client->setUsername(username);
     send(client->getFd(), "Username changed successfully\r\n", 31, 0);
     std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
-}
-
-
-void    Server::join(Client *client, String &entry)
-{
-    (void)entry;
-    send (client->getFd(), ":The_serveur 324 * #channel +tn\r\n", 33, 0);
-    std::cout << "was send" << std::endl;
 }
 
 //void    Server::ping()
