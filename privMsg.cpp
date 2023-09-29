@@ -15,7 +15,7 @@ static void privmsg_toUser(Clients *client, String &entry, std::vector<Clients *
         }
         else
         {
-            msg.bigJoin("", )
+            msg.bigJoin(client->getNickname().c_str(), )
             send(findClientFd(entry.getWord(1)));
         }
     }

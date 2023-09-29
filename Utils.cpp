@@ -23,3 +23,16 @@ int     Utils::findClientFd(String &nickname, std::vector<Client *> clientList)
     }
     return (-1);
 }
+
+int     Utils::findServerIndex(String &name, std::vector<Channel *> channelList)
+{
+    int i = 0;
+    
+    while(i != clientList.size())
+    {
+        if (channelList[i].getName() == name)
+            return (i);
+        i++;
+    }
+    return (-1);
+}
