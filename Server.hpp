@@ -46,7 +46,7 @@ class Server
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
                 void    join(Client *client, String cmd, String entry);
-
+               // void    privMsg(Client *client, String cmd, String entry);
                 //void    ping();
                 //void    invite();
 

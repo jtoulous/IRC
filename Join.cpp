@@ -12,7 +12,6 @@ int passSpace(String str) {
 void    Server::join(Client *client, String cmd, String entry) {
     
     String all = entry.substr(cmd.size(), entry.find('\0'));
-
     int owner;
     String name = all.substr(passSpace(all), all.find(' ', passSpace(all)));
     String password = all.substr(name.size() + passSpace(all), all.find('\0', name.size()));
@@ -28,7 +27,9 @@ void    Server::join(Client *client, String cmd, String entry) {
             std::cout << "Error channel invite only" << std::endl; 
             return ;    
         }*/
+        std::string message_user = ":" + client->getNickname() + " JOIN " /*+ this->channelList[index]->getName() */+ "\r\n";
         std::cout << "Push_back KO" << std::endl;
+        send (client->getFd(), message_user.c_str(), message_user.size(), 0);
         //String allcommands = this->channelList[index]->PrintCommandCanalForUser();
         //send(client->getFd(), allcommands.c_str(), allcommands.size(), 0);
         //send (client->getFd(), ":The_serveur 324 * #channel +tn\r\n", 33, 0);

@@ -120,7 +120,7 @@ void    Server::servTreatClient(Client *client)
         else
         {
             cmd = Utils::getCmd(entry);
-
+            std::cout << "cmd: " << cmd << std::endl;
             if (cmd == "PASS")
                 pass(client, entry);
             else if (cmd == "NICK")
@@ -129,8 +129,10 @@ void    Server::servTreatClient(Client *client)
                 user(client, entry);
             else if (cmd == "JOIN")
                 join(client, cmd, entry);
-            //else if (cmd == "PRIVMSG")
-            //    privMsg(client, entry);
+            //else if (cmd == "INVITE")
+              //  invite(client, cmd, entry);
+           // else if (cmd == "PRIVMSG")
+             //   privMsg(client, cmd   , entry);
             
             //else if (CMD == "INVITE")  
         } 
@@ -202,9 +204,6 @@ void    Server::user(Client *client, String &entry)
     send(client->getFd(), "Username changed successfully\r\n", 31, 0);
     std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
 }
-
-//void    Server::ping()
-//{}
 
 //void    Server::invite()
 //{}
