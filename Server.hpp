@@ -44,7 +44,7 @@ class Server
 
                 vector<Channel *>       channelList;
                 bool    CheckChannelName(String name);
-                bool    IfChannelExist(String name, int *index);
+                bool    IfChannelExist(String name);
                 void    join(Client *client, String cmd, String entry);
 
                 //void    ping();

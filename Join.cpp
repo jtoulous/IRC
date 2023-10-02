@@ -38,7 +38,7 @@ void    Server::join(Client *client, String cmd, String entry) {
     this->channelList.push_back(new Channel(name, password, owner));
     /* Ajouter fonction qui retourne un index et pour recuperer le bon nom de channel */
     std::cout << "Push_back OK" << std::endl;
-    std::string message_user = ":" + client->getNickname() + " JOIN " + this->channelList[index]->getName() + "\r\n";
+    std::string message_user = ":" + client->getNickname() + " JOIN " /*+ this->channelList[index]->getName() */+ "\r\n";
     std::cout << "message = " << message_user << std::endl;
     send (client->getFd(), message_user.c_str(), message_user.size(), 0);
   //  String allcommands = this->channelList[index]->PrintCommandCanalForUser();

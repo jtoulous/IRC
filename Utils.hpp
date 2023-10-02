@@ -6,8 +6,8 @@ class Utils
 {
     public:
             static String  getCmd(String entry);
-            static int     findClientFd(String &nickname, std::vector<Client *> clientList);
-            static int     findServerIndex(String &name, std::vector<Channel *> channelList)
+            //static int     findClientFd(String &nickname, std::vector<Client *> clientList);
+            //static int     findServerIndex(String &name, std::vector<Channel *> channelList)
 
     private:
             Utils();
