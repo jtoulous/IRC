@@ -30,8 +30,12 @@ static void privmsg_toUser(Clients *client, String &entry, std::vector<Clients *
     } 
 }
 
-//static void privmsg_toChannel(Client *client, String &entry)
-//{}
+static void privmsg_toChannel(Client *client, String &entry)
+{
+    String  msg;
+    String  destChannel = entry.getWord(1);
+    String  
+}
 
 static int  privmsg_checkFormat(String &entry)
 {
@@ -60,7 +64,7 @@ static int  privmsg_checkFormat(String &entry)
 
 void    Server::privMsg(Client *client, String &entry)
 {
-    entry -= "privmsg ";
+    entry.rmWord(1);
 
     if (privmsg_checkFormat(entry) == 1)
         privmsg_toChannel(client, entry);
