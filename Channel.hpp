@@ -14,17 +14,20 @@ class Channel
             //bool        IfChannelExist(String name, int *index);
             void        AddMembers(String name, String password);
 
-            String        PrintCommandCanalForUser();
+            String        PrintCommandCanalForOwner();
 
             String      getName();
             String      getPassword();
             String      getTopic();
             bool        getInviteOnly();
+
+            void        SetVectorUsers(int users_fd);
     private:
             String  name;
             String  password;
             String  topic;
             int     owner;
+            /* variable pour savoir si c'est sur invitation seulement ou pas */
             bool    invite_only;
             vector<int>    admin;
             vector<int>    users;

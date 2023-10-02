@@ -9,6 +9,7 @@ Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic("
 String    Channel::PrintCommandCanalForOwner() {
 
     String str = "All commands avalaible: \n"
+                "KICK: Eject a client from the channel"
                 "PASS: Is used to set a 'connection password.\n"
                 "NICK: Is used to give user a nickname or change the previous one.\n"
                 "USER: Is used to specify a user's details when connecting to an IRC server.\n"
@@ -19,8 +20,7 @@ String    Channel::PrintCommandCanalForOwner() {
                 "-> i: Set/remove Invite-only channel\n"
                 "-> t: Set/remove The restrictions of the TOPIC command to channel operator\n"
                 "-> k: Set/remove The channel password\n"
-                "-> o: Give/take Chanel operator privilege\"
-};
+                "-> o: Give/take Chanel operator privilege\n";
     return (str);
 }
 
@@ -38,4 +38,8 @@ String      Channel::getTopic() {
 
 bool        Channel::getInviteOnly() {
     return (this->invite_only);
+}
+
+void    Channel::SetVectorUsers(int users_fd) {
+    this->users.push_back(users_fd);
 }

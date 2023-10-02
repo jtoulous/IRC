@@ -24,7 +24,7 @@ int     Utils::findClientFd(String &nickname, vector<Client *> clientList)
     return (-1);
 }
 
-int     Utils::findServerIndex(String &name, vector<Channel *> channelList)
+int     Utils::findChannelIndex(String &name, vector<Channel *> channelList)
 {
     size_t i = 0;
     

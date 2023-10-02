@@ -13,15 +13,17 @@ void    Server::join(Client *client, String cmd, String entry) {
     
     String all = entry.substr(cmd.size(), entry.find('\0'));
 
-    int owner;
+    int owner = 0;
     String name = all.substr(passSpace(all), all.find(' ', passSpace(all)));
     String password = all.substr(name.size() + passSpace(all), all.find('\0', name.size()));
+    String message_user;
     if (CheckChannelName(name) == false) {
-        std::cout << "Push back KO" << std::endl;
+        std::cout << "Channel no create" << std::endl;
         String error = ":The_serveur 403 * #channel:No such channel +tn\r\n";
         send (client->getFd(), error.c_str(), error.size(), 0);
         return ;
     }
+    int index_chan = Utils::findChannelIndex(name, channelList);
     if (IfChannelExist(name) == true) {
         /* Check si le channel est sur invation ou pas a remettre quand MODE sera fait */
         /*if (this->channelList[index]->getInviteOnly() == true) {
@@ -29,21 +31,17 @@ void    Server::join(Client *client, String cmd, String entry) {
             return ;    
         }*/
         std::cout << "Push_back KO" << std::endl;
-        //String allcommands = this->channelList[index]->PrintCommandCanalForUser();
-        //send(client->getFd(), allcommands.c_str(), allcommands.size(), 0);
-        //send (client->getFd(), ":The_serveur 324 * #channel +tn\r\n", 33, 0);
+        this->channelList[index_chan]->SetVectorUsers(Utils::findClientFd(name, clientList));
+        message_user = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
+        send (client->getFd(), message_user.c_str(), message_user.size(), 0);
         return ;
     }
-    owner = client->getFd();
+    owner = Utils::findClientFd(name, this->clientList);
     this->channelList.push_back(new Channel(name, password, owner));
-    int index_chan = Utils::findServerIndex(name, channelList);
     std::cout << "Push_back OK" << std::endl;
-    std::string message_user = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
-    std::cout << "message = " << message_user << std::endl;
+    index_chan = Utils::findChannelIndex(name, channelList);
+    message_user = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
     send (client->getFd(), message_user.c_str(), message_user.size(), 0);
-    String allcommands = this->channelList[index_chan]->PrintCommandCanalForUser();
-    send(client->getFd(), allcommands.c_str(), allcommands.size(), 0);
-
 }
 
 /* "PRIVMSG #toncanal :tonmessage" */
@@ -62,6 +60,7 @@ bool    Server::IfChannelExist(String name) {
         return (false);
     for (size_t i = 0; i < this->channelList.size(); i++) {
         if (this->channelList[i]->getName() == name) {
+            std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
             return (true);
         }
     }

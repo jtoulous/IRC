@@ -168,14 +168,12 @@ void    Server::servReceive(Client *client)
 void    Server::pass(Client *client, String &entry)
 {
     String  entryPwd;
-
+    (void) client;
     entryPwd = entry.substr(entry.find(' ') + 1, entry.size());
-    if (entryPwd == password)
-    {
-        client->setLoggedIn(1);
-        std::cout << "new client connected" << std::endl;
-        send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
-    }
+   // if (entryPwd == password)
+   // {
+   //     
+   // }
 }
 
 void    Server::nick(Client *client, String &entry)
@@ -199,8 +197,12 @@ void    Server::user(Client *client, String &entry)
     pos = entry.find(' ') + 1;
     username = entry.substr(pos, entry.find(' ', pos) - pos);
     client->setUsername(username);
-    send(client->getFd(), "Username changed successfully\r\n", 31, 0);
+    client->setLoggedIn(1);
     std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
+    std::cout << "new client connected" << std::endl;
+    std::string welcome = ":The_server 001 " + client->getNickname() + " :Welcome on the server\r\n";
+    send(client->getFd(), welcome.c_str(), welcome.size(), 0);
+    send(client->getFd(), "Username changed successfully\r\n", 31, 0);
 }
 
 //void    Server::ping()
