@@ -184,7 +184,9 @@ String      String::getWord(int which)//renvoi le mot que tu veux
     int     count = 0;
     int     i = 0;
     int     e;
-
+    
+    if (which <= 0)
+        return (tmp);
     while (count != which && tmp[i])
     {
         for (; tmp[i] == ' ' && tmp[i]; i++);
@@ -208,7 +210,20 @@ String      String::getWord(int which)//renvoi le mot que tu veux
 }
 
 //void    String::rmWord(int index)//supprime le mot que tu veux bb
-//{}
+//{
+//    if (index < 1 || index > this->wordCount())
+//        return;
+//
+//    String  tmp(*this);
+//    String  word = tmp.getWord(index);
+//    int     start = tmp.find(word);
+//    int     end = start;
+//
+//    for (; tmp[end] != ' ' && tmp[end]; end++);
+//
+//    tmp.erase(start, end);
+//    *this = tmp;
+//}
 
 void    String::bigJoin(char *str1, char *str2, char *str3, char *str4, char *str5)
 {
