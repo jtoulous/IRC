@@ -14,7 +14,13 @@ String    Channel::PrintCommandCanalForOwner() {
                 "USER: Is used to specify a user's details when connecting to an IRC server.\n"
                 "JOIN:  is used to join or create a specific channel (chat room) on the IRC server.\n"
                 "PRIVMSG: is used to send a private message to a specific user or a message to a channel.\n"
-                "INVITE:  is used to invite a specific user to join a channel.\n" ;
+                "INVITE:  is used to invite a specific user to join a channel.\n" 
+                "MODE: Change the channel's mode: \n"
+                "-> i: Set/remove Invite-only channel\n"
+                "-> t: Set/remove The restrictions of the TOPIC command to channel operator\n"
+                "-> k: Set/remove The channel password\n"
+                "-> o: Give/take Chanel operator privilege\"
+};
     return (str);
 }
 
