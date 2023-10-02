@@ -1,4 +1,4 @@
-NAME	= ClapTrap
+NAME	= IRC
 CC		= c++
 CFLAGS	= -Wall -Wextra -Werror -std=c++98 -g
 SRC		= ./main.cpp ./Server.cpp ./Client.cpp ./libX.cpp ./Utils.cpp ./Channel.cpp ./Join.cpp

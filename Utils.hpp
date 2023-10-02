@@ -15,6 +15,7 @@ class Utils
 {
     public:
             static String  getCmd(String entry);
+
             static int     findClientFd(String &nickname, vector<Client *> clientList);
             static int     findServerIndex(String &name, vector<Channel *> channelList);
 
