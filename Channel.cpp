@@ -3,10 +3,12 @@
 Channel::Channel() {}
 
 Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic(""), owner(adm) {}
-/*
-String    Channel::PrintCommandCanalForUser() {
 
-    String str = "PRIVMSG " + this->name + " :All commands avalaible: \n"
+/* rajouter comande MODE avec les mode autorisés
+    Et le faire pour les admin et user */
+String    Channel::PrintCommandCanalForOwner() {
+
+    String str = "All commands avalaible: \n"
                 "PASS: Is used to set a 'connection password.\n"
                 "NICK: Is used to give user a nickname or change the previous one.\n"
                 "USER: Is used to specify a user's details when connecting to an IRC server.\n"
@@ -14,7 +16,8 @@ String    Channel::PrintCommandCanalForUser() {
                 "PRIVMSG: is used to send a private message to a specific user or a message to a channel.\n"
                 "INVITE:  is used to invite a specific user to join a channel.\n" ;
     return (str);
-}*/
+}
+
 String      Channel::getName() {
     return (this->name);
 }
