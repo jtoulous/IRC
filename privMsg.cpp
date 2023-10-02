@@ -34,7 +34,30 @@ static void privmsg_toChannel(Client *client, String &entry)
 {
     String  msg;
     String  destChannel = entry.getWord(1);
-    String  
+    int     channelIdx = Utils::findChannelIndex(destChannel, channelList);
+
+    if (channelIdx == -1)//channel existe pas
+    {
+        msg.bigJoin(":Server 401 ", client.getNickname().c_str(), " :No such channel\r\n", NULL, NULL);
+        send(client.getFd(), msg.c_str(), msg.size(), 0);
+    }
+
+    else if (entry.wordCount() == 2)
+    {
+        msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destChannel.c_str(), " :");
+        msg += entry.getWord(2) + "\r\n";
+        //channelList[channelIdx]->diffuseMsg(msg);
+        //send(Utils::findClientFd(entry.getWord(1)), msg.c_str(), msg.size(), 0);
+    }
+
+    else
+    {
+        msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destNickname.c_str(), " :");
+        for (int i = 2; i < entry.wordCount(); i++)
+            msg += entry.getWord(i) + " ";
+        msg += "\r\n"
+        //channelList[channelIdx]->diffuseMsg(msg);        
+    }
 }
 
 static int  privmsg_checkFormat(String &entry)
