@@ -14,7 +14,7 @@ class Channel
             //bool        IfChannelExist(String name, int *index);
             void        AddMembers(String name, String password);
 
-            //String        PrintCommandCanalForUser();
+            String        PrintCommandCanalForUser();
 
             String      getName();
             String      getPassword();
@@ -26,6 +26,6 @@ class Channel
             String  topic;
             int     owner;
             bool    invite_only;
-            vector<int>    members;
+            vector<int>    admin;
             vector<int>    users;
 };

@@ -50,8 +50,6 @@ class Server
                 //void    ping();
                 //void    invite();
 
-
-
                 int     getFdMax();
                 int     getEntrySocket();
                 

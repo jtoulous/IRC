@@ -11,28 +11,28 @@ String  Utils::getCmd(String entry)
     return (cmd);
 }
 
-//int     Utils::findClientFd(String &nickname, std::vector<Client *> clientList)
-//{
-//    int i = 0;
-//    
-//    while(i != clientList.size())
-//    {
-//        if (clientList[i].getNickname() == nickname)
-//            return (clientList[i].getFd());
-//        i++;
-//    }
-//    return (-1);
-//}
-//
-//int     Utils::findServerIndex(String &name, std::vector<Channel *> channelList)
-//{
-//    int i = 0;
-//    
-//    while(i != clientList.size())
-//    {
-//        if (channelList[i].getName() == name)
-//            return (i);
-//        i++;
-//    }
-//    return (-1);
-//}
+int     Utils::findClientFd(String &nickname, vector<Client *> clientList)
+{
+    size_t i = 0;
+    
+    while(i != clientList.size())
+    {
+        if (clientList[i]->getNickname() == nickname)
+            return (clientList[i]->getFd());
+        i++;
+    }
+    return (-1);
+}
+
+int     Utils::findChannelIndex(String &name, vector<Channel *> channelList)
+{
+    size_t i = 0;
+    
+    while(i != channelList.size())
+    {
+        if (channelList[i]->getName() == name)
+            return (i);
+        i++;
+    }
+    return (-1);
+}

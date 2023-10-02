@@ -2,37 +2,63 @@
 
 static void privmsg_toUser(Clients *client, String &entry, std::vector<Clients *> clientList)
 {
-    String  destUser;
     String  msg;
-    int     i = 0;
+    String  destNickname = entry.getWord(1);
+    int     destFd       = Utils::findClientFd(destNickname);
 
-    if (entry.wordCount() == 2)
+    if (destFd == -1)//le destinataire n'existe pas
     {
-        if (Utils::findClientFd(entry.getWord(1)) == -1)
-        {
-            msg.bigJoin(":Server 404 ", client.getNickname().c_str(), " : no such user", NULL, NULL);
-            send(client.getFd(), msg.c_str(), msg.size(), 0);//client does not exist
-        }
-        else
-        {
-            msg.bigJoin(client->getNickname().c_str(), )
-            send(findClientFd(entry.getWord(1)));
-        }
+        msg.bigJoin(":Server 401 ", client.getNickname().c_str(), " :No such user\r\n", NULL, NULL);
+        send(client.getFd(), msg.c_str(), msg.size(), 0);//client does not exist
     }
 
-
-
-    destUser = entry.getWord(1);
-    for (int i = 2; )
-
-    while (clientList[i])
+    if (entry.wordCount() == 2)//msg ne fait que un mot
     {
-
+            msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destNickname.c_str(), " :");
+            msg += entry.getWord(2) + "\r\n";
+            send(Utils::findClientFd(entry.getWord(1)), msg.c_str(), msg.size(), 0);
     }
+
+    else
+    {
+        msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destNickname.c_str(), " :");
+        for (int i = 2; i < entry.wordCount(); i++)
+            msg += entry.getWord(i) + " ";
+        msg += "\r\n"
+
+        send(destFd, msg.c_str(), msg.size(), 0);
+    } 
 }
 
-//static void privmsg_toChannel(Client *client, String &entry)
-//{}
+static void privmsg_toChannel(Client *client, String &entry)
+{
+    String  msg;
+    String  destChannel = entry.getWord(1);
+    int     channelIdx = Utils::findChannelIndex(destChannel, channelList);
+
+    if (channelIdx == -1)//channel existe pas
+    {
+        msg.bigJoin(":Server 401 ", client.getNickname().c_str(), " :No such channel\r\n", NULL, NULL);
+        send(client.getFd(), msg.c_str(), msg.size(), 0);
+    }
+
+    else if (entry.wordCount() == 2)
+    {
+        msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destChannel.c_str(), " :");
+        msg += entry.getWord(2) + "\r\n";
+        //channelList[channelIdx]->diffuseMsg(msg);
+        //send(Utils::findClientFd(entry.getWord(1)), msg.c_str(), msg.size(), 0);
+    }
+
+    else
+    {
+        msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destNickname.c_str(), " :");
+        for (int i = 2; i < entry.wordCount(); i++)
+            msg += entry.getWord(i) + " ";
+        msg += "\r\n"
+        //channelList[channelIdx]->diffuseMsg(msg);        
+    }
+}
 
 static int  privmsg_checkFormat(String &entry)
 {
@@ -61,7 +87,7 @@ static int  privmsg_checkFormat(String &entry)
 
 void    Server::privMsg(Client *client, String &entry)
 {
-    entry -= "privmsg ";
+    entry.rmWord(1);
 
     if (privmsg_checkFormat(entry) == 1)
         privmsg_toChannel(client, entry);

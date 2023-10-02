@@ -1,13 +1,23 @@
 #pragma once
 
 #include "libX.hpp"
+#include "Server.hpp"
+#include "Channel.hpp"
+#include "Client.hpp"
+
+class Client;
+class Server;
+class Channel;
+
+#define vector          std::vector
 
 class Utils
 {
     public:
             static String  getCmd(String entry);
-            //static int     findClientFd(String &nickname, std::vector<Client *> clientList);
-            //static int     findServerIndex(String &name, std::vector<Channel *> channelList)
+
+            static int     findClientFd(String &nickname, vector<Client *> clientList);
+            static int     findChannelIndex(String &name, vector<Channel *> channelList);
 
     private:
             Utils();
