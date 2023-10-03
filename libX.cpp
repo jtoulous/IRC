@@ -163,9 +163,8 @@ int         String::wordCount()//compte les mots
 {
     String  tmp(*this);
     int     count = 0;
-    int     i = 0;
     
-    for (; tmp[i]; i++)
+    for (unsigned int i = 0; i < tmp.size(); i++)
     {
         for (; tmp[i] == ' ' && tmp[i]; i++);
 

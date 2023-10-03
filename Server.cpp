@@ -120,19 +120,19 @@ void    Server::servTreatClient(Client *client)
             send(client->getFd(), "bad input\n", 10, 0);
         else
         {
-            cmd = Utils::getCmd(entry);
-            std::cout << "cmd: " << cmd << std::endl;
-            if (cmd == "PASS")
+            cmd = entry.getWord(1);
+            //std::cout << "cmd: " << cmd << std::endl;
+            if (cmd == "PASS" || cmd == "pass")
                 pass(client, entry);
-            else if (cmd == "NICK")
+            else if (cmd == "NICK" || cmd == "nick")
                 nick(client, entry);
-            else if (cmd == "USER")
+            else if (cmd == "USER" || cmd == "user")
                 user(client, entry);
             //else if (cmd == "JOIN")
             //    join(client, cmd, entry);
             //else if (cmd == "INVITE")
               //  invite(client, cmd, entry);
-            else if (cmd == "PRIVMSG" && cmd == "privmsg")
+            else if (cmd == "PRIVMSG" || cmd == "privmsg")
                 privMsg(client, entry);
             
             //else if (CMD == "INVITE")  
@@ -207,9 +207,7 @@ void    Server::user(Client *client, String &entry)
     std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
     std::cout << "new client connected" << std::endl;
     client->setLoggedIn(1);
-    //std::string welcome = ":The_server 001 " + client->getNickname() + " :Welcome on the server\r\n";
-    //send(client->getFd(), welcome.c_str(), welcome.size(), 0);
-    //send(client->getFd(), "Username changed successfully\r\n", 31, 0);
+    send(client->getFd(), "Username changed successfully\r\n", 31, 0);
 }
 
 //void    Server::invite()

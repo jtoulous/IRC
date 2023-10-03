@@ -19,7 +19,7 @@ static void privmsg_toUser(Client *client, String &entry, vector<Client *> clien
             msg += entry.getWord(i) + " ";
     
     sendMsg(RPL_PRIVMSG_DEST(client->getNickname(), destNickname, msg), destFd);//envoi du msg
-    sendMsg(RPL_PRIVMSG_SRC(client->getNickname(), destNickname), client->getFd());//confirmaion envoi
+    sendMsg(RPL_PRIVMSG_SRC(client->getNickname(), msg), client->getFd());//confirmaion envoi
 }
 
 static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> channelList)
