@@ -16,7 +16,7 @@ static void privmsg_toUser(Client *client, String &entry, vector<Client *> clien
     if (entry.wordCount() == 1)
         msg = entry.getWord(1);
     else
-        for (int i = 1; i < entry.wordCount(); i++)
+        for (int i = 1; i <= entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
     
     sendMsg(RPL_PRIVMSG_DEST(client->getNickname(), destNickname, msg), destFd, destNickname);//envoi du msg
@@ -39,7 +39,7 @@ static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> c
     if (entry.wordCount() == 1)
         msg = entry.getWord(1);
     else
-        for (int i = 2; i < entry.wordCount(); i++)
+        for (int i = 1; i <= entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
     
     channelList[channelIdx]->diffuseMsg(RPL_PRIVMSG_DEST(client->getNickname(), destChannel, msg), clientList);
@@ -61,7 +61,11 @@ static String  privmsg_checkFormat(String &entry)
         return (error);
 
     if (nbWords == 2)//si y a que 1 mot, gestion d'erreur finit ici
+    {    
+        if (entry.wordStartChar(2) == ':')
+            entry.rmFromWord(2, ':');
         return (type);
+    }
 
     if (entry.getWord(2) != ":")
     {
@@ -82,11 +86,13 @@ static String  privmsg_checkFormat(String &entry)
 
 void    Server::privMsg(Client *client, String &entry)
 {
+    String type;
     entry.rmWord(1);
 
-    if (privmsg_checkFormat(entry) == "channel")
+    type = privmsg_checkFormat(entry);
+    if (type == "channel")
         privmsg_toChannel(client, entry, channelList, clientList);
-    else if (privmsg_checkFormat(entry) == "user")
+    else if (type == "user")
         privmsg_toUser(client, entry, clientList);
     else
         sendMsg("privmsg: bad input", client->getFd(), client->getNickname());    

@@ -13,8 +13,8 @@
 #define RPL_TOPIC(client, channel, topic)(": 332" + client + " " channel + " :" + topic + "\r\n")
 #define RPL_INVITING(client, channel , nick)(": 341" + client + " " + channel + " " + nick + "\r\n")
 #define RPL_PRIVMSG_DEST(srcName, destName, msg) (":" + srcName + " PRIVMSG " + destName + " :" + msg + "\r\n")
-#define RPL_PRIVMSG_SRC(srcName, msg) (": 302 " + srcName + " " + msg + "\r\n") //message sent confirmation
-
+#define RPL_PRIVMSG_SRC(srcName, msg) (": 302 " + srcName + " :" + msg + "\r\n") //message sent confirmation
+#define RPL_NICKCHANGE(newNick) (": 001 " + newNick + " :Nickname changed successfully\r\n")
 
 //Error Replies
 

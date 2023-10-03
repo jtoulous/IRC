@@ -117,18 +117,18 @@ void    Server::servTreatClient(Client *client)
         client->buffer.erase(0, client->buffer.find('\n') + 1);
         
         if (entry.find(' ') == NPOS)//a remplacer par un ptite gestion d'erreur pour la commande recu
-            sendMsg("bad input\n", client->getFd(), client->getNickname());
+            sendMsg("bad input\n", client->getFd(), client->getNickname());//remplacer par le RPL qu il faut
         else
         {
             cmd = entry.getWord(1);
-            //std::cout << "cmd: " << cmd << std::endl;
+
             if (cmd == "PASS" || cmd == "pass")
                 pass(client, entry);
             else if (cmd == "NICK" || cmd == "nick")
                 nick(client, entry);
             else if (cmd == "USER" || cmd == "user")
                 user(client, entry);
-            else if (cmd == "JOIN")
+            else if (cmd == "JOIN" || cmd == "join")
                 join(client, cmd, entry);
             //else if (cmd == "INVITE")
               //  invite(client, cmd, entry);
@@ -185,17 +185,19 @@ void    Server::nick(Client *client, String &entry)
 {
     String  nickname = entry.getWord(2);
 
+    //checker si c'est pas deja utiliser
+
     client->setNickname(nickname);
-    sendMsg("Nickname changed successfully\r\n", client->getFd(), client->getNickname());
-    //std::cout << "client " << client->getNb() << ": nickname set to " << client->getNickname() << std::endl;
+    sendMsg(RPL_NICKCHANGE(nickname), client->getFd(), client->getNickname());
 }
 
 void    Server::user(Client *client, String &entry)
 {
     String  username = entry.getWord(2);
 
+    //checker si c'est pas deja utiliser
+
     client->setUsername(username);
-    //std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
     sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
 }
 
