@@ -8,7 +8,7 @@ static void privmsg_toUser(Client *client, String &entry, vector<Client *> clien
 
     if (destFd == -1)//le destinataire n'existe pas
     {
-        sendMsg(ERR_NOSUCHNICK(client->getNickname().c_str()), client->getFd());
+        sendMsg(ERR_NOSUCHNICK(client->getNickname()), client->getFd());
         return ;
     }
 
@@ -18,8 +18,8 @@ static void privmsg_toUser(Client *client, String &entry, vector<Client *> clien
         for (int i = 2; i < entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
     
-    sendMsg(RPL_PRIVMSG_DEST(client->getNickname().c_str(), destNickname.c_str(), msg.c_str()), destFd);//envoi du msg
-    sendMsg(RPL_PRIVMSG_SRC(client->getNickname().c_str(), destNickname.c_str()), client->getFd());//confirmaion envoi
+    sendMsg(RPL_PRIVMSG_DEST(client->getNickname(), destNickname, msg), destFd);//envoi du msg
+    sendMsg(RPL_PRIVMSG_SRC(client->getNickname(), destNickname), client->getFd());//confirmaion envoi
 }
 
 static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> channelList)
@@ -30,7 +30,7 @@ static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> c
 
     if (channelIdx == -1)//channel existe pas
     {
-        sendMsg(ERR_NOSUCHNICK(client->getNickname().c_str()), client->getFd());
+        sendMsg(ERR_NOSUCHNICK(client->getNickname()), client->getFd());
         return ;
     }
 
@@ -40,8 +40,8 @@ static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> c
         for (int i = 2; i < entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
     
-    channelList[channelIdx]->diffuseMsg(RPL_PRIVMSG_DEST(client->getNickname().c_str(), destChannel.c_str(), msg.c_str()));
-    sendMsg(RPL_PRIVMSG_SRC(client->getNickname().c_str(), destChannel.c_str()), client->getFd());//confirmaion envoi
+    channelList[channelIdx]->diffuseMsg(RPL_PRIVMSG_DEST(client->getNickname(), destChannel, msg));
+    sendMsg(RPL_PRIVMSG_SRC(client->getNickname(), destChannel), client->getFd());//confirmaion envoi
 }
 
 static int  privmsg_checkFormat(String &entry)

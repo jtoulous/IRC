@@ -16,7 +16,7 @@ class Channel
 
             String        PrintCommandCanalForOwner();
 
-            void        diffuseMsg(const char *msg);
+            void        diffuseMsg(String msg);
 
             String      getName();
             String      getPassword();

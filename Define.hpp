@@ -3,17 +3,17 @@
 
 
 //Command responses
-#define RPL_WELCOME(client)(": 001" client "Welcome to the Internet Relay Network" client "\r\n")
+#define RPL_WELCOME(client) (": 001 " + client + ": Welcome to the Internet Relay Network" + client + "\r\n")
 //#define RPL_NOTOPIC(client, channel)(": 331" + client + " " + channel + " :No topic is set\r\n")
 //#define RPL_TOPIC(client, channel, topic)(": 332" + client + " " channel + " :" + topic + "\r\n")
 //#define RPL_INVITING(client, channel , nick)(": 341" + client + " " + channel + " " + nick + "\r\n")
-#define RPL_PRIVMSG_DEST(srcName, destName, msg) (":" srcName " PRIVMSG " destName " :" msg "\r\n")
-#define RPL_PRIVMSG_SRC(srcName, destName) (": 302 " srcName " " destName " :message sent\r\n") //message sent confirmation
+#define RPL_PRIVMSG_DEST(srcName, destName, msg) (":" + srcName + " PRIVMSG " + destName + " :" + msg + "\r\n")
+#define RPL_PRIVMSG_SRC(srcName, destName) (": 302 " + srcName + " " + destName + " :message sent\r\n") //message sent confirmation
 
 
 //Error Replies
 
-#define ERR_NOSUCHNICK(client)(": 401" client " :No such nick/channel\r\n")
+#define ERR_NOSUCHNICK(client) (": 401" + client + " :No such nick/channel\r\n")
 //#define ERR_NOSUCHCHANNEL(client)(": 403" + client + " :No such channel\r\n")
 //#define ERR_CANNOTSENDTOCHAN(client, channel)(": 404" + client + " " + channel + " :Cannot send to channel\r\n") 
 //#define ERR_NORECIPIENT(client)(": 411" + client + ":No recipient given PRVMSG\r\n")

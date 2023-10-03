@@ -65,4 +65,4 @@ class Server
                 String          password;
 };
 
-void    sendMsg(const char *msg, int fd);
+void    sendMsg(String msg, int fd);

@@ -40,7 +40,7 @@ bool        Channel::getInviteOnly() {
     return (this->invite_only);
 }
 
-void    Channel::diffuseMsg(const char *msg)
+void    Channel::diffuseMsg(String msg)
 {
     for (int i = 0; i < (int)users.size(); i++)
         sendMsg(msg, users[i]);

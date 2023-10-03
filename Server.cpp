@@ -176,9 +176,9 @@ void    Server::pass(Client *client, String &entry)
     if (entryPwd == password)
     {
         client->setLoggedIn(1);
-        std::cout << "new client connected" << std::endl;
-       //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
-        sendMsg(RPL_WELCOME(client->getNickname().c_str()), client->getFd());
+        //std::cout << "new client connected" << std::endl;
+        //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
+        sendMsg(RPL_WELCOME(client->getNickname()), client->getFd());
     }
 }
 
@@ -206,9 +206,10 @@ void    Server::user(Client *client, String &entry)
     client->setLoggedIn(1);
     std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
     std::cout << "new client connected" << std::endl;
-    std::string welcome = ":The_server 001 " + client->getNickname() + " :Welcome on the server\r\n";
-    send(client->getFd(), welcome.c_str(), welcome.size(), 0);
-    send(client->getFd(), "Username changed successfully\r\n", 31, 0);
+    client->setLoggedIn(1);
+    //std::string welcome = ":The_server 001 " + client->getNickname() + " :Welcome on the server\r\n";
+    //send(client->getFd(), welcome.c_str(), welcome.size(), 0);
+    //send(client->getFd(), "Username changed successfully\r\n", 31, 0);
 }
 
 //void    Server::invite()
@@ -216,8 +217,8 @@ void    Server::user(Client *client, String &entry)
 
 //////////////////////////////////////////////////////////////////////////
 
-void    sendMsg(const char *msg, int fd)
+void    sendMsg(String msg, int fd)
 {
-    send(fd, msg, std::strlen(msg), 0);
+    send(fd, msg.c_str(), msg.size(), 0);
     std::cout << msg << std::endl;
 }
