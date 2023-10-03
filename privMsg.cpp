@@ -1,38 +1,48 @@
 #include "Server.hpp"
 
-static void privmsg_toUser(Clients *client, String &entry, std::vector<Clients *> clientList)
+static void privmsg_toUser(Client *client, String &entry, vector<Client *> clientList)
 {
-    String  destUser;
     String  msg;
-    int     i = 0;
+    String  destNickname = entry.getWord(1);
+    int     destFd       = Utils::findClientFd(destNickname, clientList);
+
+    if (destFd == -1)//le destinataire n'existe pas
+    {
+        sendMsg(ERR_NOSUCHNICK(client->getNickname().c_str()), client->getFd());
+        return ;
+    }
 
     if (entry.wordCount() == 2)
-    {
-        if (Utils::findClientFd(entry.getWord(1)) == -1)
-        {
-            msg.bigJoin(":Server 404 ", client.getNickname().c_str(), " : no such user", NULL, NULL);
-            send(client.getFd(), msg.c_str(), msg.size(), 0);//client does not exist
-        }
-        else
-        {
-            msg.bigJoin(client->getNickname().c_str(), )
-            send(findClientFd(entry.getWord(1)));
-        }
-    }
-
-
-
-    destUser = entry.getWord(1);
-    for (int i = 2; )
-
-    while (clientList[i])
-    {
-
-    }
+        msg = entry.getWord(2);
+    else
+        for (int i = 2; i < entry.wordCount(); i++)
+            msg += entry.getWord(i) + " ";
+    
+    sendMsg(RPL_PRIVMSG_DEST(client->getNickname().c_str(), destNickname.c_str(), msg.c_str()), destFd);//envoi du msg
+    sendMsg(RPL_PRIVMSG_SRC(client->getNickname().c_str(), destNickname.c_str()), client->getFd());//confirmaion envoi
 }
 
-//static void privmsg_toChannel(Client *client, String &entry)
-//{}
+static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> channelList)
+{
+    String  msg;
+    String  destChannel = entry.getWord(1);
+    int     channelIdx = Utils::findChannelIndex(destChannel, channelList);
+
+    if (channelIdx == -1)//channel existe pas
+    {
+        sendMsg(CODE_401(client->getNickname().c_str()), client->getFd());
+        return ;
+    }
+
+    if (entry.wordCount() == 2)
+        msg = entry.getWord(2);
+    else
+        for (int i = 2; i < entry.wordCount(); i++)
+            msg += entry.getWord(i) + " ";
+    
+    channelList[channelIdx]->diffuseMsg(RPL_PRIVMSG_DEST(client->getNickname().c_str(), destChannel.c_str(), msg.c_str()));
+    sendMsg(RPL_PRIVMSG_SRC(client->getNickname().c_str(), destChannel.c_str()), client->getFd());//confirmaion envoi
+}
 
 static int  privmsg_checkFormat(String &entry)
 {
@@ -61,12 +71,12 @@ static int  privmsg_checkFormat(String &entry)
 
 void    Server::privMsg(Client *client, String &entry)
 {
-    entry -= "privmsg ";
+    entry.rmWord(1);
 
     if (privmsg_checkFormat(entry) == 1)
-        privmsg_toChannel(client, entry);
-    else if (privMsg_checkFormat(client, entry) == 2)
+        privmsg_toChannel(client, entry, channelList);
+    else if (privmsg_checkFormat(entry) == 2)
         privmsg_toUser(client, entry, clientList);
     else
-        send(client->getFd(), "privmsg: bad input", 18, 0);    
+        sendMsg("privmsg: bad input", client->getFd());    
 }

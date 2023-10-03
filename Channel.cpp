@@ -40,6 +40,13 @@ bool        Channel::getInviteOnly() {
     return (this->invite_only);
 }
 
+<<<<<<< HEAD
 void    Channel::SetVectorUsers(int users_fd) {
     this->users.push_back(users_fd);
+=======
+void    Channel::diffuseMsg(const char *msg)
+{
+    for (int i = 0; i < (int)users.size(); i++)
+        sendMsg(msg, users[i]);
+>>>>>>> 5972e9005ecd8200c2ec2cc5beda9aef5b4eacfa
 }

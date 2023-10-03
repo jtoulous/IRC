@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "Define.hpp"
 
 /////////////////////////////////////////////////
 //                 CONSTRUCTORS                //
@@ -120,7 +121,7 @@ void    Server::servTreatClient(Client *client)
         else
         {
             cmd = Utils::getCmd(entry);
-
+            std::cout << "cmd: " << cmd << std::endl;
             if (cmd == "PASS")
                 pass(client, entry);
             else if (cmd == "NICK")
@@ -129,8 +130,10 @@ void    Server::servTreatClient(Client *client)
                 user(client, entry);
             else if (cmd == "JOIN")
                 join(client, cmd, entry);
-            //else if (cmd == "PRIVMSG")
-            //    privMsg(client, entry);
+            //else if (cmd == "INVITE")
+              //  invite(client, cmd, entry);
+           // else if (cmd == "PRIVMSG")
+             //   privMsg(client, cmd   , entry);
             
             //else if (CMD == "INVITE")  
         } 
@@ -170,10 +173,20 @@ void    Server::pass(Client *client, String &entry)
     String  entryPwd;
     (void) client;
     entryPwd = entry.substr(entry.find(' ') + 1, entry.size());
+<<<<<<< HEAD
    // if (entryPwd == password)
    // {
    //     
    // }
+=======
+    if (entryPwd == password)
+    {
+        client->setLoggedIn(1);
+        std::cout << "new client connected" << std::endl;
+       //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
+        RPL_WELCOME(client->getNickname().c_str());
+    }
+>>>>>>> 5972e9005ecd8200c2ec2cc5beda9aef5b4eacfa
 }
 
 void    Server::nick(Client *client, String &entry)
@@ -205,8 +218,13 @@ void    Server::user(Client *client, String &entry)
     send(client->getFd(), "Username changed successfully\r\n", 31, 0);
 }
 
-//void    Server::ping()
-//{}
-
 //void    Server::invite()
 //{}
+
+//////////////////////////////////////////////////////////////////////////
+
+void    sendMsg(const char *msg, int fd)
+{
+    send(fd, msg, std::strlen(msg), 0);
+    std::cout << msg << std::endl;
+}

@@ -11,7 +11,8 @@
 #include <vector>
 #include <fcntl.h>
 #include <cstdlib>
-#include <cstdio> 
+#include <cstdio>
+#include <cstring>
 
 #include "libX.hpp"
 #include "Client.hpp"
@@ -47,7 +48,7 @@ class Server
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
                 void    join(Client *client, String cmd, String entry);
-
+               // void    privMsg(Client *client, String cmd, String entry);
                 //void    ping();
                 //void    invite();
 
@@ -62,3 +63,5 @@ class Server
                 String          Hostname;
                 String          password;
 };
+
+void    sendMsg(const char *msg, int fd);

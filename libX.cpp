@@ -159,7 +159,7 @@ const char    *String::cc_str() const
     return (tmp);
 }
 
-int         String::wordCount()
+int         String::wordCount()//compte les mots
 {
     String  tmp(*this);
     int     count = 0;
@@ -177,14 +177,16 @@ int         String::wordCount()
     return (count); 
 }
 
-String      String::getWord(int which)
+String      String::getWord(int which)//renvoi le mot que tu veux
 {
     String  tmp(*this);
     String  word;
     int     count = 0;
     int     i = 0;
     int     e;
-
+    
+    if (which <= 0)
+        return (tmp);
     while (count != which && tmp[i])
     {
         for (; tmp[i] == ' ' && tmp[i]; i++);
@@ -205,6 +207,22 @@ String      String::getWord(int which)
         return (word);
     }
     return (tmp);
+}
+
+void    String::rmWord(int index)//supprime le mot que tu veux bb
+{
+    if (index < 1 || index > this->wordCount())
+        return;
+
+    String  tmp(*this);
+    String  word = tmp.getWord(index);
+    int     start = tmp.find(word);
+    int     end = start;
+
+    for (; tmp[end] != ' ' && tmp[end]; end++);
+
+    tmp.erase(start, end - start + 1);
+    *this = tmp;
 }
 
 void    String::bigJoin(char *str1, char *str2, char *str3, char *str4, char *str5)
