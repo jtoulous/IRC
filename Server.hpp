@@ -66,4 +66,4 @@ class Server
                 String          password;
 };
 
-void    sendMsg(String msg, int fd);
+void    sendMsg(String msg, int fd, String nick);

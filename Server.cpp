@@ -116,8 +116,8 @@ void    Server::servTreatClient(Client *client)
         entry = client->buffer.substr(0, client->buffer.find('\n'));
         client->buffer.erase(0, client->buffer.find('\n') + 1);
         
-        if (entry.find(' ') == NPOS)
-            send(client->getFd(), "bad input\n", 10, 0);
+        if (entry.find(' ') == NPOS)//a remplacer par un ptite gestion d'erreur pour la commande recu
+            sendMsg("bad input\n", client->getFd(), client->getNickname());
         else
         {
             cmd = entry.getWord(1);
@@ -158,8 +158,8 @@ void    Server::servReceive(Client *client)
         buff[size] = '\0';
         client->buffer = client->buffer + buff;
     }
-    std::cout << client->buffer << std::endl;
     client->buffer -= "\r";
+    std::cout << GREEN << "\n" << client->buffer << DEFAULT << std::endl;
 }
 
 
@@ -170,44 +170,33 @@ void    Server::servReceive(Client *client)
 
 void    Server::pass(Client *client, String &entry)
 {
-    String  entryPwd;
-    (void) client;
-    entryPwd = entry.substr(entry.find(' ') + 1, entry.size());
+    String  entryPwd = entry.getWord(2);
+
     if (entryPwd == password)
     {
         client->setLoggedIn(1);
         //std::cout << "new client connected" << std::endl;
         //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
-        sendMsg(RPL_WELCOME(client->getNickname()), client->getFd());
+        sendMsg(RPL_WELCOME(client->getNickname()), client->getFd(), client->getNickname());
     }
 }
 
 void    Server::nick(Client *client, String &entry)
 {
-    String  nickname;
-    int     pos;
-
-    pos = entry.find(' ') + 1;
-    nickname = entry.substr(pos, entry.find(' ', pos));
+    String  nickname = entry.getWord(2);
 
     client->setNickname(nickname);
-    send(client->getFd(), "Nickname changed successfully\r\n", 31, 0);
-    std::cout << "client " << client->getNb() << ": nickname set to " << client->getNickname() << std::endl;
+    sendMsg("Nickname changed successfully\r\n", client->getFd(), client->getNickname());
+    //std::cout << "client " << client->getNb() << ": nickname set to " << client->getNickname() << std::endl;
 }
 
 void    Server::user(Client *client, String &entry)
 {
-    String  username;
-    int     pos;
+    String  username = entry.getWord(2);
 
-    pos = entry.find(' ') + 1;
-    username = entry.substr(pos, entry.find(' ', pos) - pos);
     client->setUsername(username);
-    client->setLoggedIn(1);
-    std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
-    std::cout << "new client connected" << std::endl;
-    client->setLoggedIn(1);
-    send(client->getFd(), "Username changed successfully\r\n", 31, 0);
+    //std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
+    sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
 }
 
 //void    Server::invite()
@@ -215,8 +204,10 @@ void    Server::user(Client *client, String &entry)
 
 //////////////////////////////////////////////////////////////////////////
 
-void    sendMsg(String msg, int fd)
+void    sendMsg(String msg, int fd, String nick)
 {
     send(fd, msg.c_str(), msg.size(), 0);
-    std::cout << msg << std::endl;
+    msg -= "\r\n";
+    if (!nick.empty())
+        std::cout << "=====> " << ORANGE << "to " << nick << ": " << DEFAULT << msg << std::endl;
 }

@@ -1,6 +1,10 @@
 #ifndef DEFINE_HPP 
 #define DEFINE_HPP
 
+//Colors
+#define GREEN "\033[32m"
+#define ORANGE "\033[1;33m"
+#define DEFAULT "\033[0m"
 
 //Command responses
 #define RPL_JOINCHANNEL(client, channelList, index_chan) (":" + client + " JOIN " + channelList[index_chan] + "\r\n")

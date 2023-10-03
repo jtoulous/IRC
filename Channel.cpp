@@ -46,8 +46,8 @@ void    Channel::setUserFd(int user_fd) {
     this->users.push_back(user_fd);
 }
 
-void    Channel::diffuseMsg(String msg)
+void    Channel::diffuseMsg(String msg, vector<Client *> clientList)
 {
     for (int i = 0; i < (int)users.size(); i++)
-        sendMsg(msg, users[i]);
+        sendMsg(msg, users[i], Utils::findClientNick(users[i], clientList));
 }

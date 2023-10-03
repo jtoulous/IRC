@@ -32,9 +32,12 @@ class   String: public std::string
             String              getWord(int wordNb);
             void                rmWord(int wordNb);
             void                rmFromWord(int wordNb, char target);
+            void                rrmFromWord(int wordNb, char target);
             void                rmAllFromWord(int wordNb, char target);
             int                 wordStartPos(int wordNb);
             int                 wordEndPos(int wordNb);
+            char                wordStartChar(int wordNb);
+            char                wordEndChar(int wordNb);
             void                bigJoin(char *str1, char *str2, char *str3, char *str4, char *str5);
 };
 

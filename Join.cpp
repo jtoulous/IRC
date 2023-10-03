@@ -21,7 +21,7 @@ void    Server::join(Client *client, String cmd, String entry) {
     String message_client;
     if (CheckChannelName(name) == false) {
         std::cout << "Channel no create" << std::endl;
-        sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd());
+        sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd(), client->getNickname());
         return ;
     }
     if (IfChannelExist(name) == true) {
