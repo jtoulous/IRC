@@ -183,12 +183,14 @@ void    String::rmWord(int wordNb)//supprime le mot que tu veux bb
 {
     String  tmp(*this);
     int     start = tmp.wordStartPos(wordNb);
-    int     end = tmp.wordEndPos(wordNb);
+    int     end = tmp.wordEndPos(wordNb) + 1;
 
     if (start == -1 || end == -1)
         return;
 
-    tmp.erase(start, (end + 1) - start + 1);
+    for (; tmp[end] == ' ' && tmp[end]; end++);
+
+    tmp.erase(start, end - start);
     *this = tmp;
 }
 

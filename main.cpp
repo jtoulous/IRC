@@ -12,7 +12,7 @@ int main(int argc, char **argv)
         while (1)
         {
             if (server.clientList.size() == 0)  //      si y a personne de connecter au serveur ca reste bloquer dans servEmpty(), jusqua que quelqun se connecte      
-                server.servEmpty();             //    
+                server.servNewConnection();             //    
             
             FD_ZERO(&sockets);      //vide le fd_set sockets
             FD_SET(server.getEntrySocket(), &sockets);     //ajoute le fd d'entree au serveur dans le fd_set 

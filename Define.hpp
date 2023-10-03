@@ -4,6 +4,7 @@
 //Colors
 #define GREEN "\033[32m"
 #define ORANGE "\033[1;33m"
+#define RED "\033[1;31m"
 #define DEFAULT "\033[0m"
 
 //Command responses
@@ -35,5 +36,6 @@
 #define ERR_INVITEONLYCHAN(client, channel)(": 473" + client + " " + channel + "  :Cannot join channel (+i)\r\n")
 #define ERR_BADCHANNELKEY(client, channel)(": 475" + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)(": 482" + client + " " channel + "  :You're not channel operator\r\n")
+#define ERR_NICKALREADYUSED(nickname) (": 433 * " + nickname + " :Nickname already in use")
 
 #endif

@@ -11,7 +11,7 @@ String  Utils::getCmd(String entry)
     return (cmd);
 }
 
-int     Utils::findClientFd(String &nickname, vector<Client *> clientList)
+int     Utils::findClientFd(String &nickname, vector<Client *> &clientList)
 {
     size_t i = 0;
     
@@ -24,7 +24,7 @@ int     Utils::findClientFd(String &nickname, vector<Client *> clientList)
     return (-1);
 }
 
-String  Utils::findClientNick(int fd, vector<Client *> clientList)
+String  Utils::findClientNick(int fd, vector<Client *> &clientList)
 {
     String  notFound;
 
@@ -36,7 +36,7 @@ String  Utils::findClientNick(int fd, vector<Client *> clientList)
     return (notFound);
 }
 
-int     Utils::findChannelIndex(String &name, vector<Channel *> channelList)
+int     Utils::findChannelIndex(String &name, vector<Channel *> &channelList)
 {
     size_t i = 0;
     
@@ -47,4 +47,20 @@ int     Utils::findChannelIndex(String &name, vector<Channel *> channelList)
         i++;
     }
     return (-1);
+}
+
+bool    Utils::nicknameAvailable(String &nickname, vector<Client *> &clientList)
+{
+    for (int i = 0; i < (int)clientList.size(); i++)
+        if (clientList[i]->getNickname() == nickname)
+            return (false);
+    return (true);
+}
+
+bool    Utils::usernameAvailable(String &username, vector<Client *> &clientList)
+{
+    for (int i = 0; i < (int)clientList.size(); i++)
+        if (clientList[i]->getUsername() == username)
+            return (false);
+    return (true);
 }

@@ -63,23 +63,6 @@ int     Server::getEntrySocket()
 //                  METHODS                         //
 //////////////////////////////////////////////////////
 
-
-void    Server::servEmpty()
-{
-    int             newClient;
-    sockaddr_in     clientAddr;
-    socklen_t       clientSize = sizeof(clientAddr);
-
-    listen(EntrySocket, 10);
-    newClient = accept(EntrySocket, (struct sockaddr *)&clientAddr, &clientSize);
-    if (newClient == -1)
-        throw (Xception("Error: accept()"));
-    clientList.push_back(new Client);
-    clientList[clientList.size() - 1]->setFd(newClient);
-    clientList[clientList.size() - 1]->setNb(0);
-    //send(newClient, "password: ", 10, 0);
-}
-
 void    Server::servCheckSockets(fd_set &sockets)
 {
     if (FD_ISSET(EntrySocket, &sockets))
@@ -95,13 +78,17 @@ void    Server::servNewConnection()
     sockaddr_in     clientAddr;
     socklen_t       clientSize = sizeof(clientAddr);
 
+    if (clientList.size() == 0)
+        listen(EntrySocket, 10);
     newClient = accept(EntrySocket, (struct sockaddr *)&clientAddr, &clientSize);
     if (newClient == -1)
-        throw (Xception("Error: accept()"));
-    clientList.push_back(new Client);
-    clientList[clientList.size() - 1]->setFd(newClient);
-    clientList[clientList.size() - 1]->setNb(clientList.size() - 1);
-    //send(newClient, "password: ", 10, 0);
+        std::cout << RED << "Error: accept()" << DEFAULT << std::endl;
+    else
+    {
+        clientList.push_back(new Client);
+        clientList[clientList.size() - 1]->setFd(newClient);
+        clientList[clientList.size() - 1]->setNb(clientList.size() - 1);
+    }
 }
 
 void    Server::servTreatClient(Client *client)
@@ -129,7 +116,7 @@ void    Server::servTreatClient(Client *client)
             else if (cmd == "USER" || cmd == "user")
                 user(client, entry);
             else if (cmd == "JOIN" || cmd == "join")
-                join(client, cmd, entry);
+                join(client, entry);
             //else if (cmd == "INVITE")
               //  invite(client, cmd, entry);
             else if (cmd == "PRIVMSG" || cmd == "privmsg")
@@ -138,8 +125,6 @@ void    Server::servTreatClient(Client *client)
             //else if (CMD == "INVITE")  
         } 
     }
-
-
 }
 
 void    Server::servReceive(Client *client)
@@ -175,30 +160,39 @@ void    Server::pass(Client *client, String &entry)
     if (entryPwd == password)
     {
         client->setLoggedIn(1);
-        //std::cout << "new client connected" << std::endl;
-        //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
         sendMsg(RPL_WELCOME(client->getNickname()), client->getFd(), client->getNickname());
     }
+    //else //il degage
+    //{
+    //    close (client->getFd());
+    //    Utils::removeClient(client->getFd(), clientList);
+    //}
 }
 
 void    Server::nick(Client *client, String &entry)
 {
     String  nickname = entry.getWord(2);
 
-    //checker si c'est pas deja utiliser
-
-    client->setNickname(nickname);
-    sendMsg(RPL_NICKCHANGE(nickname), client->getFd(), client->getNickname());
+    if (!Utils::nicknameAvailable(nickname, clientList))
+        sendMsg(ERR_NICKALREADYUSED(nickname), client->getFd(), client->getNickname());
+    else
+    {
+        client->setNickname(nickname);
+        sendMsg(RPL_NICKCHANGE(nickname), client->getFd(), client->getNickname());
+    }
 }
 
 void    Server::user(Client *client, String &entry)
 {
     String  username = entry.getWord(2);
 
-    //checker si c'est pas deja utiliser
-
-    client->setUsername(username);
-    sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
+    if (!Utils::usernameAvailable(username, clientList))
+        sendMsg(ERR_NICKALREADYUSED(username), client->getFd(), client->getNickname());
+    else
+    {
+        client->setUsername(username);
+        sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
+    }
 }
 
 //void    Server::invite()

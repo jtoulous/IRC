@@ -9,12 +9,14 @@ int passSpace(String str) {
 }
 
 /* probleme valeur des variable de client, nickname vide */
-void    Server::join(Client *client, String cmd, String entry) {
+void    Server::join(Client *client, String &entry) {
     
     int owner_fd = -1;
     int index_chan = -1;
 
-    String all = entry.substr(cmd.size(), entry.find('\0'));
+    String all = entry;
+    all.rmWord(1);
+    //String all = entry.substr(cmd.size(), entry.find('\0'));
     String name = all.substr(passSpace(all), all.find(' ', passSpace(all)));
     String password = all.substr(name.size() + passSpace(all), all.find('\0', name.size()));
     
