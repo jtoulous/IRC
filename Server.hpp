@@ -18,6 +18,7 @@
 #include "Client.hpp"
 #include "Utils.hpp"
 #include "Channel.hpp"
+#include "Define.hpp"
 
 #define vector          std::vector
 #define BUFFER_SIZE     100
@@ -42,13 +43,13 @@ class Server
                 void    nick(Client *client, String &entry);
                 void    user(Client *client, String &entry);
                 void    kick(Client *client, String &cmd, String &entry);
-                //void    privMsg(Client *client, String &entry);
+                void    privMsg(Client *client, String &entry);
 
                 vector<Channel *>       channelList;
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
                 void    join(Client *client, String cmd, String entry);
-               // void    privMsg(Client *client, String cmd, String entry);
+                void    privMsg(Client *client, String cmd, String entry);
                 //void    ping();
                 //void    invite();
 

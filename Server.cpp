@@ -128,12 +128,12 @@ void    Server::servTreatClient(Client *client)
                 nick(client, entry);
             else if (cmd == "USER")
                 user(client, entry);
-            else if (cmd == "JOIN")
-                join(client, cmd, entry);
+            //else if (cmd == "JOIN")
+            //    join(client, cmd, entry);
             //else if (cmd == "INVITE")
               //  invite(client, cmd, entry);
-           // else if (cmd == "PRIVMSG")
-             //   privMsg(client, cmd   , entry);
+            else if (cmd == "PRIVMSG" && cmd == "privmsg")
+                privMsg(client, entry);
             
             //else if (CMD == "INVITE")  
         } 
@@ -173,20 +173,13 @@ void    Server::pass(Client *client, String &entry)
     String  entryPwd;
     (void) client;
     entryPwd = entry.substr(entry.find(' ') + 1, entry.size());
-<<<<<<< HEAD
-   // if (entryPwd == password)
-   // {
-   //     
-   // }
-=======
     if (entryPwd == password)
     {
         client->setLoggedIn(1);
         std::cout << "new client connected" << std::endl;
        //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
-        RPL_WELCOME(client->getNickname().c_str());
+        sendMsg(RPL_WELCOME(client->getNickname().c_str()), client->getFd());
     }
->>>>>>> 5972e9005ecd8200c2ec2cc5beda9aef5b4eacfa
 }
 
 void    Server::nick(Client *client, String &entry)

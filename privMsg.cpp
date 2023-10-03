@@ -30,7 +30,7 @@ static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> c
 
     if (channelIdx == -1)//channel existe pas
     {
-        sendMsg(CODE_401(client->getNickname().c_str()), client->getFd());
+        sendMsg(ERR_NOSUCHNICK(client->getNickname().c_str()), client->getFd());
         return ;
     }
 
