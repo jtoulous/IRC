@@ -23,6 +23,7 @@
 #define vector          std::vector
 #define BUFFER_SIZE     100
 
+
 class Client;
 class Channel;
 

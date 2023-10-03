@@ -11,41 +11,42 @@ int passSpace(String str) {
 /* probleme valeur des variable de client, nickname vide */
 void    Server::join(Client *client, String cmd, String entry) {
     
+    int owner_fd = -1;
+    int index_chan = -1;
+
     String all = entry.substr(cmd.size(), entry.find('\0'));
-    int owner;
     String name = all.substr(passSpace(all), all.find(' ', passSpace(all)));
     String password = all.substr(name.size() + passSpace(all), all.find('\0', name.size()));
-    String message_user;
+    
+    String message_client;
     if (CheckChannelName(name) == false) {
         std::cout << "Channel no create" << std::endl;
-        String error = ":The_serveur 403 * #channel:No such channel +tn\r\n";
-        send (client->getFd(), error.c_str(), error.size(), 0);
+        sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd());
         return ;
     }
-    int index_chan = Utils::findChannelIndex(name, channelList);
     if (IfChannelExist(name) == true) {
         /* Check si le channel est sur invation ou pas a remettre quand MODE sera fait */
         /*if (this->channelList[index]->getInviteOnly() == true) {
             std::cout << "Error channel invite only" << std::endl; 
             return ;    
         }*/
-        std::string message_user = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
+        int user_fd = Utils::findClientFd(name, this->clientList);
+        
+        index_chan = Utils::findChannelIndex(name, channelList);
+        this->channelList[index_chan]->setUserFd(user_fd);
+        message_client = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
         std::cout << "Push_back KO" << std::endl;
-        send (client->getFd(), message_user.c_str(), message_user.size(), 0);
-        //String allcommands = this->channelList[index]->PrintCommandCanalForUser();
-        //send(client->getFd(), allcommands.c_str(), allcommands.size(), 0);
-        //send (client->getFd(), ":The_serveur 324 * #channel +tn\r\n", 33, 0);
+        send (client->getFd(), message_client.c_str(), message_client.size(), 0);
         return ;
     }
-    owner = Utils::findClientFd(name, this->clientList);
-    this->channelList.push_back(new Channel(name, password, owner));
+    owner_fd = Utils::findClientFd(name, this->clientList);
+    
+    this->channelList.push_back(new Channel(name, password, owner_fd));
+        
     std::cout << "Push_back OK" << std::endl;
-    std::string message_user = ":" + client->getNickname() + " JOIN "/* + this->channelList[index_chan]->getName() */+ "\r\n";
-    std::cout << "message = " << message_user << std::endl;
-    send (client->getFd(), message_user.c_str(), message_user.size(), 0);
-    String allcommands = this->channelList[index_chan]->PrintCommandCanalForOwner();
-    send(client->getFd(), allcommands.c_str(), allcommands.size(), 0);
-
+    
+    message_client = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
+    send (client->getFd(), message_client.c_str(), message_client.size(), 0);
 }
 
 /* "PRIVMSG #toncanal :tonmessage" */

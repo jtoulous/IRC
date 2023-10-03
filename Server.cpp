@@ -128,8 +128,8 @@ void    Server::servTreatClient(Client *client)
                 nick(client, entry);
             else if (cmd == "USER" || cmd == "user")
                 user(client, entry);
-            //else if (cmd == "JOIN")
-            //    join(client, cmd, entry);
+            else if (cmd == "JOIN")
+                join(client, cmd, entry);
             //else if (cmd == "INVITE")
               //  invite(client, cmd, entry);
             else if (cmd == "PRIVMSG" || cmd == "privmsg")

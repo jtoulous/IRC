@@ -6,7 +6,8 @@ Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic("
 
 /* rajouter comande MODE avec les mode autorisés
     Et le faire pour les admin et user */
-String    Channel::PrintCommandCanalForOwner() {
+
+/*String    Channel::PrintCommandCanalForOwner() {
 
     String str = "All commands avalaible: \n"
                 "KICK: Eject a client from the channel"
@@ -22,7 +23,7 @@ String    Channel::PrintCommandCanalForOwner() {
                 "-> k: Set/remove The channel password\n"
                 "-> o: Give/take Chanel operator privilege\n";
     return (str);
-}
+}*/
 
 String      Channel::getName() {
     return (this->name);
@@ -38,6 +39,11 @@ String      Channel::getTopic() {
 
 bool        Channel::getInviteOnly() {
     return (this->invite_only);
+}
+
+void    Channel::setUserFd(int user_fd) {
+
+    this->users.push_back(user_fd);
 }
 
 void    Channel::diffuseMsg(String msg)
