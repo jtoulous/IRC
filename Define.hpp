@@ -7,11 +7,14 @@
 #define RPL_NOTOPIC(client, channel)(": 331" + client + " " + channel + " :No topic is set\r\n")
 #define RPL_TOPIC(client, channel, topic)(": 332" + client + " " channel + " :" + topic + "\r\n")
 #define RPL_INVITING(client, channel , nick)(": 341" + client + " " + channel + " " + nick + "\r\n")
+#define RPL_PRIVMSG_DEST(srcName, destName, msg) (":" + srcName + " PRIVMSG " + destName + " :" + msg + "\r\n")
+#define RPL_PRIVMSG_SRC(srcName, destName) (": 302 " + srcName + " " + destName + " :message sent\r\n") //message sent confirmation
+
 
 //Error Replies
 
 #define ERR_NOSUCHNICK(client)(": 401" + client + " :No such nick/channel\r\n")
-#define ERR_NOSUCHCHANNEL(client)(": 403" + client + " :No such channe\r\n")
+#define ERR_NOSUCHCHANNEL(client)(": 403" + client + " :No such channel\r\n")
 #define ERR_CANNOTSENDTOCHAN(client, channel)(": 404" + client + " " + channel + " :Cannot send to channel\r\n") 
 #define ERR_NORECIPIENT(client)(": 411" + client + ":No recipient given PRVMSG\r\n")
 #define ERR_NOTEXTTOSEND(client)(": 412" + client + ":No text to send\r\n")
@@ -22,11 +25,10 @@
 #define ERR_NOTREGISTERED(client)(": 451 " + client + " :You have not registered\r\n")
 #define ERR_NEEDMOREPARAMS(client, cmd)(": 461" + client + " " + cmd + " :Not enough parameters\r\n")
 #define ERR_ALREADYREGISTRED(client)(": 462" + client + ":You may not reregister\r\n")
-#define ERR_PASSWDMISMATCH(client)(": 464" + client ":Password incorrect\r\n")
+#define ERR_PASSWDMISMATCH(client)(": 464" + client + ":Password incorrect\r\n")
 #define ERR_CHANNELISFULL(client, channel)(": 471" + client + " " + channel + " :Cannot join channel (+l)\r\n")
 #define ERR_INVITEONLYCHAN(client, channel)(": 473" + client + " " + channel + "  :Cannot join channel (+i)\r\n")
 #define ERR_BADCHANNELKEY(client, channel)(": 475" + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)(": 482" + client + " " channel + "  :You're not channel operator\r\n")
-
 
 #endif

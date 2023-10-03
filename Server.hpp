@@ -11,7 +11,8 @@
 #include <vector>
 #include <fcntl.h>
 #include <cstdlib>
-#include <cstdio> 
+#include <cstdio>
+#include <cstring>
 
 #include "libX.hpp"
 #include "Client.hpp"
