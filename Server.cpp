@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "Define.hpp"
 
 /////////////////////////////////////////////////
 //                 CONSTRUCTORS                //
@@ -176,7 +177,8 @@ void    Server::pass(Client *client, String &entry)
     {
         client->setLoggedIn(1);
         std::cout << "new client connected" << std::endl;
-        send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
+       //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
+        RPL_WELCOME(client);
     }
 }
 

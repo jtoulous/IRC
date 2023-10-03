@@ -21,13 +21,14 @@ void    Server::join(Client *client, String cmd, String entry) {
         send (client->getFd(), error.c_str(), error.size(), 0);
         return ;
     }
+    int index_chan = Utils::findChannelIndex(name, channelList);
     if (IfChannelExist(name) == true) {
         /* Check si le channel est sur invation ou pas a remettre quand MODE sera fait */
         /*if (this->channelList[index]->getInviteOnly() == true) {
             std::cout << "Error channel invite only" << std::endl; 
             return ;    
         }*/
-        std::string message_user = ":" + client->getNickname() + " JOIN " /*+ this->channelList[index]->getName() */+ "\r\n";
+        std::string message_user = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
         std::cout << "Push_back KO" << std::endl;
         send (client->getFd(), message_user.c_str(), message_user.size(), 0);
         //String allcommands = this->channelList[index]->PrintCommandCanalForUser();
@@ -37,12 +38,11 @@ void    Server::join(Client *client, String cmd, String entry) {
     }
     owner = client->getFd();
     this->channelList.push_back(new Channel(name, password, owner));
-    int index_chan = Utils::findServerIndex(name, channelList);
     std::cout << "Push_back OK" << std::endl;
-    std::string message_user = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
+    std::string message_user = ":" + client->getNickname() + " JOIN "/* + this->channelList[index_chan]->getName() */+ "\r\n";
     std::cout << "message = " << message_user << std::endl;
     send (client->getFd(), message_user.c_str(), message_user.size(), 0);
-    String allcommands = this->channelList[index_chan]->PrintCommandCanalForUser();
+    String allcommands = this->channelList[index_chan]->PrintCommandCanalForOwner();
     send(client->getFd(), allcommands.c_str(), allcommands.size(), 0);
 
 }

@@ -19,8 +19,7 @@ String    Channel::PrintCommandCanalForOwner() {
                 "-> i: Set/remove Invite-only channel\n"
                 "-> t: Set/remove The restrictions of the TOPIC command to channel operator\n"
                 "-> k: Set/remove The channel password\n"
-                "-> o: Give/take Chanel operator privilege\"
-};
+                "-> o: Give/take Chanel operator privilege\n";
     return (str);
 }
 

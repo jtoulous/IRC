@@ -14,7 +14,7 @@ class Channel
             //bool        IfChannelExist(String name, int *index);
             void        AddMembers(String name, String password);
 
-            String        PrintCommandCanalForUser();
+            String        PrintCommandCanalForOwner();
 
             String      getName();
             String      getPassword();
