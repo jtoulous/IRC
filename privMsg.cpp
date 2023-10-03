@@ -6,16 +6,17 @@ static void privmsg_toUser(Client *client, String &entry, vector<Client *> clien
     String  destNickname = entry.getWord(1);
     int     destFd       = Utils::findClientFd(destNickname, clientList);
 
+    entry.rmWord(1);
     if (destFd == -1)//le destinataire n'existe pas
     {
         sendMsg(ERR_NOSUCHNICK(client->getNickname()), client->getFd());
         return ;
     }
 
-    if (entry.wordCount() == 2)
-        msg = entry.getWord(2);
+    if (entry.wordCount() == 1)
+        msg = entry.getWord(1);
     else
-        for (int i = 2; i < entry.wordCount(); i++)
+        for (int i = 1; i < entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
     
     sendMsg(RPL_PRIVMSG_DEST(client->getNickname(), destNickname, msg), destFd);//envoi du msg
@@ -44,28 +45,37 @@ static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> c
     sendMsg(RPL_PRIVMSG_SRC(client->getNickname(), destChannel), client->getFd());//confirmaion envoi
 }
 
-static int  privmsg_checkFormat(String &entry)
+static String  privmsg_checkFormat(String &entry)
 {
-    int     type = 0;
-    int     nbWords = entry.wordCount();
-    int     i;
+    String      type;
+    int         nbWords = entry.wordCount();
+    int         i;
 
     for (i = 0; entry[i] == ' '; i++) ;
 
     if (entry[i] == '#')
-        type = 1;
+        type = "channel";
     else
-        type = 2;
+        type = "user";
     
     if (nbWords <= 1)
-        return (0);
+        return ("error");
 
     if (nbWords == 2)
         return (type);
 
     if (entry.getWord(2) != ":")
-        return (0);
+    {
+        String word = entry.getWord(1);
+        if (word.back() != ':')
+        {
+            word = entry.getWord(2);
+            if (word[0] != ':')
+                return ("error")    
+        }
+    }
 
+    entry.erase(entry.find(':'));
     return (type);
 }
 
