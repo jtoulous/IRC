@@ -1,36 +1,30 @@
 #include "Server.hpp"
 
-static void privmsg_toUser(Clients *client, String &entry, std::vector<Clients *> clientList)
+static void privmsg_toUser(Client *client, String &entry, vector<Client *> clientList)
 {
     String  msg;
     String  destNickname = entry.getWord(1);
-    int     destFd       = Utils::findClientFd(destNickname);
+    int     destFd       = Utils::findClientFd(destNickname, clientList);
 
     if (destFd == -1)//le destinataire n'existe pas
     {
-        msg.bigJoin(":Server 401 ", client.getNickname().c_str(), " :No such user\r\n", NULL, NULL);
-        send(client.getFd(), msg.c_str(), msg.size(), 0);//client does not exist
+        sendMsg(CODE_401(client->getNickname().c_str()), client->getFd());
+        return ;
     }
 
-    if (entry.wordCount() == 2)//msg ne fait que un mot
-    {
-            msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destNickname.c_str(), " :");
-            msg += entry.getWord(2) + "\r\n";
-            send(Utils::findClientFd(entry.getWord(1)), msg.c_str(), msg.size(), 0);
-    }
-
+    if (entry.wordCount() == 2)
+        msg = entry.getWord(2);
     else
-    {
-        msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destNickname.c_str(), " :");
         for (int i = 2; i < entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
-        msg += "\r\n"
+    
+    msg += "\r\n";
 
-        send(destFd, msg.c_str(), msg.size(), 0);
-    } 
+    sendMsg(PRIVMSG(client->getNickname().c_str(), destNickname.c_str(), msg.c_str()), destFd);//envoi du msg
+    sendMsg(CODE_302(client->getNickname().c_str(), destNickname.c_str()), client->getFd());//confirmaion envoi
 }
 
-static void privmsg_toChannel(Client *client, String &entry)
+static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> channelList)
 {
     String  msg;
     String  destChannel = entry.getWord(1);
@@ -38,26 +32,20 @@ static void privmsg_toChannel(Client *client, String &entry)
 
     if (channelIdx == -1)//channel existe pas
     {
-        msg.bigJoin(":Server 401 ", client.getNickname().c_str(), " :No such channel\r\n", NULL, NULL);
-        send(client.getFd(), msg.c_str(), msg.size(), 0);
+        sendMsg(CODE_401(client->getNickname().c_str()), client->getFd());
+        return ;
     }
 
-    else if (entry.wordCount() == 2)
-    {
-        msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destChannel.c_str(), " :");
-        msg += entry.getWord(2) + "\r\n";
-        //channelList[channelIdx]->diffuseMsg(msg);
-        //send(Utils::findClientFd(entry.getWord(1)), msg.c_str(), msg.size(), 0);
-    }
-
+    if (entry.wordCount() == 2)
+        msg = entry.getWord(2);
     else
-    {
-        msg.bigJoin(":", client->getNickname().c_str(), " PRIVMSG ", destNickname.c_str(), " :");
         for (int i = 2; i < entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
-        msg += "\r\n"
-        //channelList[channelIdx]->diffuseMsg(msg);        
-    }
+    
+    msg += "\r\n";
+
+    channelList[channelIdx]->diffuseMsg(PRIVMSG(client->getNickname().c_str(), destChannel.c_str(), msg.c_str()));
+    sendMsg(CODE_302(client->getNickname().c_str(), destChannel.c_str()), client->getFd());//confirmaion envoi
 }
 
 static int  privmsg_checkFormat(String &entry)
@@ -90,9 +78,9 @@ void    Server::privMsg(Client *client, String &entry)
     entry.rmWord(1);
 
     if (privmsg_checkFormat(entry) == 1)
-        privmsg_toChannel(client, entry);
-    else if (privMsg_checkFormat(client, entry) == 2)
+        privmsg_toChannel(client, entry, channelList);
+    else if (privmsg_checkFormat(entry) == 2)
         privmsg_toUser(client, entry, clientList);
     else
-        send(client->getFd(), "privmsg: bad input", 18, 0);    
+        sendMsg("privmsg: bad input", client->getFd());    
 }

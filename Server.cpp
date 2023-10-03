@@ -178,7 +178,7 @@ void    Server::pass(Client *client, String &entry)
         client->setLoggedIn(1);
         std::cout << "new client connected" << std::endl;
        //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
-        RPL_WELCOME(client);
+        RPL_WELCOME(client->getNickname().c_str());
     }
 }
 
@@ -209,3 +209,11 @@ void    Server::user(Client *client, String &entry)
 
 //void    Server::invite()
 //{}
+
+//////////////////////////////////////////////////////////////////////////
+
+void    sendMsg(const char *msg, int fd)
+{
+    send(fd, msg, std::strlen(msg), 0);
+    std::cout << msg << std::endl;
+}

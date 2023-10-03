@@ -209,21 +209,21 @@ String      String::getWord(int which)//renvoi le mot que tu veux
     return (tmp);
 }
 
-//void    String::rmWord(int index)//supprime le mot que tu veux bb
-//{
-//    if (index < 1 || index > this->wordCount())
-//        return;
-//
-//    String  tmp(*this);
-//    String  word = tmp.getWord(index);
-//    int     start = tmp.find(word);
-//    int     end = start;
-//
-//    for (; tmp[end] != ' ' && tmp[end]; end++);
-//
-//    tmp.erase(start, end);
-//    *this = tmp;
-//}
+void    String::rmWord(int index)//supprime le mot que tu veux bb
+{
+    if (index < 1 || index > this->wordCount())
+        return;
+
+    String  tmp(*this);
+    String  word = tmp.getWord(index);
+    int     start = tmp.find(word);
+    int     end = start;
+
+    for (; tmp[end] != ' ' && tmp[end]; end++);
+
+    tmp.erase(start, end - start + 1);
+    *this = tmp;
+}
 
 void    String::bigJoin(char *str1, char *str2, char *str3, char *str4, char *str5)
 {

@@ -61,3 +61,5 @@ class Server
                 String          Hostname;
                 String          password;
 };
+
+void    sendMsg(const char *msg, int fd);
