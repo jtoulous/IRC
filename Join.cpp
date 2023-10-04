@@ -1,12 +1,6 @@
 #include "Server.hpp"
 
-int passSpace(String str) {
 
-    int i = 0;
-    while (str[i] && str[i] == ' ')
-        i++;
-    return (i);
-}
 
 /* probleme valeur des variable de client, nickname vide */
 void    Server::join(Client *client, String &entry) {
@@ -17,10 +11,10 @@ void    Server::join(Client *client, String &entry) {
     String all = entry;
     all.rmWord(1);
     //String all = entry.substr(cmd.size(), entry.find('\0'));
-    String name = all.substr(passSpace(all), all.find(' ', passSpace(all)));
+    String name = all.substr(Utils::passSpace(all), all.find(' ', Utils::passSpace(all)));
     int i = 0;
     
-    i = passSpace(all);
+    i = Utils::passSpace(all);
     i += name.size();
     while (all[i] && all[i] == ' ')
         i++;

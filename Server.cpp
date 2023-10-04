@@ -36,6 +36,9 @@ Server::Server(char **argv)
 
 Server::~Server()
 {
+    for (size_t i = 0; i < this->channelList.size(); i++) {
+        delete (this->channelList[i]);
+    }
     close (EntrySocket);
 }
 
@@ -119,6 +122,8 @@ void    Server::servTreatClient(Client *client)
                 join(client, entry);
             else if (cmd == "PRIVMSG" || cmd == "privmsg")
                 privMsg(client, entry);
+            else if (cmd == "TOPIC" || cmd == "topic")
+                Topic(client, entry);
             //else if (entry.empty()) //si le mec a deco le recv return 0
             //  Utils::rmFromServer(client, clientList, channelList);
         } 

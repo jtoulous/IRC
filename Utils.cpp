@@ -65,7 +65,15 @@ bool    Utils::usernameAvailable(String &username, vector<Client *> &clientList)
     return (true);
 }
 
-void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList)
+int Utils::passSpace(String str) {
+
+    int i = 0;
+    while (str[i] && str[i] == ' ')
+        i++;
+    return (i);
+}
+
+/*void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList)
 {
     int fdTarget = client->getFd();
     int nickTarget = client->getNickname();
@@ -106,4 +114,4 @@ void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector
     }
 
     
-}
+}*/

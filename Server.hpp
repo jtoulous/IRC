@@ -51,6 +51,8 @@ class Server
                 bool    IfPasswordIsOk(String name, String password);
                 void    SendMessageToClient(int client_fd, Client *client, int index_chan);
                 
+                void    Topic(Client *client, String entry);
+
                 int     getFdMax();
                 int     getEntrySocket();
                 

@@ -10,6 +10,7 @@ class Channel
 {
     public:
             Channel();
+            ~Channel();
             Channel(String name, String password, int admin);
             bool        CheckChannelName(String name);
             bool        IfChannelExist(String name, int *index);

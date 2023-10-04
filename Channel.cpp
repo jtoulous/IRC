@@ -6,6 +6,7 @@ Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic("
     users.push_back(adm);
 }
 
+Channel::~Channel() {}
 /* rajouter comande MODE avec les mode autorisés
     Et le faire pour les admin et user */
 
