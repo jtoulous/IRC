@@ -25,7 +25,7 @@ class Channel
             void        setUserFd(int user_fd);
             void        setBoolInviteOnly(bool invite);
             
-            void        diffuseMsg(String msg, vector<Client *> clientList);
+            void        diffuseMsg(String msg, vector<Client *> clientList, int srcFd);
             
     private:
             String  name;

@@ -2,7 +2,9 @@
 
 Channel::Channel() {}
 
-Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic(""), owner(adm) {}
+Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic(""), owner(adm) {
+    users.push_back(adm);
+}
 
 /* rajouter comande MODE avec les mode autorisés
     Et le faire pour les admin et user */
@@ -46,12 +48,13 @@ void    Channel::setUserFd(int user_fd) {
     this->users.push_back(user_fd);
 }
 
-void    Channel::diffuseMsg(String msg, vector<Client *> clientList)
+void    Channel::diffuseMsg(String msg, vector<Client *> clientList, int srcFd)
 {
     for (int i = 0; i < (int)users.size(); i++)
-        sendMsg(msg, users[i], Utils::findClientNick(users[i], clientList));
+        if (srcFd != users[i])
+            sendMsg(msg, users[i], Utils::findClientNick(users[i], clientList));
 }
 
-void    setBoolInviteOnly(bool invite) {
+void    Channel::setBoolInviteOnly(bool invite) {
     this->invite_only = invite;
 }

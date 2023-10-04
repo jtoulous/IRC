@@ -42,7 +42,7 @@ static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> c
         for (int i = 1; i <= entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
     
-    channelList[channelIdx]->diffuseMsg(RPL_PRIVMSG_DEST(client->getNickname(), destChannel, msg), clientList);
+    channelList[channelIdx]->diffuseMsg(RPL_PRIVMSG_DEST(client->getNickname(), destChannel, msg), clientList, client->getFd());
     sendMsg(RPL_PRIVMSG_SRC(client->getNickname(), destChannel), client->getFd(), client->getNickname());//confirmaion envoi
 }
 
