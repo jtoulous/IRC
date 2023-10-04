@@ -64,6 +64,21 @@ int         &Channel::getOwner()
     return (owner);
 }
 
+int         Channel::getAdminWithIndex(int index_vec) {
+    return (this->admin[index_vec]);
+}
+
+bool        Channel::FdIsAdmin(int fd) {
+
+    if (this->admin.size() == 0)
+        return (false);
+    for (size_t i = 0; i < this->admin.size(); i++) {
+        if (this->admin[i] == fd)
+            return (true);
+    }
+    return (false);
+}
+
 void    Channel::diffuseMsg(String msg, vector<Client *> clientList, int srcFd)
 {
     for (int i = 0; i < (int)users.size(); i++)
@@ -73,4 +88,8 @@ void    Channel::diffuseMsg(String msg, vector<Client *> clientList, int srcFd)
 
 void    Channel::setBoolInviteOnly(bool invite) {
     this->invite_only = invite;
+}
+
+void        Channel::setTopic(String topik) {
+    this->topic = topik;
 }

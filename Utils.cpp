@@ -73,6 +73,7 @@ int Utils::passSpace(String str) {
     return (i);
 }
 
+
 /*void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList)
 {
     int fdTarget = client->getFd();
