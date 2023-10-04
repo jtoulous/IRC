@@ -76,7 +76,6 @@ int Utils::passSpace(String str) {
 /*void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList)
 {
     int fdTarget = client->getFd();
-    int nickTarget = client->getNickname();
 
     for (int i = 0; i < channelList.size(); i++) //checker les channel ou il etait
     {
@@ -107,9 +106,12 @@ int Utils::passSpace(String str) {
             if (admins.size() != 0)
                 owner = admins[0];
             else if (users.size() != 0)
-                owmer = users[0];
+                owner = users[0];
             else
-                channelList.erase(channelList.begin() + i); 
+            {
+                channelList.erase(channelList.begin() + i);
+                i--;
+            }
         }
     }
 

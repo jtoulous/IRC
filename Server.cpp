@@ -99,7 +99,11 @@ void    Server::servTreatClient(Client *client)
     String  entry;
     String  cmd;
 
-    servReceive(client);
+    /*if (*/servReceive(client);/*== 0)*/
+    //{
+    //    rmFromServer(client);
+    //    return ;
+    //}
     std::cout << client->buffer << "---" << std::endl;
     while (client->buffer.find('\n') != NPOS)
     {
@@ -130,7 +134,7 @@ void    Server::servTreatClient(Client *client)
     }
 }
 
-void    Server::servReceive(Client *client)
+int    Server::servReceive(Client *client)
 {
     int     size = BUFFER_SIZE;
     char    buff[BUFFER_SIZE];
@@ -141,13 +145,14 @@ void    Server::servReceive(Client *client)
         if (size == -1)
         {
             std::cout << "recv problem for " << client->getUsername() << std::endl;
-            return;
+            return (-1);
         }
         buff[size] = '\0';
         client->buffer = client->buffer + buff;
     }
     client->buffer -= "\r";
     std::cout << GREEN << "\n" << client->buffer << DEFAULT << std::endl;
+    return (size);
 }
 
 //////////////////////////////////////////////////////////////////////////
