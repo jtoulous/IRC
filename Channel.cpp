@@ -52,6 +52,6 @@ void    Channel::diffuseMsg(String msg, vector<Client *> clientList)
         sendMsg(msg, users[i], Utils::findClientNick(users[i], clientList));
 }
 
-void    setBoolInviteOnly(bool invite) {
+void    Channel::setBoolInviteOnly(bool invite) {
     this->invite_only = invite;
 }

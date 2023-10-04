@@ -36,5 +36,4 @@
 #define ERR_BADCHANNELKEY(client, channel)(": 475" + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)(": 482" + client + " " channel + "  :You're not channel operator\r\n")
 #define ERR_NICKALREADYUSED(nickname) (": 433 * " + nickname + " :Nickname already in use")
-
 #endif

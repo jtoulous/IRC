@@ -48,7 +48,9 @@ class Server
 
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
-
+                bool    IfPasswordIsOk(String name, String password);
+                void    SendMessageToClient(int client_fd, Client *client, int index_chan);
+                
                 int     getFdMax();
                 int     getEntrySocket();
                 

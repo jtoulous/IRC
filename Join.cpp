@@ -18,9 +18,16 @@ void    Server::join(Client *client, String &entry) {
     all.rmWord(1);
     //String all = entry.substr(cmd.size(), entry.find('\0'));
     String name = all.substr(passSpace(all), all.find(' ', passSpace(all)));
-    String password = all.substr(name.size() + passSpace(all), all.find('\0', name.size()));
-    String message_client;
+    int i = 0;
     
+    i = passSpace(all);
+    i += name.size();
+    while (all[i] && all[i] == ' ')
+        i++;
+    String password = all.substr(i, all.find('\0', name.size()));
+    std::cout << "password = " << "'" << password << "'" << std::endl;
+    String message_client;
+
     if (CheckChannelName(name) == false) {
         std::cout << "Channel no create" << std::endl;
         sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd(), client->getNickname());
@@ -32,15 +39,22 @@ void    Server::join(Client *client, String &entry) {
             std::cout << "Error channel invite only" << std::endl; 
             return ;    
         }*/
-        /* fonction findClientFd ne fonctionne pas */
+        /* si le channel a le bon mot de passe du channel */
         int user_fd = client->getFd();
-        
         index_chan = Utils::findChannelIndex(name, channelList);
+        if (IfPasswordIsOk(name, password) == true) {
+            SendMessageToClient(user_fd, client, index_chan);
+            return ;
+        }
+        else if (IfPasswordIsOk(name, password) == false) {
+            sendMsg(ERR_BADCHANNELKEY(client->getNickname(), this->channelList[index_chan]->getName()), user_fd, client->getNickname());
+            return ;
+        }
+
         this->channelList[index_chan]->setUserFd(user_fd);
-        message_client = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
+
+        SendMessageToClient(user_fd, client, index_chan);
         std::cout << "Push_back KO" << std::endl;
-        
-        send (user_fd, message_client.c_str(), message_client.size(), 0);
         return ;
     }
     owner_fd = client->getFd();
@@ -49,9 +63,7 @@ void    Server::join(Client *client, String &entry) {
     index_chan = Utils::findChannelIndex(name, channelList);
     std::cout << "Push_back OK" << std::endl;
 
-    message_client = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
-    std::cout << message_client << std::endl;
-    send (owner_fd, message_client.c_str(), message_client.size(), 0);
+    SendMessageToClient(owner_fd, client, index_chan);
 }
 
 /* "PRIVMSG #toncanal :tonmessage" */
@@ -75,4 +87,27 @@ bool    Server::IfChannelExist(String name) {
     }
 
     return (false);
+}
+
+bool    Server::IfPasswordIsOk(String name, String password) {
+
+    size_t i = 0;
+    while (i < this->channelList.size()) {
+        if (this->channelList[i]->getName() == name 
+            && !this->channelList[i]->getPassword().empty()) {
+                if (this->channelList[i]->getPassword() == password) {
+                    std::cout << "password = " << this->channelList[i]->getPassword() << std::endl;
+                    return (true);
+                }
+            }
+        i++;
+    }
+    //std::cout << "password = " << this->channelList[i]->getPassword() << std::endl;
+    return (false);
+}
+
+void    Server::SendMessageToClient(int client_fd, Client *client, int index_chan) {
+    
+    String message_client = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
+    send (client_fd, message_client.c_str(), message_client.size(), 0);
 }
