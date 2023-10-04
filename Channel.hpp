@@ -23,7 +23,10 @@ class Channel
             bool        getInviteOnly();
 
             void        setUserFd(int user_fd);
+            void        setBoolInviteOnly(bool invite);
+            
             void        diffuseMsg(String msg, vector<Client *> clientList);
+            
     private:
             String  name;
             String  password;

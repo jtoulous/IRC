@@ -19,8 +19,8 @@ void    Server::join(Client *client, String &entry) {
     //String all = entry.substr(cmd.size(), entry.find('\0'));
     String name = all.substr(passSpace(all), all.find(' ', passSpace(all)));
     String password = all.substr(name.size() + passSpace(all), all.find('\0', name.size()));
-    
     String message_client;
+    
     if (CheckChannelName(name) == false) {
         std::cout << "Channel no create" << std::endl;
         sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd(), client->getNickname());
@@ -33,27 +33,25 @@ void    Server::join(Client *client, String &entry) {
             return ;    
         }*/
         /* fonction findClientFd ne fonctionne pas */
-        int user_fd = Utils::findClientFd(name, this->clientList);
+        int user_fd = client->getFd();
         
         index_chan = Utils::findChannelIndex(name, channelList);
         this->channelList[index_chan]->setUserFd(user_fd);
         message_client = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
         std::cout << "Push_back KO" << std::endl;
-        send (client->getFd(), message_client.c_str(), message_client.size(), 0);
+        
+        send (user_fd, message_client.c_str(), message_client.size(), 0);
         return ;
     }
-    owner_fd = Utils::findClientFd(name, this->clientList);
+    owner_fd = client->getFd();
     
     this->channelList.push_back(new Channel(name, password, owner_fd));
     index_chan = Utils::findChannelIndex(name, channelList);
     std::cout << "Push_back OK" << std::endl;
-    std::cout << "fd_owner = " << owner_fd << std::endl;
-    std::cout << "fd->client = " << client->getFd() << std::endl;
-    //std::cout << "client->getNickname = " << client->getNickname() << std::endl;
-    //std::cout << "name_channel = " << this->channelList[index_chan]->getName() << std::endl;
+
     message_client = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
     std::cout << message_client << std::endl;
-    send (client->getFd(), message_client.c_str(), message_client.size(), 0);
+    send (owner_fd, message_client.c_str(), message_client.size(), 0);
 }
 
 /* "PRIVMSG #toncanal :tonmessage" */

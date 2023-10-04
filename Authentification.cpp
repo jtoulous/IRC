@@ -39,5 +39,6 @@ void    Server::user(Client *client, String &entry)
     {
         client->setUsername(username);
         sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
+        //sendMsg(RPL_WELCOME(client->getNickname()), client->getFd(), client->getNickname());
     }
 }
