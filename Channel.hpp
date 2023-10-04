@@ -21,6 +21,9 @@ class Channel
             String      getPassword();
             String      getTopic();
             bool        getInviteOnly();
+            vector<int> &getUsers();
+            vector<int> &getAdmins();
+            int         &getOwner();
 
             void        setUserFd(int user_fd);
             void        setBoolInviteOnly(bool invite);

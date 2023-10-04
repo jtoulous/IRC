@@ -251,7 +251,7 @@ int     String::wordStartPos(int wordNb)
     int     count = 0;
     int     i = 0;
 
-    if (wordNb <= 0 || wordNb > this->wordCount())
+    if (this->empty() || wordNb <= 0 || wordNb > this->wordCount())
         return (-1);
 
     while (count != wordNb && tmp[i])

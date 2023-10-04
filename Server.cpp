@@ -119,6 +119,8 @@ void    Server::servTreatClient(Client *client)
                 join(client, entry);
             else if (cmd == "PRIVMSG" || cmd == "privmsg")
                 privMsg(client, entry);
+            //else if (entry.empty()) //si le mec a deco le recv return 0
+            //  Utils::rmFromServer(client, clientList, channelList);
         } 
     }
 }

@@ -48,6 +48,21 @@ void    Channel::setUserFd(int user_fd) {
     this->users.push_back(user_fd);
 }
 
+vector<int> &Channel::getUsers()
+{
+    return (users);
+}
+
+vector<int> &Channel::getAdmins()
+{
+    return (admin);
+}
+
+int         &Channel::getOwner()
+{
+    return (owner);
+}
+
 void    Channel::diffuseMsg(String msg, vector<Client *> clientList, int srcFd)
 {
     for (int i = 0; i < (int)users.size(); i++)
