@@ -64,3 +64,46 @@ bool    Utils::usernameAvailable(String &username, vector<Client *> &clientList)
             return (false);
     return (true);
 }
+
+void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList)
+{
+    int fdTarget = client->getFd();
+    int nickTarget = client->getNickname();
+
+    for (int i = 0; i < channelList.size(); i++) //checker les channel ou il etait
+    {
+        vector<int> users = channelList[i]->getUsers();
+        vector<int> admins = channelList[i]->getAdmins();
+        int         owner = channelList[i]->getOwner();
+
+        for (int u = 0; u < users.size(); u++)
+        {
+            if (users[i] == fdTarget)
+            {
+                users.erase(users.begin() + i);           
+                break;
+            }
+        }
+
+        for (int a = 0; a < admins.size(); a++)
+        {
+            if (admins[i] == fdTarget)
+            {
+                admins.erase(admins.begin() + i);
+                break;
+            }
+        }
+
+        if (owner == fdTarget)
+        {
+            if (admins.size() != 0)
+                owner = admins[0];
+            else if (users.size() != 0)
+                owmer = users[0];
+            else
+                channelList.erase(channelList.begin() + i); 
+        }
+    }
+
+    
+}

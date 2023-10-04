@@ -21,7 +21,7 @@ class Utils
             static int          findChannelIndex(String &name, vector<Channel *> &channelList);
             static bool         nicknameAvailable(String &nickname, vector<Client *> &clientList);
             static bool         usernameAvailable(String &username, vector<Client *> &clientList);
-            //static void         removeClient();
+            //static void         rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList);
 
     private:
             Utils();
