@@ -7,20 +7,17 @@ void    Server::join(Client *client, String &entry) {
     
     int owner_fd = -1;
     int index_chan = -1;
-
-    String all = entry;
-    all.rmWord(1);
-    //String all = entry.substr(cmd.size(), entry.find('\0'));
-    String name = all.substr(Utils::passSpace(all), all.find(' ', Utils::passSpace(all)));
-    int i = 0;
-    
-    i = Utils::passSpace(all);
-    i += name.size();
-    while (all[i] && all[i] == ' ')
-        i++;
-    String password = all.substr(i, all.find('\0', name.size()));
-    std::cout << "password = " << "'" << password << "'" << std::endl;
     String message_client;
+
+    entry.rmWord(1);
+    //String entry = entry.substr(cmd.size(), entry.find('\0'));
+    String name = entry.substr(Utils::passSpace(entry), entry.find(' ', Utils::passSpace(entry)));
+    
+    int i = Utils::passSpace(entry) + name.size();
+    while (entry[i] && entry[i] == ' ')
+        i++;
+
+    String password = entry.substr(i, entry.find('\0', name.size()));
 
     if (CheckChannelName(name) == false) {
         std::cout << "Channel no create" << std::endl;
@@ -90,13 +87,11 @@ bool    Server::IfPasswordIsOk(String name, String password) {
         if (this->channelList[i]->getName() == name 
             && !this->channelList[i]->getPassword().empty()) {
                 if (this->channelList[i]->getPassword() == password) {
-                    std::cout << "password = " << this->channelList[i]->getPassword() << std::endl;
                     return (true);
                 }
             }
         i++;
     }
-    //std::cout << "password = " << this->channelList[i]->getPassword() << std::endl;
     return (false);
 }
 
