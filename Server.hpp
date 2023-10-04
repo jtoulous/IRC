@@ -37,7 +37,7 @@ class Server
                 void    servCheckSockets(fd_set &sockets);
                 void    servNewConnection();
                 void    servTreatClient(Client *client);
-                void    servReceive(Client *client);
+                int     servReceive(Client *client);
 
                 void    pass(Client *client, String &entry);
                 void    nick(Client *client, String &entry);
