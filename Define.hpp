@@ -3,7 +3,6 @@
 
 
 //Command responses
-#define RPL_JOINCHANNEL(client, channelList, index_chan) (":" + client + " JOIN " + channelList[index_chan] + "\r\n")
 #define RPL_WELCOME(client) (": 001 " + client + ": Welcome to the Internet Relay Network\r\n")
 #define RPL_NOTOPIC(client, channel)(": 331" + client + " " + channel + " :No topic is set\r\n")
 #define RPL_TOPIC(client, channel, topic)(": 332" + client + " " channel + " :" + topic + "\r\n")

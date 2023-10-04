@@ -110,7 +110,7 @@ void    Server::servTreatClient(Client *client)
     String  cmd;
 
     servReceive(client);
-    
+    std::cout << client->buffer << "---" << std::endl;
     while (client->buffer.find('\n') != NPOS)
     {
         entry = client->buffer.substr(0, client->buffer.find('\n'));
@@ -158,7 +158,7 @@ void    Server::servReceive(Client *client)
         buff[size] = '\0';
         client->buffer = client->buffer + buff;
     }
-    std::cout << client->buffer << std::endl;
+    //std::cout << client->buffer << std::endl;
     client->buffer -= "\r";
 }
 
@@ -173,13 +173,12 @@ void    Server::pass(Client *client, String &entry)
     String  entryPwd;
     (void) client;
     entryPwd = entry.substr(entry.find(' ') + 1, entry.size());
-    if (entryPwd == password)
+  /*  if (entryPwd == password)
     {
-        client->setLoggedIn(1);
+       // client->setLoggedIn(1);
         //std::cout << "new client connected" << std::endl;
         //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
-        sendMsg(RPL_WELCOME(client->getNickname()), client->getFd());
-    }
+    }*/
 }
 
 void    Server::nick(Client *client, String &entry)
@@ -206,7 +205,7 @@ void    Server::user(Client *client, String &entry)
     client->setLoggedIn(1);
     std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
     std::cout << "new client connected" << std::endl;
-    client->setLoggedIn(1);
+    sendMsg(RPL_WELCOME(client->getNickname()), client->getFd());
     send(client->getFd(), "Username changed successfully\r\n", 31, 0);
 }
 

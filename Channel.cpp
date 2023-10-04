@@ -33,7 +33,7 @@ String      Channel::getPassword() {
     return (this->password);
 }
 
-String      Channel::getTopic() {
+String      Channel::getTopic() {   
     return (this->topic);
 }
 

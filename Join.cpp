@@ -30,6 +30,7 @@ void    Server::join(Client *client, String cmd, String entry) {
             std::cout << "Error channel invite only" << std::endl; 
             return ;    
         }*/
+        /* fonction findClientFd ne fonctionne pas */
         int user_fd = Utils::findClientFd(name, this->clientList);
         
         index_chan = Utils::findChannelIndex(name, channelList);
@@ -42,10 +43,14 @@ void    Server::join(Client *client, String cmd, String entry) {
     owner_fd = Utils::findClientFd(name, this->clientList);
     
     this->channelList.push_back(new Channel(name, password, owner_fd));
-        
+    index_chan = Utils::findChannelIndex(name, channelList);
     std::cout << "Push_back OK" << std::endl;
-    
+    std::cout << "fd_owner = " << owner_fd << std::endl;
+    std::cout << "fd->client = " << client->getFd() << std::endl;
+    //std::cout << "client->getNickname = " << client->getNickname() << std::endl;
+    //std::cout << "name_channel = " << this->channelList[index_chan]->getName() << std::endl;
     message_client = ":" + client->getNickname() + " JOIN " + this->channelList[index_chan]->getName() + "\r\n";
+    std::cout << message_client << std::endl;
     send (client->getFd(), message_client.c_str(), message_client.size(), 0);
 }
 
@@ -65,7 +70,6 @@ bool    Server::IfChannelExist(String name) {
         return (false);
     for (size_t i = 0; i < this->channelList.size(); i++) {
         if (this->channelList[i]->getName() == name) {
-            std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
             return (true);
         }
     }
