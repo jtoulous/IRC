@@ -1,6 +1,11 @@
 #ifndef DEFINE_HPP 
 #define DEFINE_HPP
 
+//Colors
+#define GREEN "\033[32m"
+#define ORANGE "\033[1;33m"
+#define RED "\033[1;31m"
+#define DEFAULT "\033[0m"
 
 //Command responses
 #define RPL_WELCOME(client) (": 001 " + client + ": Welcome to the Internet Relay Network\r\n")
@@ -8,8 +13,8 @@
 #define RPL_TOPIC(client, channel, topic)(": 332" + client + " " channel + " :" + topic + "\r\n")
 #define RPL_INVITING(client, channel , nick)(": 341" + client + " " + channel + " " + nick + "\r\n")
 #define RPL_PRIVMSG_DEST(srcName, destName, msg) (":" + srcName + " PRIVMSG " + destName + " :" + msg + "\r\n")
-#define RPL_PRIVMSG_SRC(srcName, msg) (": 302 " + srcName + " " + msg + "\r\n") //message sent confirmation
-
+#define RPL_PRIVMSG_SRC(srcName, msg) (": 302 " + srcName + " :" + msg + "\r\n") //message sent confirmation
+#define RPL_NICKCHANGE(newNick) (": 001 " + newNick + " :Nickname changed successfully\r\n")
 
 //Error Replies
 
@@ -30,5 +35,6 @@
 #define ERR_INVITEONLYCHAN(client, channel)(": 473" + client + " " + channel + "  :Cannot join channel (+i)\r\n")
 #define ERR_BADCHANNELKEY(client, channel)(": 475" + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)(": 482" + client + " " channel + "  :You're not channel operator\r\n")
+#define ERR_NICKALREADYUSED(nickname) (": 433 * " + nickname + " :Nickname already in use")
 
 #endif

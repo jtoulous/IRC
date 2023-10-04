@@ -4,6 +4,7 @@
 
 #define vector          std::vector
 class Server;
+class Client;
 
 class Channel
 {
@@ -22,7 +23,7 @@ class Channel
             bool        getInviteOnly();
 
             void        setUserFd(int user_fd);
-            void        diffuseMsg(String msg);
+            void        diffuseMsg(String msg, vector<Client *> clientList);
     private:
             String  name;
             String  password;

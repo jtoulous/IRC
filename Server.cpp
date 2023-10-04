@@ -63,23 +63,6 @@ int     Server::getEntrySocket()
 //                  METHODS                         //
 //////////////////////////////////////////////////////
 
-
-void    Server::servEmpty()
-{
-    int             newClient;
-    sockaddr_in     clientAddr;
-    socklen_t       clientSize = sizeof(clientAddr);
-
-    listen(EntrySocket, 10);
-    newClient = accept(EntrySocket, (struct sockaddr *)&clientAddr, &clientSize);
-    if (newClient == -1)
-        throw (Xception("Error: accept()"));
-    clientList.push_back(new Client);
-    clientList[clientList.size() - 1]->setFd(newClient);
-    clientList[clientList.size() - 1]->setNb(0);
-    //send(newClient, "password: ", 10, 0);
-}
-
 void    Server::servCheckSockets(fd_set &sockets)
 {
     if (FD_ISSET(EntrySocket, &sockets))
@@ -95,13 +78,17 @@ void    Server::servNewConnection()
     sockaddr_in     clientAddr;
     socklen_t       clientSize = sizeof(clientAddr);
 
+    if (clientList.size() == 0)
+        listen(EntrySocket, 10);
     newClient = accept(EntrySocket, (struct sockaddr *)&clientAddr, &clientSize);
     if (newClient == -1)
-        throw (Xception("Error: accept()"));
-    clientList.push_back(new Client);
-    clientList[clientList.size() - 1]->setFd(newClient);
-    clientList[clientList.size() - 1]->setNb(clientList.size() - 1);
-    //send(newClient, "password: ", 10, 0);
+        std::cout << RED << "Error: accept()" << DEFAULT << std::endl;
+    else
+    {
+        clientList.push_back(new Client);
+        clientList[clientList.size() - 1]->setFd(newClient);
+        clientList[clientList.size() - 1]->setNb(clientList.size() - 1);
+    }
 }
 
 void    Server::servTreatClient(Client *client)
@@ -116,30 +103,24 @@ void    Server::servTreatClient(Client *client)
         entry = client->buffer.substr(0, client->buffer.find('\n'));
         client->buffer.erase(0, client->buffer.find('\n') + 1);
         
-        if (entry.find(' ') == NPOS)
-            send(client->getFd(), "bad input\n", 10, 0);
+        if (entry.find(' ') == NPOS)//a remplacer par un ptite gestion d'erreur pour la commande recu
+            sendMsg("bad input\n", client->getFd(), client->getNickname());//remplacer par le RPL qu il faut
         else
         {
             cmd = entry.getWord(1);
-            //std::cout << "cmd: " << cmd << std::endl;
+
             if (cmd == "PASS" || cmd == "pass")
                 pass(client, entry);
             else if (cmd == "NICK" || cmd == "nick")
                 nick(client, entry);
             else if (cmd == "USER" || cmd == "user")
                 user(client, entry);
-            else if (cmd == "JOIN")
-                join(client, cmd, entry);
-            //else if (cmd == "INVITE")
-              //  invite(client, cmd, entry);
+            else if (cmd == "JOIN" || cmd == "join")
+                join(client, entry);
             else if (cmd == "PRIVMSG" || cmd == "privmsg")
                 privMsg(client, entry);
-            
-            //else if (CMD == "INVITE")  
         } 
     }
-
-
 }
 
 void    Server::servReceive(Client *client)
@@ -158,64 +139,16 @@ void    Server::servReceive(Client *client)
         buff[size] = '\0';
         client->buffer = client->buffer + buff;
     }
-    //std::cout << client->buffer << std::endl;
     client->buffer -= "\r";
+    std::cout << GREEN << "\n" << client->buffer << DEFAULT << std::endl;
 }
-
-
-/////////////////////////////////////////////////////
-//              IRC COMMANDS                       //
-////////////////////////////////////////////////////
-
-
-void    Server::pass(Client *client, String &entry)
-{
-    String  entryPwd;
-    (void) client;
-    entryPwd = entry.substr(entry.find(' ') + 1, entry.size());
-  /*  if (entryPwd == password)
-    {
-       // client->setLoggedIn(1);
-        //std::cout << "new client connected" << std::endl;
-        //send(client->getFd(), ":The_server 001 * :Welcome on the server\r\n", 42, 0);
-    }*/
-}
-
-void    Server::nick(Client *client, String &entry)
-{
-    String  nickname;
-    int     pos;
-
-    pos = entry.find(' ') + 1;
-    nickname = entry.substr(pos, entry.find(' ', pos));
-
-    client->setNickname(nickname);
-    send(client->getFd(), "Nickname changed successfully\r\n", 31, 0);
-    std::cout << "client " << client->getNb() << ": nickname set to " << client->getNickname() << std::endl;
-}
-
-void    Server::user(Client *client, String &entry)
-{
-    String  username;
-    int     pos;
-
-    pos = entry.find(' ') + 1;
-    username = entry.substr(pos, entry.find(' ', pos) - pos);
-    client->setUsername(username);
-    client->setLoggedIn(1);
-    std::cout << "client " << client->getNb() << ": username set to " << client->getUsername() << std::endl;
-    std::cout << "new client connected" << std::endl;
-    sendMsg(RPL_WELCOME(client->getNickname()), client->getFd());
-    send(client->getFd(), "Username changed successfully\r\n", 31, 0);
-}
-
-//void    Server::invite()
-//{}
 
 //////////////////////////////////////////////////////////////////////////
 
-void    sendMsg(String msg, int fd)
+void    sendMsg(String msg, int fd, String nick)
 {
     send(fd, msg.c_str(), msg.size(), 0);
-    std::cout << msg << std::endl;
+    msg -= "\r\n";
+    if (!nick.empty())
+        std::cout << "=====> " << ORANGE << "to " << nick << ": " << DEFAULT << msg << std::endl;
 }

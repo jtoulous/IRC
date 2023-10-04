@@ -151,14 +151,6 @@ int     String::X_occur(char ch)
     return (nb);
 }
 
-const char    *String::cc_str() const
-{
-    const char *tmp;
-
-    tmp = this->c_str();
-    return (tmp);
-}
-
 int         String::wordCount()//compte les mots
 {
     String  tmp(*this);
@@ -176,53 +168,142 @@ int         String::wordCount()//compte les mots
     return (count); 
 }
 
-String      String::getWord(int which)//renvoi le mot que tu veux
+String      String::getWord(int wordNb)//renvoi le mot que tu veux
+{
+    String  word(*this);
+    int     s = wordStartPos(wordNb);
+    int     e = wordEndPos(wordNb);
+    
+    if (s != -1 && e != -1)
+        word = word.substr(s, (e + 1) - s);
+    return (word);
+}
+
+void    String::rmWord(int wordNb)//supprime le mot que tu veux bb
 {
     String  tmp(*this);
-    String  word;
+    int     start = tmp.wordStartPos(wordNb);
+    int     end = tmp.wordEndPos(wordNb) + 1;
+
+    if (start == -1 || end == -1)
+        return;
+
+    for (; tmp[end] == ' ' && tmp[end]; end++);
+
+    tmp.erase(start, end - start);
+    *this = tmp;
+}
+
+void    String::rrmFromWord(int wordNb, char target)
+{
+    String  tmp(*this);
+    int     idx = tmp.wordEndPos(wordNb);
+
+    if (wordNb <= 0 || wordNb > this->wordCount() || idx == -1)
+        return;
+
+    for (; tmp[idx] != target && tmp[idx] != ' ' && idx >= 0; idx--);
+
+    if (tmp[idx] == target)
+        tmp.erase(idx, 1);
+    
+    *this = tmp;
+}
+
+void    String::rmFromWord(int wordNb, char target)
+{
+    String  tmp(*this);
+    int     idx = tmp.wordStartPos(wordNb);
+
+    if (wordNb <= 0 || wordNb > this->wordCount() || idx == -1)
+        return;
+
+    for (; tmp[idx] != target && tmp[idx] != ' ' && tmp[idx]; idx++);
+
+    if (tmp[idx] == target)
+        tmp.erase(idx, 1);
+    
+    *this = tmp;
+}
+
+void    String::rmAllFromWord(int wordNb, char target)
+{
+    String  tmp(*this);
+    int     idx = tmp.wordStartPos(wordNb);
+
+    if (wordNb <= 0 || wordNb > this->wordCount() || idx == -1 || target == ' ')
+        return;
+
+    for (; tmp[idx] != ' ' && tmp[idx]; idx++)
+    {    
+        if (tmp[idx] == target)
+        {    
+            tmp.erase(idx, 1);
+            idx--;
+        }
+    }
+    *this = tmp;
+}
+
+int     String::wordStartPos(int wordNb)
+{
+    String  tmp(*this);
     int     count = 0;
     int     i = 0;
-    int     e;
-    
-    if (which <= 0)
-        return (tmp);
-    while (count != which && tmp[i])
+
+    if (wordNb <= 0 || wordNb > this->wordCount())
+        return (-1);
+
+    while (count != wordNb && tmp[i])
     {
         for (; tmp[i] == ' ' && tmp[i]; i++);
 
         if (tmp[i] != '\0')
             count++;
-        if (count != which)
+        if (count != wordNb)
             for (; tmp[i] != ' ' && tmp[i]; i++);
     }
-
-    if (tmp[i] != '\0')
-    {
-        e = i;
-        for (; tmp[e] != ' ' && tmp[e]; e++);
-
-        word = tmp.substr(i, e - i);
-
-        return (word);
-    }
-    return (tmp);
+    if (tmp[i] == '\0')
+        return (-1);
+    return (i);
 }
 
-void    String::rmWord(int index)//supprime le mot que tu veux bb
+int     String::wordEndPos(int wordNb)
 {
-    if (index < 1 || index > this->wordCount())
-        return;
+        String  tmp(*this);
+        int     e = tmp.wordStartPos(wordNb);
 
-    String  tmp(*this);
-    String  word = tmp.getWord(index);
-    int     start = tmp.find(word);
-    int     end = start;
+        if (wordNb <= 0 || wordNb > this->wordCount() || e == -1)
+            return (-1);
 
-    for (; tmp[end] != ' ' && tmp[end]; end++);
-
-    tmp.erase(start, end - start + 1);
-    *this = tmp;
+        for (; tmp[e + 1] != '\0' && tmp[e + 1] != ' '; e++);
+        
+        return (e);
 }
+
+char    String::wordStartChar(int wordNb)
+{
+    String  tmp(*this);
+    int     pos = tmp.wordStartPos(wordNb);
+
+    if (pos == -1)
+        return ('\0');
+
+    return (tmp[tmp.wordStartPos(wordNb)]);
+}
+
+char    String::wordEndChar(int wordNb)
+{
+    String  tmp(*this);
+    int     pos = tmp.wordEndPos(wordNb);
+
+    if (pos == -1)
+        return ('\0');
+
+    return (tmp[pos]);
+}
+
+
 
 void    String::bigJoin(char *str1, char *str2, char *str3, char *str4, char *str5)
 {

@@ -34,7 +34,6 @@ class Server
                 Server(char **argv);
                 ~Server();
 
-                void    servEmpty();
                 void    servCheckSockets(fd_set &sockets);
                 void    servNewConnection();
                 void    servTreatClient(Client *client);
@@ -45,20 +44,16 @@ class Server
                 void    user(Client *client, String &entry);
                 void    kick(Client *client, String &cmd, String &entry);
                 void    privMsg(Client *client, String &entry);
+                void    join(Client *client, String &entry);
 
-                vector<Channel *>       channelList;
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
-                void    join(Client *client, String cmd, String entry);
-                void    privMsg(Client *client, String cmd, String entry);
-                //void    ping();
-                //void    invite();
 
                 int     getFdMax();
                 int     getEntrySocket();
                 
                 vector<Client *>        clientList;
-                //vector<Channel *>       channelList;
+                vector<Channel *>       channelList;
 
         private:
                 int             EntrySocket;
@@ -66,4 +61,4 @@ class Server
                 String          password;
 };
 
-void    sendMsg(String msg, int fd);
+void    sendMsg(String msg, int fd, String nick);
