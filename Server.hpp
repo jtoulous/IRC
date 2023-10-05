@@ -42,7 +42,7 @@ class Server
                 void    pass(Client *client, String &entry);
                 void    nick(Client *client, String &entry);
                 void    user(Client *client, String &entry);
-                void    kick(Client *client, String &cmd, String &entry);
+                void    kick(Client *client, String &entry);
                 void    privMsg(Client *client, String &entry);
                 void    join(Client *client, String &entry);
                 void    invite(Client *client, String &entry);
