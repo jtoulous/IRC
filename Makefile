@@ -11,7 +11,7 @@ SRC		= main.cpp \
 			Join.cpp \
 			Authentification.cpp \
 			Topic.cpp\
-			invite.cpp
+			Invite.cpp
 
 OBJ		= $(SRC:.cpp=.o)
 
