@@ -18,6 +18,7 @@ class Utils
 
             static int          findClientFd(String &nickname, vector<Client *> &clientList);
             static String       findClientNick(int fd, vector<Client *> &clientList);
+            static int          findClientIndex(int fd, vector<Client *> &clientList);
             static int          findChannelIndex(String &name, vector<Channel *> &channelList);
             static bool         nicknameAvailable(String &nickname, vector<Client *> &clientList);
             static bool         usernameAvailable(String &username, vector<Client *> &clientList);

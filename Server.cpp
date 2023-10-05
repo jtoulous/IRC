@@ -110,10 +110,10 @@ void    Server::servTreatClient(Client *client)
         entry = client->buffer.substr(0, client->buffer.find('\n'));
         client->buffer.erase(0, client->buffer.find('\n') + 1);
         
-        if (entry.find(' ') == NPOS)//a remplacer par un ptite gestion d'erreur pour la commande recu
-            sendMsg("bad input\n", client->getFd(), client->getNickname());//remplacer par le RPL qu il faut
-        else
-        {
+        //if (littleCheck(entry))
+        //    sendMsg("bad input\n", client->getFd(), client->getNickname());//remplacer par le RPL qu il faut
+        //else
+        //{
             cmd = entry.getWord(1);
             if (cmd == "PASS" || cmd == "pass")
                 pass(client, entry);
@@ -135,7 +135,7 @@ void    Server::servTreatClient(Client *client)
             //    kick(client, entry);
             //else
             //    sendMsg("command unknown", client->getFd(), client->getNickname());
-        } 
+        //} 
     }
 }
 

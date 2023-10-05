@@ -36,6 +36,16 @@ String  Utils::findClientNick(int fd, vector<Client *> &clientList)
     return (notFound);
 }
 
+int     Utils::findClientIndex(int fd, vector<Client *> &clientList)
+{
+    for (int i = 0; i < (int)clientList.size(); i++)
+    {
+        if (clientList[i]->getFd() == fd)
+            return (i);
+    }
+    return (-1);
+}
+
 int     Utils::findChannelIndex(String &name, vector<Channel *> &channelList)
 {
     size_t i = 0;
