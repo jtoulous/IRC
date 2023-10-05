@@ -73,10 +73,9 @@ int Utils::passSpace(String str) {
     return (i);
 }
 
-
-/*void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList)
+/*void    Utils::rmFromServer(int fdTarget, vector<Client *> &clientList, vector<Channel *> &channelList)
 {
-    int fdTarget = client->getFd();
+    Client *tmp;
 
     for (int i = 0; i < channelList.size(); i++) //checker les channel ou il etait
     {
@@ -84,7 +83,7 @@ int Utils::passSpace(String str) {
         vector<int> admins = channelList[i]->getAdmins();
         int         owner = channelList[i]->getOwner();
 
-        for (int u = 0; u < users.size(); u++)
+        for (int u = 0; u < users.size(); u++)//list des users
         {
             if (users[i] == fdTarget)
             {
@@ -93,7 +92,7 @@ int Utils::passSpace(String str) {
             }
         }
 
-        for (int a = 0; a < admins.size(); a++)
+        for (int a = 0; a < admins.size(); a++)//admin
         {
             if (admins[i] == fdTarget)
             {
@@ -102,12 +101,12 @@ int Utils::passSpace(String str) {
             }
         }
 
-        if (owner == fdTarget)
+        if (owner == fdTarget)//transfert droit d'owner 
         {
             if (admins.size() != 0)
-                owner = admins[0];
+                channelList[i]->setOwner() = admins[0];
             else if (users.size() != 0)
-                owner = users[0];
+                channelList[i]->setOwner() = users[0];
             else
             {
                 channelList.erase(channelList.begin() + i);
@@ -116,5 +115,15 @@ int Utils::passSpace(String str) {
         }
     }
 
-    
+
+    for (int i = 0; i < clientList.size(); i++)
+    {
+        if (fdTarget == clientList[i]->getFd())
+        {
+            tmp = clientList[i];
+            clientList.erase(clientList.begin() + i);
+            close (fdTarget);
+            delete tmp;
+        }
+    }    
 }*/

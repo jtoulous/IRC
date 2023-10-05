@@ -101,7 +101,7 @@ void    Server::servTreatClient(Client *client)
 
     /*if (*/servReceive(client);/*== 0)*/
     //{
-    //    rmFromServer(client);
+    //    Utils::rmFromServer(client);
     //    return ;
     //}
     std::cout << client->buffer << "---" << std::endl;
@@ -129,8 +129,12 @@ void    Server::servTreatClient(Client *client)
                 Topic(client, entry);
             else if (cmd == "INVITE" || cmd == "invite")
                 invite(client, entry);
-            //else if (entry.empty()) //si le mec a deco le recv return 0
-            //  Utils::rmFromServer(client, clientList, channelList);
+            //else if (cmd == "MODE" || cmd == "mode")
+            //    mode(client, entry);
+            //else if (cmd == "KICK" || cmd == "kick")
+            //    kick(client, entry);
+            //else
+            //    sendMsg("command unknown", client->getFd(), client->getNickname());
         } 
     }
 }
