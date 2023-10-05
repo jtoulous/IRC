@@ -17,7 +17,20 @@ static void execMode(String mode, Channel *channel, Client *Target, Client *Admi
 }
 
 static void  parseModes(vector<String> &modes, String entry)
-{}
+{
+  char  operator = '\0';
+  
+  for (int i = 1; i <= entry.wordCount(); i++)
+  {
+    String word = entry.getWord(i);
+
+    for (int j = 0; word)
+    if (operator == '\0' && word[0] != '+' || word[0] != '-')
+    {
+
+    }
+  }
+}
 
 void  Server::mode(Client *client, String &entry)
 {
@@ -42,8 +55,7 @@ void  Server::mode(Client *client, String &entry)
         throw (Xception(ERR_BLABLA));
     }
 
-    if (!parseModes(modes, entry))//mode invalid
-      throw (Xception(ERR_BLABLA));
+    parseModes(modes, entry)//mode invalid
 
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
       execMode(modes[i], channelList[channelIndex], clientList[Utils::findClientIndex(fdTarget)], client);

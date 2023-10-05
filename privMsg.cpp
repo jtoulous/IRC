@@ -3,10 +3,9 @@
 static void privmsg_toUser(Client *client, String &entry, vector<Client *> clientList)
 {
     String  msg;
-    String  destNickname = entry.getWord(1);
+    String  destNickname = entry.extractWord(1);
     int     destFd       = Utils::findClientFd(destNickname, clientList);
 
-    entry.rmWord(1);
     if (destFd == -1)//le destinataire n'existe pas
     {
         sendMsg(ERR_NOSUCHNICK(client->getNickname()), client->getFd(), client->getNickname());
@@ -26,10 +25,9 @@ static void privmsg_toUser(Client *client, String &entry, vector<Client *> clien
 static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> channelList, vector<Client *> clientList)
 {
     String  msg;
-    String  destChannel = entry.getWord(1);
+    String  destChannel = entry.extractWord(1);
     int     channelIdx = Utils::findChannelIndex(destChannel, channelList);
 
-    entry.rmWord(1);
     if (channelIdx == -1)//channel existe pas
     {
         sendMsg(ERR_NOSUCHNICK(client->getNickname()), client->getFd(), client->getNickname());
@@ -42,8 +40,13 @@ static void privmsg_toChannel(Client *client, String &entry, vector<Channel *> c
         for (int i = 1; i <= entry.wordCount(); i++)
             msg += entry.getWord(i) + " ";
     
-    channelList[channelIdx]->diffuseMsg(RPL_PRIVMSG_DEST(client->getNickname(), destChannel, msg), clientList, client->getFd());
-    sendMsg(RPL_PRIVMSG_SRC(client->getNickname(), destChannel), client->getFd(), client->getNickname());//confirmaion envoi
+    if (channelList[channelIdx]->FdIsUser(client->getFd()))
+    {    
+        channelList[channelIdx]->diffuseMsg(RPL_PRIVMSG_DEST(client->getNickname(), destChannel, msg), clientList, client->getFd());
+        sendMsg(RPL_PRIVMSG_SRC(client->getNickname(), destChannel), client->getFd(), client->getNickname());//confirmaion envoi
+    }
+    else
+        sendMsg(ERR_CANNOTSENDTOCHAN(client->getNickname(), destChannel), client->getFd(), client->getUsername());
 }
 
 static String  privmsg_checkFormat(String &entry)

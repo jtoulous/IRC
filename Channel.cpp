@@ -81,6 +81,14 @@ bool        Channel::FdIsAdmin(int fd) {
     return (false);
 }
 
+bool    Channel::FdIsUser(int fd)
+{
+    for (int i = 0; i < (int)users.size(); i++)
+        if (fd == users[i])
+            return (true);
+    return (false);
+}
+
 void    Channel::diffuseMsg(String msg, vector<Client *> clientList, int srcFd)
 {
     for (int i = 0; i < (int)users.size(); i++)
