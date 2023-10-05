@@ -11,7 +11,7 @@
 #define RPL_WELCOME(client) (": 001 " + client + ": Welcome to the Internet Relay Network\r\n")
 #define RPL_NOTOPIC(client, channel) (": 331" + client + " " + channel + " :No topic is set\r\n")
 #define RPL_TOPIC(client, channel, topic) (": 332 " + client + " " + channel + " :" + topic + "\r\n")
-#define RPL_INVITING(client, channel) (": 341" + client + " INVITE " + channel + "\r\n")
+#define RPL_INVITING(client, channel, guest) (": 341 " + client + " INVITE " + guest + " IN " + channel + "\r\n")
 #define RPL_PRIVMSG_DEST(srcName, destName, msg) (":" + srcName + " PRIVMSG " + destName + " :" + msg + "\r\n")
 #define RPL_PRIVMSG_SRC(srcName, msg) (": 302 " + srcName + " :" + msg + "\r\n") //message sent confirmation
 #define RPL_NICKCHANGE(newNick) (": 001 " + newNick + " :Nickname changed successfully\r\n")

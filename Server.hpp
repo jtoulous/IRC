@@ -60,6 +60,7 @@ class Server
                 
                 vector<Client *>        clientList;
                 vector<Channel *>       channelList;
+                vector<Client *>        GuestList;       
 
         private:
                 int             EntrySocket;
