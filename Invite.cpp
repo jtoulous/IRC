@@ -23,7 +23,6 @@ int i = 0;
 void  Server::invite(Client *client, String &entry)
 {
   entry.rmWord(1);
-  (void) client;
   String guest, channel;
   size_t pos = entry.find('#');
   guest = entry.substr(0, pos - 1);
@@ -42,14 +41,22 @@ void  Server::invite(Client *client, String &entry)
     sendMsg(ERR_NOSUCHNICK(guest), client->getFd(), client->getNickname());
   }
   else{
-    Client* guestClient = IfGuestExist(guest);
-    int user_fd = guestClient->getFd();
     int index_chan = Utils::findChannelIndex(channel, this->channelList);
-    sendMsg(RPL_INVITING(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
-    this->channelList[index_chan]->setUserFd(index_chan);
-    SendMessageToClient(user_fd, guestClient, index_chan);
-  std::cout << "Invite OK\n";
-  return;
+    if (this->channelList[index_chan]->getOwner() == client->getFd() || this->channelList[index_chan]->FdIsAdmin(client->getFd()) == true){
+      Client* guestClient = IfGuestExist(guest);
+      int user_fd = guestClient->getFd();
+      sendMsg(RPL_INVITING(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
+     //attend la reponse a faire
+      this->channelList[index_chan]->setUserFd(user_fd);
+      SendMessageToClient(user_fd, guestClient, index_chan);
+      std::cout << "Invite OK\n";
+      return;
+    }
+    else{
+      sendMsg(ERR_CHANOPRIVSNEEDED(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
+      std::cout << "Pas les droits\n";
+      return;
+    }
   }  
 }
 

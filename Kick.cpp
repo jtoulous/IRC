@@ -14,21 +14,36 @@ Réponses numériques :
            ERR_NOTONCHANNEL
 Exemples:
 
-KICK &Melbourne Matthew ; Kick Matthew de &Melbourne
 KICK #Finnish John :Speaking English ; Kick John de #Finnish en spécifiant "Speaking English" comme raison (commentaire).
 :WiZ KICK #Finnish John ; Message KICK de WiZ pour retirer John du canal #Finnish*/
 
 
 /* KICK #Finnish John :Speaking English */
 
-void    Server::kick(Client *client, String &cmd, String &entry) {
+static int ParseName(String entry, String name, int i) {
 
-    String all = entry.substr(cmd.size(), entry.find('\0'));
+    i = Utils::passSpace(entry);
+    i += name.size();
+    while (entry[i] && entry[i] == ' ')
+        i++;
+    if (entry[i] && entry[i] == ':') {
+        i++;
+    }
+    while (entry[i] && entry[i] == ' ')
+        i++;
+    return (i);
+}
 
-    String name_chan = all.substr(passSpace(all), all.find(' ', passSpace(all)));
-    String password = all.substr(name.size() + passSpace(all), all.find('\0', name.size()));
+void    Server::kick(Client *client, String &entry) {
 
-    /* tester si ça fonctionne */
-    std::cout << "name_channel = " << name_chan << std::endl;
-    std::cout << "password = " << password << std::endl;
+    (void)client;
+    entry.rmWord(1);
+    
+    String name_chan = entry.substr(Utils::passSpace(entry), entry.find(' ', Utils::passSpace(entry)));
+    int i = 0;
+    i = ParseName(entry, name_chan, i);
+    
+    String name_user = entry.substr(i, entry.find('\0', name_chan.size()));
+    std::cout << RED << "name_channel = " << name_chan << std::endl;
+    std::cout << RED << "name_user = " << name_user << std::endl;
 }

@@ -42,16 +42,16 @@ class Server
                 void    pass(Client *client, String &entry);
                 void    nick(Client *client, String &entry);
                 void    user(Client *client, String &entry);
-                void    kick(Client *client, String &cmd, String &entry);
+                void    kick(Client *client, String &entry);
                 void    privMsg(Client *client, String &entry);
                 void    join(Client *client, String &entry);
-                void  invite(Client *client, String &entry);
+                void    invite(Client *client, String &entry);
 
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
-                Client* IfGuestExist(String name);
                 bool    IfPasswordIsOk(String name, String password);
                 void    SendMessageToClient(int client_fd, Client *client, int index_chan);
+                Client* IfGuestExist(String name);
                 
                 void    Topic(Client *client, String entry);
 
