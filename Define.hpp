@@ -17,7 +17,7 @@
 #define RPL_NICKCHANGE(newNick) (": 001 " + newNick + " :Nickname changed successfully\r\n")
 
 //Error Replies
-
+/*:<serveur> 441 <pseudo-client> #nom-du-canal <pseudo-exclus> :Vous avez exclu <pseudo-exclus> du canal*/
 #define ERR_NOSUCHNICK(client) (": 401 " + client + " :No such nick/channel\r\n")
 #define ERR_NOSUCHCHANNEL(client) (": 403 " + client + " :No such channel\r\n")
 #define ERR_CANNOTSENDTOCHAN(client, channel) (": 404 " + client + " " + channel + " :Cannot send to channel\r\n") 
@@ -25,7 +25,8 @@
 #define ERR_NOTEXTTOSEND(client) (": 412 " + client + ":No text to send\r\n")
 #define ERR_UNKNOWNCOMMAND(client, cmd)(": 421 " + client + " " + cmd + " :Unknown command\r\n")
 #define ERR_ERRONEUSNICKNAME(client, nick)(": 432 " + client + " " + nick + " :Erroneus nickname\r\n")
-#define ERR_USERNOTINCHANNEL(client, nick)(": 441 " + client + " " + nick + " :They aren't on that channel\r\n")
+//#define ERR_USERNOTINCHANNEL(client, nick, channel)(": 441 " + client + " " + channel + " " + nick + " :They aren't on that channel\r\n")
+#define ERR_USERNOTINCHANNEL(client, nick, channel)(": 482 " + client + " " + channel + " " + nick + " :They aren't on that channel\r\n")
 #define ERR_NOTONCHANNEL(client, channel)(": 442 " + client + " " + channel + " :They aren't on that channel\r\n")
 #define ERR_NOTREGISTERED(client)(": 451 " + client + " :You have not registered\r\n")
 #define ERR_NEEDMOREPARAMS(client, cmd)(": 461 " + client + " " + cmd + " :Not enough parameters\r\n")

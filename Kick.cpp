@@ -73,19 +73,23 @@ void    Server::kick(Client *client, String &entry) {
         }
     }
     /* si le message du kick est vide */
-    String message_client;
     int client_fd = client->getFd();
+    String message_client;
+    /*  S <-   :dan!d@localhost KICK #Melbourne alice :dan  */
     /*  :WiZ KICK #Finnish John ; Message KICK de WiZ pour retirer John du canal #Finnish */
     if (message_kick.empty()) {
         std::cout << "KICK ok" << std::endl;
-        message_client = ":" + client->getNickname() + " KICK " + this->channelList[index_chan]->getName() + " " + name_user + " :T pa bo \r\n";
-        sendMsg(message_client, client_fd, client->getNickname());
-        //send (client_fd, message_client.c_str(), message_client.size(), 0);
+        /*  :<serveur> 441 <pseudo-client> #nom-du-canal <pseudo-exclus> :Vous avez exclu <pseudo-exclus> du canal  */
+        message_client = ":" + client->getNickname() + " KICK " + this->channelList[index_chan]->getName() + " " + name_user + "\r\n";
+        //sendMsg(ERR_USERNOTINCHANNEL(client->getNickname(), name_user, this->channelList[index_chan]->getName()), client_fd, client->getNickname());
+        send (Utils::findClientFd(name_user, clientList), message_client.c_str(), message_client.size(), 0);
     }
     else {
         std::cout << "KICK ok" << std::endl;
-        message_client = ":" + client->getNickname() + " KICK " + this->channelList[index_chan]->getName() + " " + name_user + " :T pa bo \r\n";
-        sendMsg(message_client, client_fd, client->getNickname());
-        //send (client_fd, message_client.c_str(), message_client.size(), 0);
+        message_client = ":" + client->getNickname() + " KICK " + this->channelList[index_chan]->getName() + " " + name_user + "\r\n";
+        //message_client = ":" + client->getNickname() + " KICK " + this->channelList[index_chan]->getName() + " :blabla" + "\r\n";
+        //sendMsg(ERR_USERNOTINCHANNEL(client->getNickname(), name_user, this->channelList[index_chan]->getName()), client_fd, client->getNickname());
+        send (client_fd, message_client.c_str(), message_client.size(), 0);
     }
 }
+/*  StaticFunctions::SendToFd((*usrIt)->getFd(),  ":" + op->getNickname() + " KICK " + getName() + " " + name, "", 0);*/
