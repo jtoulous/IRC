@@ -32,6 +32,7 @@ class Channel
             void        setTopic(String topik);
 
             bool        FdIsAdmin(int fd);
+            bool        FdIsUser(int fd);
 
             void        diffuseMsg(String msg, vector<Client *> clientList, int srcFd);
             
