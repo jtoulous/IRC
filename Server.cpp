@@ -115,7 +115,6 @@ void    Server::servTreatClient(Client *client)
         else
         {
             cmd = entry.getWord(1);
-
             if (cmd == "PASS" || cmd == "pass")
                 pass(client, entry);
             else if (cmd == "NICK" || cmd == "nick")
@@ -128,6 +127,8 @@ void    Server::servTreatClient(Client *client)
                 privMsg(client, entry);
             else if (cmd == "TOPIC" || cmd == "topic")
                 Topic(client, entry);
+            else if (cmd == "INVITE" || cmd == "invite")
+                invite(client, entry);
             //else if (entry.empty()) //si le mec a deco le recv return 0
             //  Utils::rmFromServer(client, clientList, channelList);
         } 

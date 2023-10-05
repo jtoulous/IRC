@@ -10,7 +10,8 @@ SRC		= main.cpp \
 			privMsg.cpp \
 			Join.cpp \
 			Authentification.cpp \
-			Topic.cpp
+			Topic.cpp\
+			invite.cpp
 
 OBJ		= $(SRC:.cpp=.o)
 
