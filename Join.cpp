@@ -34,6 +34,7 @@ void    Server::join(Client *client, String &entry) {
         int user_fd = client->getFd();
         index_chan = Utils::findChannelIndex(name, channelList);
         if (IfPasswordIsOk(name, password) == true) {
+            this->channelList[index_chan]->setUserFd(user_fd);
             SendMessageToClient(user_fd, client, index_chan);
             return ;
         }
