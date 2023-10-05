@@ -32,28 +32,34 @@ void  Server::invite(Client *client, String &entry)
     sendMsg(ERR_NEEDMOREPARAMS(client->getNickname(), entry), client->getFd(), client->getNickname());
     return;
   }
-  std::cout <<  "guest:" << guest << "\nchannel:" << channel << std::endl;
   if (IfChannelExist(channel) == false){
       std::cout << "Channel no exist" << std::endl;
         sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd(), client->getNickname());
         return ;
   }
-  if (IfGuestExist(guest) == false){
+  else if (IfGuestExist(guest) == NULL){
     std::cout << "Guest not on server" << std::endl;
-    sendMsg(ERR_NOSUCHNICK(client->getNickname()), client->getFd(), client->getNickname());
+    sendMsg(ERR_NOSUCHNICK(guest), client->getFd(), client->getNickname());
   }
-  
-
-
+  else{
+    Client* guestClient = IfGuestExist(guest);
+    int user_fd = guestClient->getFd();
+    int index_chan = Utils::findChannelIndex(channel, this->channelList);
+    sendMsg(RPL_INVITING(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
+    this->channelList[index_chan]->setUserFd(index_chan);
+    SendMessageToClient(user_fd, guestClient, index_chan);
+  std::cout << "Invite OK\n";
+  return;
+  }  
 }
 
 
-bool Server::IfGuestExist(String name){
+Client* Server::IfGuestExist(String name){
   if (this->clientList.empty() == true)
-    return false;
+    return NULL;
   for(size_t i = 0; i < this->clientList.size(); i++){
     if (name == this->clientList[i]->getNickname())
-      return true;
+      return this->clientList[i];
   }
-  return false;
+  return NULL;
 }
