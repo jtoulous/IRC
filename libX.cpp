@@ -168,7 +168,7 @@ int         String::wordCount()//compte les mots
     return (count); 
 }
 
-String      String::getWord(int wordNb)//renvoi le mot que tu veux
+String  String::getWord(int wordNb)//renvoi le mot que tu veux
 {
     String  word(*this);
     int     s = wordStartPos(wordNb);
@@ -176,6 +176,16 @@ String      String::getWord(int wordNb)//renvoi le mot que tu veux
     
     if (s != -1 && e != -1)
         word = word.substr(s, (e + 1) - s);
+    return (word);
+}
+
+String  String::extractWord(int wordNb)
+{
+    String word;
+
+    word = this->getWord(wordNb);
+    this->rmWord(wordNb);
+
     return (word);
 }
 

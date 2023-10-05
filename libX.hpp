@@ -30,7 +30,7 @@ class   String: public std::string
             int                 X_occur(char ch);
             int                 wordCount();
             String              getWord(int wordNb);
-            //String              extractWord(int wordNb);
+            String              extractWord(int wordNb);
             void                rmWord(int wordNb);
             void                rmFromWord(int wordNb, char target);
             void                rrmFromWord(int wordNb, char target);
