@@ -24,11 +24,12 @@ static void  parseModes(vector<String> &modes, String entry)
   {
     String word = entry.getWord(i);
 
-    for (int j = 0; word)
-    if (operator == '\0' && word[0] != '+' || word[0] != '-')
+    for (int j = 0; word[j]; j++)
     {
-
-    }
+      if (operator == '\0' && word[j] != '+' && word[j] != '-')
+        throw (Xception());//bad input
+      operator = word[j]
+    }  
   }
 }
 
