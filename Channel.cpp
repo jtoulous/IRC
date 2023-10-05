@@ -49,6 +49,8 @@ void    Channel::setUserFd(int user_fd) {
     this->users.push_back(user_fd);
 }
 
+
+
 vector<int> &Channel::getUsers()
 {
     return (users);
