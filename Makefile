@@ -12,7 +12,9 @@ SRC		= main.cpp \
 			Authentification.cpp \
 			Topic.cpp \
 			Invite.cpp \
-			Kick.cpp 
+			Kick.cpp \
+			Mode.cpp \
+			iMode.cpp 
 
 OBJ		= $(SRC:.cpp=.o)
 

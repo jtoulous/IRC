@@ -50,6 +50,7 @@ class Server
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
                 bool    IfPasswordIsOk(String name, String password);
+                bool    PasswordExist(String name);
                 void    SendMessageToClient(int client_fd, Client *client, int index_chan);
                 Client* IfGuestExist(String name);
                 
@@ -58,6 +59,9 @@ class Server
                 int     getFdMax();
                 int     getEntrySocket();
                 
+                void    mode(Client *client, String &entry);
+                void    iMod(Channel *channel, Client *Target, Client*Admin, String mode);
+
                 vector<Client *>        clientList;
                 vector<Channel *>       channelList;
                 vector<Client *>        GuestList;       

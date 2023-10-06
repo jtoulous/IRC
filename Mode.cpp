@@ -1,17 +1,19 @@
 #include "Server.hpp"                                                      
 
 static void execMode(String mode, Channel *channel, Client *Target, Client *Admin)
-{                                                                            
-  if (mode == '+i' || mode == '-i')                                          
-    iMod();///////////////////////////////////////////////////              
-  else if (mode == '+t' || mode == '-t')                               
-    tMod();///////////////////////////////////////////////////             
-  else if (mode == '+k' || mode == '-k')                                 
-    kMod();///////////////////////////////////////////////////          
-  else if (mode == '+o' || mode == '-o')                               
-    oMod();//////////////////////////////////////////////////          
-  else if (mode == '+l' || mode == '-l')                                
-      lMod();//////////////////////////////////////////////////
+{                       
+  /*  i: Set/remove Invite-only channel */                                                     
+  if (mode == "+i" || mode == "-i")                                          
+    iMod(channel, Target, Admin, mode);
+  /*   t: Set/remove the restrictions of the TOPIC command to channel operators */           
+  /*else if (mode == "+t"|| mode == "-t")                               
+    tMod();///////////////////////////////////////////////////        
+  else if (mode == "+k" || mode == "-k")                                 
+    kMod();///////////////////////////////////////////////////        
+  else if (mode == "+o" || mode == "-o")                               
+    oMod();////////////////////////////////////////////////// 
+  else if (mode == "+l" || mode == "-l")                                
+      lMod();//////////////////////////////////////////////////*/
   else
     sendMsg(ERR_NOTVALIDMOD(), Admin->getFd(), Admin->getNickname());
 }
@@ -28,7 +30,7 @@ static void  parseModes(vector<String> &modes, String entry)
     {
       if (operator == '\0' && word[j] != '+' && word[j] != '-')
         throw (Xception());//bad input
-      operator = word[j]
+      operator = word[j];
     }  
   }
 }
@@ -56,7 +58,7 @@ void  Server::mode(Client *client, String &entry)
         throw (Xception(ERR_BLABLA));
     }
 
-    parseModes(modes, entry)//mode invalid
+    parseModes(modes, entry);//mode invalid
 
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
       execMode(modes[i], channelList[channelIndex], clientList[Utils::findClientIndex(fdTarget)], client);
