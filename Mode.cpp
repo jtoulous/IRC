@@ -18,7 +18,11 @@ static void execMode(String mode, Channel *channel, Client *Target, Client *Admi
 
 static void  parseModes(vector<String> &modes, String entry)
 {
-  char  operator = '\0';
+  char    operator = entry.wordStartChar(1);
+  String  mod;
+
+  if (operator != '-' && operator != '+')
+        throw (Xception());//bad input
   
   for (int i = 1; i <= entry.wordCount(); i++)
   {
@@ -26,9 +30,17 @@ static void  parseModes(vector<String> &modes, String entry)
 
     for (int j = 0; word[j]; j++)
     {
-      if (operator == '\0' && word[j] != '+' && word[j] != '-')
+      if (!Utils::modValidChar(word[j]))
         throw (Xception());//bad input
-      operator = word[j]
+      
+      if (word[j] == '+' || word[j] == '-')
+        operator = word[j];
+      else
+      {
+        mod = operator + word[j];
+        modes.push_back(mod);
+        mod.clear();
+      }
     }  
   }
 }
