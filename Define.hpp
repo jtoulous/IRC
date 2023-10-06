@@ -15,6 +15,14 @@
 #define RPL_PRIVMSG_DEST(srcName, destName, msg) (":" + srcName + " PRIVMSG " + destName + " :" + msg + "\r\n")
 #define RPL_PRIVMSG_SRC(srcName, msg) (": 302 " + srcName + " :" + msg + "\r\n") //message sent confirmation
 #define RPL_NICKCHANGE(newNick) (": 001 " + newNick + " :Nickname changed successfully\r\n")
+#define RPL_NEWOPERATOR(nickname, channel) (": 381 " + nickname + " :You are now operator on " + channel + "\r\n")
+#define RPL_NEWOPERATORFOROWNER(owner, nickname, channel) (": 381 " + owner + " :" + nickname + " is now now operator on " + channel + "\r\n")
+#define RPL_NEWOPERATORFORCHANNEL(nickname, channel) (":Info PRIVMSG " + channel + " :" + nickname + " is now an operator\r\n")
+#define RPL_DEOPPED(nickname, channel) (": 381 " + nickname + " :You are now deopped in " + channel + "\r\n")
+#define RPL_DEOPPEDFOROWNER(owner, nickname, channel) (": 381 " + owner + " :" + nickname + " is now deopped in " + channel + "\r\n")
+#define RPL_DEOPPEDFORCHANNEL(nickname, channel) (":Info PRIVMSG " + channel + " :" + nickname + " was deopped\r\n")
+#define RPL_ALREADYOPERATOR(owner, channel, newOperator) (": 368 " + owner + " " + channel + " " + newOperator + " :User is already operator")
+#define RPL_NOTOPERATOR(owner, channel, victim) (": 368 " + owner + " " + channel + " " + victim + " :User is not an operator")
 
 //Error Replies
 /*:<serveur> 441 <pseudo-client> #nom-du-canal <pseudo-exclus> :Vous avez exclu <pseudo-exclus> du canal*/
@@ -36,5 +44,7 @@
 #define ERR_INVITEONLYCHAN(client, channel)(": 473 " + client + " " + channel + "  :Cannot join channel (+i)\r\n")
 #define ERR_BADCHANNELKEY(client, channel)(": 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel) (": 482 " + client + " " + channel + "  :You're not channel operator\r\n")
+#define ERR_NOTOWNER(client, channel) (": 482 " + client + " " + channel + "  :You're not channel owner\r\n")
 #define ERR_NICKALREADYUSED(nickname) (": 433 * " + nickname + " :Nickname already in use")
+
 #endif

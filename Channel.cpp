@@ -49,7 +49,11 @@ void    Channel::setUserFd(int user_fd) {
     this->users.push_back(user_fd);
 }
 
-
+void    Channel::setAdminFd(int fd)
+{
+    if (!FdIsAdmin(fd))
+        admin.push_back(fd);
+}
 
 vector<int> &Channel::getUsers()
 {
@@ -109,4 +113,16 @@ void    Channel::setBoolInviteOnly(bool invite) {
 
 void        Channel::setTopic(String topik) {
     this->topic = topik;
+}
+
+void    Channel::removeAdmin(int fd)
+{
+    for (int i = 0; i < (int)admin.size(); i++)
+    {
+        if (admin[i] == fd)
+        {
+            admin.erase(admin.begin() + i);
+            return;
+        }
+    }
 }
