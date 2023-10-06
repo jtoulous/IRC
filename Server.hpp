@@ -46,10 +46,12 @@ class Server
                 void    privMsg(Client *client, String &entry);
                 void    join(Client *client, String &entry);
                 void    invite(Client *client, String &entry);
+                void    mode(Client *client, String &entry);
 
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
                 bool    IfPasswordIsOk(String name, String password);
+                bool    PasswordExist(String name);
                 void    SendMessageToClient(int client_fd, Client *client, int index_chan);
                 Client* IfGuestExist(String name);
                 

@@ -33,6 +33,7 @@ class Channel
 
             bool        FdIsAdmin(int fd);
             bool        FdIsUser(int fd);
+            bool        FdIsOwner(int fd);
 
             void        diffuseMsg(String msg, vector<Client *> clientList, int srcFd);
             

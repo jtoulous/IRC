@@ -11,7 +11,7 @@ String  Utils::getCmd(String entry)
     return (cmd);
 }
 
-int     Utils::findClientFd(String &nickname, vector<Client *> &clientList)
+int     Utils::findClientFd(String nickname, vector<Client *> &clientList)
 {
     size_t i = 0;
     
@@ -46,7 +46,7 @@ int     Utils::findClientIndex(int fd, vector<Client *> &clientList)
     return (-1);
 }
 
-int     Utils::findChannelIndex(String &name, vector<Channel *> &channelList)
+int     Utils::findChannelIndex(String name, vector<Channel *> &channelList)
 {
     size_t i = 0;
     
