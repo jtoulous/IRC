@@ -46,6 +46,7 @@ class Server
                 void    privMsg(Client *client, String &entry);
                 void    join(Client *client, String &entry);
                 void    invite(Client *client, String &entry);
+                void    mode(Client *client, String &entry);
 
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);

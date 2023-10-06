@@ -11,7 +11,7 @@ String  Utils::getCmd(String entry)
     return (cmd);
 }
 
-int     Utils::findClientFd(String &nickname, vector<Client *> &clientList)
+int     Utils::findClientFd(String nickname, vector<Client *> &clientList)
 {
     size_t i = 0;
     
@@ -46,7 +46,7 @@ int     Utils::findClientIndex(int fd, vector<Client *> &clientList)
     return (-1);
 }
 
-int     Utils::findChannelIndex(String &name, vector<Channel *> &channelList)
+int     Utils::findChannelIndex(String name, vector<Channel *> &channelList)
 {
     size_t i = 0;
     
@@ -81,6 +81,13 @@ int Utils::passSpace(String str) {
     while (str[i] && str[i] == ' ')
         i++;
     return (i);
+}
+
+bool    Utils::modValidChar(char ch)
+{
+    if (ch != '+' && ch != '-' && ch != 'i' && ch != 't' && ch != 'k' && ch != 'l' && ch != 'o')
+        return (false);
+    return (true);
 }
 
 /*void    Utils::rmFromServer(int fdTarget, vector<Client *> &clientList, vector<Channel *> &channelList)

@@ -8,7 +8,8 @@ SRC		= main.cpp \
 			Utils.cpp \
 			Channel.cpp \
 			privMsg.cpp \
-			Join.cpp \
+			Join.cpp\
+			Mode.cpp \
 			Authentification.cpp \
 			Topic.cpp \
 			Invite.cpp \

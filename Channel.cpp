@@ -89,6 +89,13 @@ bool    Channel::FdIsUser(int fd)
     return (false);
 }
 
+bool    Channel::FdIsOwner(int fd)
+{
+    if (fd == owner)
+        return (true);
+    return (false);
+}
+
 void    Channel::diffuseMsg(String msg, vector<Client *> clientList, int srcFd)
 {
     for (int i = 0; i < (int)users.size(); i++)

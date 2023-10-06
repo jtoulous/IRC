@@ -32,6 +32,7 @@ void    Server::join(Client *client, String &entry) {
         /* si le channel a le bon mot de passe du channel */
         int user_fd = client->getFd();
         index_chan = Utils::findChannelIndex(name, channelList);
+        /*  Si le password existe, on check si il est bon   */
         if (PasswordExist(name) == true) {
             if (IfPasswordIsOk(name, password) == true) {
                 this->channelList[index_chan]->setUserFd(user_fd);

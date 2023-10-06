@@ -130,11 +130,11 @@ void    Server::servTreatClient(Client *client)
             else if (cmd == "INVITE" || cmd == "invite")
                 invite(client, entry);
             else if (cmd == "MODE" || cmd == "mode")
-               mode(client, entry);
+                mode(client, entry);
             else if (cmd == "KICK" || cmd == "kick")
                 kick(client, entry);
             //else
-            //    sendMsg("command unknown", client->getFd(), client->getNickname());
+            //    sendMsg(ERR_UNKNOWNCOMMAND(client->getNickname(), entry), client->getFd(), client->getNickname());
         //} 
     }
 }

@@ -34,7 +34,7 @@
 #define ERR_PASSWDMISMATCH(client)(": 464 " + client + ":Password incorrect\r\n")
 #define ERR_CHANNELISFULL(client, channel)(": 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
 #define ERR_INVITEONLYCHAN(client, channel)(": 473 " + client + " " + channel + "  :Cannot join channel (+i)\r\n")
-#define ERR_BADCHANNELKEY(client, channel)(": 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
+ #define ERR_BADCHANNELKEY(client, channel)(": 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel) (": 482 " + client + " " + channel + "  :You're not channel operator\r\n")
 #define ERR_NICKALREADYUSED(nickname) (": 433 * " + nickname + " :Nickname already in use")
 #endif
