@@ -23,7 +23,8 @@ class Utils
             static bool         nicknameAvailable(String &nickname, vector<Client *> &clientList);
             static bool         usernameAvailable(String &username, vector<Client *> &clientList);
             //static void         rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList);
-            static int         passSpace(String str);
+            static int          passSpace(String str);
+            bool                modValidChar(char ch);
     private:
             Utils();
             //Utils(const Utils &ref);
