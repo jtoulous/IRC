@@ -83,6 +83,13 @@ int Utils::passSpace(String str) {
     return (i);
 }
 
+bool    Utils::modValidChar(char ch)
+{
+    if (ch != '+' && ch != '-' && ch != 'i' && ch != 't' && ch != 'k' && ch != 'l' && ch != 'o')
+        return (false);
+    return (true);
+}
+
 /*void    Utils::rmFromServer(int fdTarget, vector<Client *> &clientList, vector<Channel *> &channelList)
 {
     Client *tmp;

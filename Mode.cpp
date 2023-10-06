@@ -11,7 +11,7 @@ static void execMode(String mode, Channel *channel, Client *Target, Client *Admi
   else if (mode == '+o' || mode == '-o')                               
     oMod();//////////////////////////////////////////////////          
   else if (mode == '+l' || mode == '-l')                                
-      lMod();//////////////////////////////////////////////////
+    lMod();//////////////////////////////////////////////////
   else
     sendMsg(ERR_NOTVALIDMOD(), Admin->getFd(), Admin->getNickname());
 }
