@@ -10,7 +10,6 @@ void    Server::join(Client *client, String &entry) {
     String message_client;
 
     entry.rmWord(1);
-    //String entry = entry.substr(cmd.size(), entry.find('\0'));
     String name = entry.substr(Utils::passSpace(entry), entry.find(' ', Utils::passSpace(entry)));
     
     int i = Utils::passSpace(entry) + name.size();
@@ -33,16 +32,17 @@ void    Server::join(Client *client, String &entry) {
         /* si le channel a le bon mot de passe du channel */
         int user_fd = client->getFd();
         index_chan = Utils::findChannelIndex(name, channelList);
-        if (IfPasswordIsOk(name, password) == true) {
-            this->channelList[index_chan]->setUserFd(user_fd);
-            SendMessageToClient(user_fd, client, index_chan);
-            return ;
+        if (PasswordExist(name) == true) {
+            if (IfPasswordIsOk(name, password) == true) {
+                this->channelList[index_chan]->setUserFd(user_fd);
+                SendMessageToClient(user_fd, client, index_chan);
+                return ;
+            }
+            else if (IfPasswordIsOk(name, password) == false) {
+                sendMsg(ERR_BADCHANNELKEY(client->getNickname(), this->channelList[index_chan]->getName()), user_fd, client->getNickname());
+                return ;
+            }
         }
-        else if (IfPasswordIsOk(name, password) == false) {
-            sendMsg(ERR_BADCHANNELKEY(client->getNickname(), this->channelList[index_chan]->getName()), user_fd, client->getNickname());
-            return ;
-        }
-
         this->channelList[index_chan]->setUserFd(user_fd);
 
         SendMessageToClient(user_fd, client, index_chan);
@@ -88,6 +88,20 @@ bool    Server::IfPasswordIsOk(String name, String password) {
         if (this->channelList[i]->getName() == name 
             && !this->channelList[i]->getPassword().empty()) {
                 if (this->channelList[i]->getPassword() == password) {
+                    return (true);
+                }
+            }
+        i++;
+    }
+    return (false);
+}
+
+bool    Server::PasswordExist(String name) {
+
+    size_t i = 0;
+    while (i < this->channelList.size()) {
+        if (this->channelList[i]->getName() == name) {
+                if (!this->channelList[i]->getPassword().empty()) {
                     return (true);
                 }
             }
