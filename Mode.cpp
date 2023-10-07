@@ -1,9 +1,12 @@
 #include "Server.hpp"                                                      
 
-static void execMode(String mode, Channel *channel, Client *Target, Client *Admin)
-{                                                                            
-  //if (mode == '+i' || mode == '-i')                                          
-  //  iMod();              
+void Server::execMode(String mode, Channel *channel, Client *Target, Client *Admin)
+{                        
+                                                      
+  if (mode == "+i" || mode == "-i")                                          
+    iMod(channel, Target,mode);              
+  else
+    sendMsg("YO", Admin->getFd(), Admin->getNickname());
   //else if (mode == '+t' || mode == '-t')                               
   //  tMod();             
   //else if (mode == '+k' || mode == '-k')                                 
@@ -13,7 +16,6 @@ static void execMode(String mode, Channel *channel, Client *Target, Client *Admi
   //else if (mode == '+l' || mode == '-l')                                
   //  lMod();
   //else
-    sendMsg(ERR_NOTVALIDMOD(), Admin->getFd(), Admin->getNickname());
 }
 
 static void  parseModes(vector<String> &modes, String entry, String client)
@@ -80,8 +82,9 @@ void  Server::mode(Client *client, String &entry)
 
     parseModes(modes, entry, nickClient);
 
+
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
-      execMode(modes[i], channel, clientList[Utils::findClientIndex(fdTarget)], client);
+      execMode(modes[0], channel, clientList[Utils::findClientIndex(fdTarget, clientList)], client);
   }
 
   catch (Xception &e)
