@@ -26,11 +26,20 @@ class Channel
             vector<int> &getAdmins();
             int         &getOwner();
             int         getAdminWithIndex(int index_vec);
+            bool        getTopicPrivilege();
+            int         getLimitUsers();
+            bool        getBoolLimitUsers();
+            int         getCountUsers();
 
             void        setUserFd(int user_fd);
             void        setAdminFd(int fd);
             void        setBoolInviteOnly(bool invite);
             void        setTopic(String topik);
+            void        setTopicPrivilege(bool privilege);
+            void        setPassword(String pass);
+            void        setLimitUsers(int limit);
+            void        setBoolLimitUsers(bool l);
+            void        addCountUsers(int nb);
 
             bool        FdIsAdmin(int fd);
             bool        FdIsUser(int fd);
@@ -46,6 +55,11 @@ class Channel
             String  topic;
             int     owner;
             bool    invite_only;
+            bool    topic_privilege;
+            bool    limit_bool;
             vector<int>    admin;
             vector<int>    users;
+
+            int      limit_users;
+            int      count_users;
 };

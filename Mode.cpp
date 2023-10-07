@@ -29,16 +29,52 @@ static void oMod(Channel *channel, Client *owner, Client *target, char operation
   }
 }
 
+void  tMod(Channel *channel, Client *Target, String mode) {
+     
+    String msg;
+    if (mode == "+t") {
+        channel->setTopicPrivilege(true);
+        msg = "MODE " + channel->getName() + " +t" + "\r\n";
+        send(Target->getFd(), msg.c_str(), msg.size(), 0);
+    }
+    else if (mode == "-t") {
+        channel->setTopicPrivilege(false);
+        msg = "MODE " + channel->getName() + " -t" + "\r\n";
+        send(Target->getFd(), msg.c_str(), msg.size(), 0);
+    }
+}
+/*
+void  kMod(Channel *channel, Client *Target, String mode) {
+  
+  //  A voir pour parser ça 
+  // MODE #chan +k password
+}*/
+
+/*
+void  lMod(Channel *channel, Client *Target, String mode) {
+    
+    // MODE #nom-du-canal +l 10
+    int limit = 0; // set la limit en fonction du parsing
+    if (mode == "+l") {
+      channel->setLimitUsers(limit);
+      channel->setBoolLimitUsers(true);
+    }
+    else if (mode == "-l") {
+      channel->setLimitUsers(0);
+      channel->setBoolLimitUsers(false);
+    }
+}*/
+
 static void execMode(String mode, Channel *channel, int clientIndex, Client *owner, vector<Client *> clientList, String entry)
 {              
   try
   {
-    //if (mode == "+i" || mode == "-i")                                          
-    //  iMod();             
-    //else if (mode == "+t" || mode == "-t")                               
-    //  tMod();
-    //else if (mode == "+k" || mode == "-k")                       
-    //  kMod();          
+    if (mode == "+i" || mode == "-i")                                          
+      iMod(channel, owner, mode);             
+    else if (mode == "+t" || mode == "-t")                               
+      tMod(channel, owner, mode);
+    //else if (mode == "+k" || mode == "-k")                    
+     // kMod(channel, owner, mode);          
     if (mode == "+o" || mode == "-o")                               
     {
       if (clientIndex == -1)//si le mec a pas rentrer de pseudo cible
@@ -129,7 +165,7 @@ void  Server::mode(Client *client, String &entry)
 
 
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
-      execMode(modes[i], channel, Utils::findClientIndex(fdTarget, clientList), client, clientList, entry);
+      ::execMode(modes[i], channel, Utils::findClientIndex(fdTarget, clientList), client, clientList, entry);
   }
 
   catch (Xception &e)

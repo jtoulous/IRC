@@ -3,7 +3,10 @@
 
 int main(int argc, char **argv)
 {
-    (void)argc;
+    if (argc != 3) {
+        std::cerr << "Error format : " << GREEN << "./ircserv " << ORANGE << "<port>" << RED << " <password>" << DEFAULT << std::endl;
+        return (1);
+    }
     try
     {
         Server          server(argv);   //demarrage serveur

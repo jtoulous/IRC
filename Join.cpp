@@ -25,14 +25,21 @@ void    Server::join(Client *client, String &entry) {
     }
     if (IfChannelExist(name) == true) {
         /* Check si le channel est sur invation ou pas a remettre quand MODE sera fait */
-        /*if (this->channelList[index]->getInviteOnly() == true) {
-            std::cout << "Error channel invite only" << std::endl; 
+        index_chan = Utils::findChannelIndex(name, channelList);        
+        if (this->channelList[index_chan]->getInviteOnly() == true) {
+            sendMsg(ERR_INVITEONLYCHAN(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
             return ;    
-        }*/
-        /* si le channel a le bon mot de passe du channel */
+        }
         int user_fd = client->getFd();
-        index_chan = Utils::findChannelIndex(name, channelList);
         /*  Si le password existe, on check si il est bon   */
+        /*  Check si il y a une limite d'utilisateur    */
+        if (this->channelList[index_chan]->getBoolLimitUsers() == true) {
+            /*  Check la limite du nombre des utilisateur en fonction du MODE +l */
+            if (this->channelList[index_chan]->getLimitUsers() >= this->channelList[index_chan]->getCountUsers()) {
+                sendMsg(ERR_CHANNELISFULL(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
+                return ;
+            }
+        }
         if (PasswordExist(name) == true) {
             if (IfPasswordIsOk(name, password) == true) {
                 this->channelList[index_chan]->setUserFd(user_fd);
@@ -45,7 +52,8 @@ void    Server::join(Client *client, String &entry) {
             }
         }
         this->channelList[index_chan]->setUserFd(user_fd);
-
+        if (this->channelList[index_chan]->getBoolLimitUsers() == true)
+            this->channelList[index_chan]->addCountUsers(1);
         SendMessageToClient(user_fd, client, index_chan);
         std::cout << "Push_back KO" << std::endl;
         return ;
@@ -55,7 +63,10 @@ void    Server::join(Client *client, String &entry) {
     this->channelList.push_back(new Channel(name, password, owner_fd));
     index_chan = Utils::findChannelIndex(name, channelList);
     std::cout << "Push_back OK" << std::endl;
-
+    
+    if (this->channelList[index_chan]->getBoolLimitUsers() == true)
+        this->channelList[index_chan]->addCountUsers(1);
+   
     SendMessageToClient(owner_fd, client, index_chan);
 }
 

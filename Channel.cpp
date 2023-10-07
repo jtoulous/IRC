@@ -4,29 +4,11 @@ Channel::Channel() {}
 
 Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic(""), owner(adm) {
     users.push_back(adm);
+    topic_privilege = true;
+    limit_bool = false;
 }
 
 Channel::~Channel() {}
-/* rajouter comande MODE avec les mode autorisés
-    Et le faire pour les admin et user */
-
-/*String    Channel::PrintCommandCanalForOwner() {
-
-    String str = "All commands avalaible: \n"
-                "KICK: Eject a client from the channel"
-                "PASS: Is used to set a 'connection password.\n"
-                "NICK: Is used to give user a nickname or change the previous one.\n"
-                "USER: Is used to specify a user's details when connecting to an IRC server.\n"
-                "JOIN:  is used to join or create a specific channel (chat room) on the IRC server.\n"
-                "PRIVMSG: is used to send a private message to a specific user or a message to a channel.\n"
-                "INVITE:  is used to invite a specific user to join a channel.\n" 
-                "MODE: Change the channel's mode: \n"
-                "-> i: Set/remove Invite-only channel\n"
-                "-> t: Set/remove The restrictions of the TOPIC command to channel operator\n"
-                "-> k: Set/remove The channel password\n"
-                "-> o: Give/take Chanel operator privilege\n";
-    return (str);
-}*/
 
 String      Channel::getName() {
     return (this->name);
@@ -125,4 +107,43 @@ void    Channel::removeAdmin(int fd)
             return;
         }
     }
+}
+
+void        Channel::setTopicPrivilege(bool privilege) {
+    this->topic_privilege = privilege;
+}
+
+bool    Channel::getTopicPrivilege() {
+    return (this->topic_privilege);
+}
+
+void    Channel::setPassword(String pass) {
+    this->password = pass;
+}
+
+void    Channel::setLimitUsers(int limits) {
+    if (limits < 0)
+        this->limit_users = 0;
+    else
+        this->limit_users = limits;
+}
+
+int    Channel::getLimitUsers() {
+    return (this->limit_users);
+}
+
+void    Channel::addCountUsers(int nb) {
+    this->count_users += nb;
+}
+
+int     Channel::getCountUsers() {
+    return (this->count_users);
+}
+
+void        Channel::setBoolLimitUsers(bool l) {
+    this->limit_bool = l;
+}
+
+bool    Channel::getBoolLimitUsers() {
+    return (this->limit_bool);
 }

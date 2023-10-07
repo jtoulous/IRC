@@ -59,7 +59,6 @@ class Server
                 int     getFdMax();
                 int     getEntrySocket();
                 
-                void    iMod(Channel *channel, Client *Target, String mode);
                 void execMode(String mode, Channel *channel, Client *Target, Client *Admin);
 
                 vector<Client *>        clientList;
@@ -71,5 +70,7 @@ class Server
                 String          Hostname;
                 String          password;
 };
+
+void    iMod(Channel *channel, Client *Target, String mode);
 
 void    sendMsg(String msg, int fd, String nick);

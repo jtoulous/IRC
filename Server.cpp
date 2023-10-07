@@ -70,9 +70,11 @@ void    Server::servCheckSockets(fd_set &sockets)
 {
     if (FD_ISSET(EntrySocket, &sockets))
         servNewConnection();
-    for (unsigned int i = 0; i < clientList.size(); i++)
+    /* PROBLEME DE BOUCLE INFINI QUAND le client quitte, le nombre de client ne diminue pas */
+    for (unsigned int i = 0; i < clientList.size(); i++) {
         if (FD_ISSET(clientList[i]->getFd(), &sockets))
             servTreatClient(clientList[i]);
+    }
 }
 
 void    Server::servNewConnection()
@@ -133,6 +135,9 @@ void    Server::servTreatClient(Client *client)
                 mode(client, entry);
             else if (cmd == "KICK" || cmd == "kick")
                 kick(client, entry);
+            else if (cmd == "QUIT" || cmd == "quit") {
+                /*  probleme boucle infini */
+            } 
             //else
             //    sendMsg(ERR_UNKNOWNCOMMAND(client->getNickname(), entry), client->getFd(), client->getNickname());
         //} 

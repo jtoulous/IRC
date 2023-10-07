@@ -31,7 +31,6 @@ void    Server::Topic(Client *client, String entry) {
 
     int i = 0;
 
-
     entry.rmWord(1);
     String name = entry.substr(Utils::passSpace(entry), entry.find(' ', Utils::passSpace(entry)));
 
@@ -62,6 +61,10 @@ void    Server::Topic(Client *client, String entry) {
                 }
             }
             /*  On envoie la String topic crée au dessus    */
+            if (this->channelList[index_chan]->getTopicPrivilege() == false) {
+                sendMsg(ERR_CHANOPRIVSNEEDED(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
+                return ;
+            }
             this->channelList[index_chan]->setTopic(topic);
             sendMsg(RPL_TOPIC(client->getNickname(), this->channelList[index_chan]->getName(), topic), client->getFd(), client->getNickname());
         }
