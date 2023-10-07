@@ -47,6 +47,7 @@ class Server
                 void    join(Client *client, String &entry);
                 void    invite(Client *client, String &entry);
                 void    mode(Client *client, String &entry);
+                void    Topic(Client *client, String entry);
 
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
@@ -55,8 +56,6 @@ class Server
                 void    SendMessageToClient(int client_fd, Client *client, int index_chan);
                 Client* IfGuestExist(String name);
                 
-                void    Topic(Client *client, String entry);
-
                 int     getFdMax();
                 int     getEntrySocket();
                 

@@ -28,12 +28,15 @@ class Channel
             int         getAdminWithIndex(int index_vec);
 
             void        setUserFd(int user_fd);
+            void        setAdminFd(int fd);
             void        setBoolInviteOnly(bool invite);
             void        setTopic(String topik);
 
             bool        FdIsAdmin(int fd);
             bool        FdIsUser(int fd);
             bool        FdIsOwner(int fd);
+
+            void        removeAdmin(int fd);
 
             void        diffuseMsg(String msg, vector<Client *> clientList, int srcFd);
             
