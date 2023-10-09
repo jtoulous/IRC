@@ -132,7 +132,10 @@ void    Server::servTreatClient(Client *client)
                 kick(client, entry);
             else if (cmd == "QUIT" || cmd == "quit") {
                 /*  probleme boucle infini */
-            } 
+            }
+            else if (cmd == "NAMES" || cmd == "names") {
+                names(client, entry);
+            }
             //else
             //    sendMsg(ERR_UNKNOWNCOMMAND(client->getNickname(), entry), client->getFd(), client->getNickname());
         //} 

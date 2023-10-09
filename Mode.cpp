@@ -8,7 +8,7 @@ static void execMode(String mode, Channel *channel, String arg, Client *owner, v
       iMod(channel, owner, mode);             
     else if (mode == "+t" || mode == "-t")                               
       tMod(channel, owner, mode);
-    else if (mode == "+k" || mode == "-k")                    
+    else if (mode == "+k" || mode == "  -k")                    
       kMod(mode, channel, arg, owner);        
     else if (mode == "+o" || mode == "-o")                               
     {  
@@ -16,7 +16,7 @@ static void execMode(String mode, Channel *channel, String arg, Client *owner, v
         throw (Xception(ERR_UNKNOWNCOMMAND(owner->getNickname(), entry)));
       oMod(channel, owner, arg, mode[0], clientList);  
     }
-    else if (mode == "+l" || mode == "-l")                              
+    else if (mode == "+l" || mode == "-l")                    
       lMod(mode, channel, arg, owner);
   }
 
