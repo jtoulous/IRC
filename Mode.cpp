@@ -47,12 +47,6 @@ static int  parseModes(vector<String> &modes, String client, String &tmpEntry, S
     String  word = tmpEntry.extractWord(1);
     String  mod;
     char    ope = word[0];
-
-    //if (tmpEntry.wordCount() == 0 && ope != '+' && ope != '-')
-    //  return;
-
-    //if (ope != '+' && ope != '-')
-    //  throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));
     
     for (int j = 1; word[j]; j++)
     {
