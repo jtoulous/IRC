@@ -39,7 +39,7 @@ class Channel
             void        setPassword(String pass);
             void        setLimitUsers(int limit);
             void        setBoolLimitUsers(bool l);
-            void        addCountUsers(int nb);
+            void        addCountUsers();
 
             bool        FdIsAdmin(int fd);
             bool        FdIsUser(int fd);

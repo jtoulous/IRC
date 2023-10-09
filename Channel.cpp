@@ -134,8 +134,8 @@ int    Channel::getLimitUsers() {
     return (this->limit_users);
 }
 
-void    Channel::addCountUsers(int nb) {
-    this->count_users += nb;
+void    Channel::addCountUsers() {
+    this->count_users++;
 }
 
 int     Channel::getCountUsers() {

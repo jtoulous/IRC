@@ -8,7 +8,7 @@
 Server::Server()
 {}
 
-Server::Server(char **argv)
+Server::Server(char **argv, int argc)
 : Hostname("Server")
 {
     sockaddr_in serverAddr;
@@ -26,7 +26,10 @@ Server::Server(char **argv)
     if (bind(EntrySocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1)
         throw (Xception("Error: binding entry socket"));
 
-    password = argv[2];
+    if (argc == 3)
+        password = argv[2];
+    else
+        password = "";
     
     std::cout << "\n================================\n"
               <<   "|       SERVER ACTIVE          |\n" 

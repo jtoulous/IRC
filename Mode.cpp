@@ -94,16 +94,16 @@ static void execMode(String mode, Channel *channel, vector<String> argsList, Cli
       iMod(channel, owner, mode);             
     else if (mode == "+t" || mode == "-t")                               
       tMod(channel, owner, mode);
-    //else if (mode == "+k" || mode == "-k")                    
-     // kMod(channel, owner, mode);          
-    if (mode == "+o" || mode == "-o")                               
+    else if (mode == "+k" || mode == "-k")                    
+      kMod(mode, channel, arg, owner);        
+    else if (mode == "+o" || mode == "-o")                               
     {  
       if (arg.empty())
         throw (Xception(ERR_UNKNOWNCOMMAND(owner->getNickname(), entry)));
       oMod(channel, owner, arg, mode[0], clientList);  
     }
-    //else                              
-    //  lMod();
+    else if (mode == "+l" || mode == "-l")                              
+      lMod(mode, channel, arg, owner);
   }
 
   catch (Xception &e)

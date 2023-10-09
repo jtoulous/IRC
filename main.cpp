@@ -12,13 +12,13 @@ void    handleSigInt(int signal)
 
 int main(int argc, char **argv)
 {
-    if (argc != 3) {
+    if (argc > 3 || argc < 1) {
         std::cerr << "Error format : " << GREEN << "./ircserv " << ORANGE << "<port>" << RED << " <password>" << DEFAULT << std::endl;
         return (1);
     }
     try
     {
-        Server          server(argv);   //demarrage serveur
+        Server          server(argv, argc);   //demarrage serveur
         fd_set          sockets;    //structure qui contient tout les fd des clients et le fd d'entree au serv pour l'utilisation de select()
         
         serverPtr = &server;
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
             if (select(server.getFdMax() + 1, &sockets, NULL, NULL, NULL) == -1)//surveille tous les fd qui sont dans le fd_set, reste bloquer ici tant que y a aucune activite de detecter
             {    
                 perror("perror: ");
-                throw (Xception("\nError: select() problemo"));
+                throw (Xception("\nError: select() problems"));
             }
             server.servCheckSockets(sockets); //check sur quel fd y a de l'activite et traite la demande du client ou la nouvelle connexion entrante
         }
