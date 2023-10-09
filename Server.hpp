@@ -53,9 +53,11 @@ class Server
                 bool    IfChannelExist(String name);
                 bool    IfPasswordIsOk(String name, String password);
                 bool    PasswordExist(String name);
+                bool    GuestExistForJoin(vector<Client *> GuestClient, Client *client);
                 void    SendMessageToClient(int client_fd, Client *client, int index_chan);
                 Client* IfGuestExist(String name);
                 
+
                 int     getFdMax();
                 int     getEntrySocket();
                 
