@@ -313,7 +313,13 @@ char    String::wordEndChar(int wordNb)
     return (tmp[pos]);
 }
 
+String  String::lastWord()
+{
+    String word;
 
+    word = this->getWord(this->wordCount());
+    return (word);
+}
 
 void    String::bigJoin(char *str1, char *str2, char *str3, char *str4, char *str5)
 {

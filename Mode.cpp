@@ -1,7 +1,15 @@
 #include "Server.hpp"                                                      
 
-static void oMod(Channel *channel, Client *owner, Client *target, char operation, vector<Client *> clientList)
+static void oMod(Channel *channel, Client *owner, String targetNick, char operation, vector<Client *> clientList)
 {
+  int     fdTarget = Utils::findClientFd(targetNick, clientList);
+  Client  *target;
+  
+  if (fdTarget == -1)
+    throw (Xception(ERR_NOSUCHNICK(targetNick)));
+  
+  target = clientList[Utils::findClientIndex(fdTarget, clientList)];
+  
   if (operation == '+')
   {
       if (!channel->FdIsAdmin(target->getFd()))
@@ -65,7 +73,7 @@ void  lMod(Channel *channel, Client *Target, String mode) {
     }
 }*/
 
-static void execMode(String mode, Channel *channel, int clientIndex, Client *owner, vector<Client *> clientList, String entry)
+static void execMode(String mode, Channel *channel, String arg, Client *owner, vector<Client *> clientList, String entry)
 {              
   try
   {
@@ -76,11 +84,10 @@ static void execMode(String mode, Channel *channel, int clientIndex, Client *own
     //else if (mode == "+k" || mode == "-k")                    
      // kMod(channel, owner, mode);          
     if (mode == "+o" || mode == "-o")                               
-    {
-      if (clientIndex == -1)//si le mec a pas rentrer de pseudo cible
+    {  
+      if (arg.empty())
         throw (Xception(ERR_UNKNOWNCOMMAND(owner->getNickname(), entry)));
-      
-      oMod(channel, owner, clientList[clientIndex], mode[0], clientList);  
+      oMod(channel, owner, arg, mode[0], clientList);  
     }
     //else                              
     //  lMod();
@@ -93,38 +100,33 @@ static void execMode(String mode, Channel *channel, int clientIndex, Client *own
   }
 }
 
-static void  parseModes(vector<String> &modes, String client, String tmpEntry, String entry)
+static void  parseModes(vector<String> &modes, String client, String &tmpEntry, String entry)
 {
-  char    ope = tmpEntry.wordStartChar(1);
-  String  mod;
-
-  if (ope != '-' && ope != '+')
-        throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));//bad input
-  
-  for (int i = 1; i <= tmpEntry.wordCount(); i++)
+  while (tmpEntry.wordCount() != 0)
   {
-    String word = tmpEntry.getWord(i);
+    String  word = tmpEntry.extractWord(1);
+    String  mod;
+    char    ope = word[0];
 
+    if (tmpEntry.wordCount() == 0 && ope != '+' && ope != '-')
+      return;
+
+    if (ope != '+' && ope != '-')
+      throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));
+    
     for (int j = 0; word[j]; j++)
     {
+      if (word[j] == '+' || word[j] == '-')
+        ope = word[j];
       if (!Utils::modValidChar(word[j]))
         throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));//bad input
-      
-      if (word[j] == '+' || word[j] == '-')
-      {
-        if (word[j + 1] == '+' || word[j + 1] == '-')
-          throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));//bad input
-        ope = word[j];
-      }
-
-      else
+      else if (word[j] != '+' && word[j] != '-')
       {
         mod.push_back(ope);
         mod.push_back(word[j]);
         modes.push_back(mod);
-        mod.clear();
       }
-    }  
+    }
   }
 }
 
@@ -134,9 +136,10 @@ void  Server::mode(Client *client, String &entry)
   String          tmpEntry = entry;
   Channel         *channel; 
   int             channelIndex = Utils::findChannelIndex(tmpEntry.extractWord(2), channelList);
-  int             fdTarget = -2;
+  //int             fdTarget = -2;
   int             fdClient = client->getFd();
   String          nickClient = client->getNickname();
+  String          arg;
 
   tmpEntry.rmWord(1);
 
@@ -152,20 +155,13 @@ void  Server::mode(Client *client, String &entry)
     if (tmpEntry.wordCount() == 0)
       return;
 
-    if (tmpEntry.wordStartChar(1) != '+' && tmpEntry.wordStartChar(1) != '-')
-    { 
-      if (tmpEntry.wordCount() == 1)
-        throw (Xception(ERR_UNKNOWNCOMMAND(nickClient, entry)));
-      fdTarget = Utils::findClientFd(tmpEntry.extractWord(1), clientList);
-      if (fdTarget == -1)//le client cible existe pas
-        throw (Xception(ERR_NOSUCHNICK(nickClient)));
-    }
-
     parseModes(modes, nickClient, tmpEntry, entry);
 
+    if (entry.lastWord()[0] != '-' && entry.lastWord()[0] != '+')
+      arg = entry.lastWord();
 
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
-      ::execMode(modes[i], channel, Utils::findClientIndex(fdTarget, clientList), client, clientList, entry);
+      execMode(modes[i], channel, arg, client, clientList, entry);
   }
 
   catch (Xception &e)

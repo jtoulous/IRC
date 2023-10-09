@@ -6,6 +6,8 @@ Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic("
     users.push_back(adm);
     topic_privilege = true;
     limit_bool = false;
+    limit_users = 0;
+    count_users = 0;
 }
 
 Channel::~Channel() {}
