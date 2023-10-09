@@ -106,7 +106,6 @@ void    Server::servTreatClient(Client *client)
     //    Utils::rmFromServer(client);
     //    return ;
     //}
-    std::cout << client->buffer << "---" << std::endl;
     while (client->buffer.find('\n') != NPOS)
     {
         entry = client->buffer.substr(0, client->buffer.find('\n'));

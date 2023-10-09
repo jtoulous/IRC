@@ -93,39 +93,39 @@ static void execMode(String mode, Channel *channel, int clientIndex, Client *own
   }
 }
 
-static void  parseModes(vector<String> &modes, String client, String tmpEntry, String entry)
+static int  parseModes(vector<String> &modes, String client, String &tmpEntry, String entry, vector<Client *> clientList)
 {
-  char    ope = tmpEntry.wordStartChar(1);
-  String  mod;
-
-  if (ope != '-' && ope != '+')
-        throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));//bad input
-  
-  for (int i = 1; i <= tmpEntry.wordCount(); i++)
+  while (tmpEntry.wordCount() != 0)
   {
-    String word = tmpEntry.getWord(i);
+    String  word = tmpEntry.extractWord(1);
+    String  mod;
+    char    ope = word[0];
 
+    if (tmpEntry.wordCount() == 0 && ope != '+' && ope != '-')
+    { 
+      if (Utils::findClientFd(word, clientList) == -1)
+        throw (Xception(ERR_NOSUCHNICK(client)));
+      return (Utils::findClientFd(word, clientList));
+    }
+
+    if (ope != '+' && ope != '-')
+      throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));
+    
     for (int j = 0; word[j]; j++)
     {
+      if (word[j] == '+' || word[j] == '-')
+        ope = word[j];
       if (!Utils::modValidChar(word[j]))
         throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));//bad input
-      
-      if (word[j] == '+' || word[j] == '-')
-      {
-        if (word[j + 1] == '+' || word[j + 1] == '-')
-          throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));//bad input
-        ope = word[j];
-      }
-
-      else
+      else if (word[j] != '+' && word[j] != '-')
       {
         mod.push_back(ope);
         mod.push_back(word[j]);
         modes.push_back(mod);
-        mod.clear();
       }
-    }  
+    }
   }
+  return (69); 
 }
 
 void  Server::mode(Client *client, String &entry)
@@ -152,20 +152,10 @@ void  Server::mode(Client *client, String &entry)
     if (tmpEntry.wordCount() == 0)
       return;
 
-    if (tmpEntry.wordStartChar(1) != '+' && tmpEntry.wordStartChar(1) != '-')
-    { 
-      if (tmpEntry.wordCount() == 1)
-        throw (Xception(ERR_UNKNOWNCOMMAND(nickClient, entry)));
-      fdTarget = Utils::findClientFd(tmpEntry.extractWord(1), clientList);
-      if (fdTarget == -1)//le client cible existe pas
-        throw (Xception(ERR_NOSUCHNICK(nickClient)));
-    }
-
-    parseModes(modes, nickClient, tmpEntry, entry);
-
+    fdTarget = parseModes(modes, nickClient, tmpEntry, entry, clientList);
 
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
-      ::execMode(modes[i], channel, Utils::findClientIndex(fdTarget, clientList), client, clientList, entry);
+      execMode(modes[i], channel, Utils::findClientIndex(fdTarget, clientList), client, clientList, entry);
   }
 
   catch (Xception &e)
