@@ -150,9 +150,9 @@ void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector
     {
         if (client->getFd() == GuestClient[i]->getFd())
         {
-            tmp = GuestClient[i];
+            //tmp = GuestClient[i];
             GuestClient.erase(GuestClient.begin() + i);
-            delete tmp;
+            //delete tmp;
         }
     }      
 

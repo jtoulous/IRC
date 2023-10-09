@@ -1,5 +1,18 @@
 #include "Server.hpp"                                                      
 
+static bool isMod(String word)
+{
+  if (word[0] == '-' || word[0] == '+')
+    return true;
+  return false;
+}
+
+static void getArgs(String entry, vector<String> &args)
+{
+  while (entry.wordCount() != 0)
+    args.push_back(entry.extractWord(1));
+}
+
 static void oMod(Channel *channel, Client *owner, String targetNick, char operation, vector<Client *> clientList)
 {
   int     fdTarget = Utils::findClientFd(targetNick, clientList);
@@ -73,7 +86,7 @@ void  lMod(Channel *channel, Client *Target, String mode) {
     }
 }*/
 
-static void execMode(String mode, Channel *channel, String arg, Client *owner, vector<Client *> clientList, String entry)
+static void execMode(String mode, Channel *channel, vector<String> argsList, Client *owner, vector<Client *> clientList, String entry)
 {              
   try
   {
@@ -102,24 +115,27 @@ static void execMode(String mode, Channel *channel, String arg, Client *owner, v
 
 static void  parseModes(vector<String> &modes, String client, String &tmpEntry, String entry)
 {
-  while (tmpEntry.wordCount() != 0)
+  while (isMod(tmpEntry.getWord(1)))
   {
     String  word = tmpEntry.extractWord(1);
     String  mod;
     char    ope = word[0];
+    int     nbArgs = 0;
 
-    if (tmpEntry.wordCount() == 0 && ope != '+' && ope != '-')
-      return;
+    //if (tmpEntry.wordCount() == 0 && ope != '+' && ope != '-')
+    //  return;
 
-    if (ope != '+' && ope != '-')
-      throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));
+    //if (ope != '+' && ope != '-')
+    //  throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));
     
-    for (int j = 0; word[j]; j++)
+    for (int j = 1; word[j]; j++)
     {
       if (word[j] == '+' || word[j] == '-')
         ope = word[j];
       if (!Utils::modValidChar(word[j]))
         throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));//bad input
+      if (word[j] == 'o' || word[j] == 'l' || word[j] == 'k')
+        nbArgs++;
       else if (word[j] != '+' && word[j] != '-')
       {
         mod.push_back(ope);
@@ -128,6 +144,7 @@ static void  parseModes(vector<String> &modes, String client, String &tmpEntry, 
       }
     }
   }
+  return (nbArgs);
 }
 
 void  Server::mode(Client *client, String &entry)
@@ -139,7 +156,9 @@ void  Server::mode(Client *client, String &entry)
   //int             fdTarget = -2;
   int             fdClient = client->getFd();
   String          nickClient = client->getNickname();
-  String          arg;
+  vector<String>          argsList;
+  int             nbMod;
+  int             nbArgs;
 
   tmpEntry.rmWord(1);
 
@@ -154,14 +173,16 @@ void  Server::mode(Client *client, String &entry)
 
     if (tmpEntry.wordCount() == 0)
       return;
+    
+0
+    nbArgs = parseModes(modes, nickClient, tmpEntry, entry);
+    getArgs(tmpEntry, argsList);
 
-    parseModes(modes, nickClient, tmpEntry, entry);
-
-    if (entry.lastWord()[0] != '-' && entry.lastWord()[0] != '+')
-      arg = entry.lastWord();
+    if (nbArgs != argsList.size())
+      throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));
 
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
-      execMode(modes[i], channel, arg, client, clientList, entry);
+      execMode(modes[i], channel, argsList, client, clientList, entry);
   }
 
   catch (Xception &e)
