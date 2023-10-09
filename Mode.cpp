@@ -6,10 +6,9 @@ void    tMod(Channel *channel, Client *Target, String mode);
 void    kMod(String mode, Channel *channel, String arg, Client*owner);
 void    lMod(String mode, Channel *channel, String arg, Client*owner);
 
-static void execMode(String mode, Channel *channel, String argsList, Client *owner, vector<Client *> clientList, String entry)
+static void execMode(String mode, Channel *channel, String argsList, Client *owner, vector<Client *> clientList)
 {              
   String arg;
-  (void) entry;
 
   try
   {
@@ -101,7 +100,7 @@ void  Server::mode(Client *client, String &entry)
       throw (Xception(ERR_UNKNOWNCOMMAND(nickClient, entry)));
 
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
-      execMode(modes[i], channel, tmpEntry, client, clientList, entry);
+      execMode(modes[i], channel, tmpEntry, client, clientList);
   }
 
   catch (Xception &e)
