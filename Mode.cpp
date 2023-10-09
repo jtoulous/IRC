@@ -1,109 +1,34 @@
 #include "Server.hpp"                                                      
 
-static bool isMod(String word)
-{
-  if (word[0] == '-' || word[0] == '+')
-    return true;
-  return false;
-}
+void    iMod(Channel *channel, Client *Target, String mode);
+void    oMod(Channel *channel, Client *owner, String targetNick, char operation, vector<Client *> clientList);
+void    tMod(Channel *channel, Client *Target, String mode);
+void    kMod(String mode, Channel *channel, String arg, Client*owner);
+void    lMod(String mode, Channel *channel, String arg, Client*owner);
 
-static void getArgs(String entry, vector<String> &args)
-{
-  while (entry.wordCount() != 0)
-    args.push_back(entry.extractWord(1));
-}
-
-static void oMod(Channel *channel, Client *owner, String targetNick, char operation, vector<Client *> clientList)
-{
-  int     fdTarget = Utils::findClientFd(targetNick, clientList);
-  Client  *target;
-  
-  if (fdTarget == -1)
-    throw (Xception(ERR_NOSUCHNICK(targetNick)));
-  
-  target = clientList[Utils::findClientIndex(fdTarget, clientList)];
-  
-  if (operation == '+')
-  {
-      if (!channel->FdIsAdmin(target->getFd()))
-      {
-        channel->setAdminFd(target->getFd());
-        sendMsg(RPL_NEWOPERATOR(target->getNickname(), channel->getName()), target->getFd(), target->getNickname());
-        sendMsg(RPL_NEWOPERATORFOROWNER(owner->getNickname(), target->getNickname(), channel->getName()), owner->getFd(), owner->getNickname());
-        channel->diffuseMsg(RPL_NEWOPERATORFORCHANNEL(target->getNickname(), channel->getName()), clientList, -1);
-      }
-      else
-        sendMsg(RPL_ALREADYOPERATOR(owner->getNickname(), channel->getName(), target->getNickname()), owner->getFd(), owner->getNickname());
-  }
-
-  else
-  {
-    if (channel->FdIsAdmin(target->getFd()))
-    {
-      channel->removeAdmin(target->getFd());
-      sendMsg(RPL_DEOPPED(target->getNickname(), channel->getName()), target->getFd(), target->getNickname());
-      sendMsg(RPL_DEOPPEDFOROWNER(owner->getNickname(), target->getNickname(), channel->getName()), owner->getFd(), owner->getNickname());
-      channel->diffuseMsg(RPL_DEOPPEDFORCHANNEL(target->getNickname(), channel->getName()), clientList, -1);
-    }
-    else
-      sendMsg(RPL_NOTOPERATOR(owner->getNickname(), channel->getName(), target->getNickname()), owner->getFd(), owner->getNickname());
-  }
-}
-
-void  tMod(Channel *channel, Client *Target, String mode) {
-     
-    String msg;
-    if (mode == "+t") {
-        channel->setTopicPrivilege(true);
-        msg = "MODE " + channel->getName() + " +t" + "\r\n";
-        send(Target->getFd(), msg.c_str(), msg.size(), 0);
-    }
-    else if (mode == "-t") {
-        channel->setTopicPrivilege(false);
-        msg = "MODE " + channel->getName() + " -t" + "\r\n";
-        send(Target->getFd(), msg.c_str(), msg.size(), 0);
-    }
-}
-/*
-void  kMod(Channel *channel, Client *Target, String mode) {
-  
-  //  A voir pour parser ça 
-  // MODE #chan +k password
-}*/
-
-/*
-void  lMod(Channel *channel, Client *Target, String mode) {
-    
-    // MODE #nom-du-canal +l 10
-    int limit = 0; // set la limit en fonction du parsing
-    if (mode == "+l") {
-      channel->setLimitUsers(limit);
-      channel->setBoolLimitUsers(true);
-    }
-    else if (mode == "-l") {
-      channel->setLimitUsers(0);
-      channel->setBoolLimitUsers(false);
-    }
-}*/
-
-static void execMode(String mode, Channel *channel, vector<String> argsList, Client *owner, vector<Client *> clientList, String entry)
+static void execMode(String mode, Channel *channel, String argsList, Client *owner, vector<Client *> clientList, String entry)
 {              
+  String arg;
+  (void) entry;
+
   try
   {
-    if (mode == "+i" || mode == "-i")                                          
-      iMod(channel, owner, mode);             
-    else if (mode == "+t" || mode == "-t")                               
+    //if (mode == "+i" || mode == "-i")                                          
+    //  iMod(channel, owner, mode);             
+    if (mode == "+t" || mode == "-t")                               
       tMod(channel, owner, mode);
-    else if (mode == "+k" || mode == "-k")                    
-      kMod(mode, channel, arg, owner);        
-    else if (mode == "+o" || mode == "-o")                               
-    {  
-      if (arg.empty())
-        throw (Xception(ERR_UNKNOWNCOMMAND(owner->getNickname(), entry)));
-      oMod(channel, owner, arg, mode[0], clientList);  
+    
+    else
+    {
+      arg = argsList.extractWord(1);
+      
+      if (mode == "+o" || mode == "-o")                               
+        oMod(channel, owner, arg, mode[0], clientList);  
+      //else if (mode == "+k" || mode == "-k")                    
+       // kMod(channel, owner, mode, arg);          
+      //else                              
+      //  lMod();
     }
-    else if (mode == "+l" || mode == "-l")                              
-      lMod(mode, channel, arg, owner);
   }
 
   catch (Xception &e)
@@ -113,14 +38,15 @@ static void execMode(String mode, Channel *channel, vector<String> argsList, Cli
   }
 }
 
-static void  parseModes(vector<String> &modes, String client, String &tmpEntry, String entry)
+static int  parseModes(vector<String> &modes, String client, String &tmpEntry, String entry)
 {
-  while (isMod(tmpEntry.getWord(1)))
+  int     nbArgs = 0;
+  
+  while (tmpEntry.getWord(1)[0] == '+' || tmpEntry.getWord(1)[0] == '-')
   {
     String  word = tmpEntry.extractWord(1);
     String  mod;
     char    ope = word[0];
-    int     nbArgs = 0;
 
     //if (tmpEntry.wordCount() == 0 && ope != '+' && ope != '-')
     //  return;
@@ -132,11 +58,14 @@ static void  parseModes(vector<String> &modes, String client, String &tmpEntry, 
     {
       if (word[j] == '+' || word[j] == '-')
         ope = word[j];
+      
       if (!Utils::modValidChar(word[j]))
         throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));//bad input
+      
       if (word[j] == 'o' || word[j] == 'l' || word[j] == 'k')
         nbArgs++;
-      else if (word[j] != '+' && word[j] != '-')
+      
+      if (word[j] != '+' && word[j] != '-')
       {
         mod.push_back(ope);
         mod.push_back(word[j]);
@@ -153,11 +82,8 @@ void  Server::mode(Client *client, String &entry)
   String          tmpEntry = entry;
   Channel         *channel; 
   int             channelIndex = Utils::findChannelIndex(tmpEntry.extractWord(2), channelList);
-  //int             fdTarget = -2;
   int             fdClient = client->getFd();
   String          nickClient = client->getNickname();
-  vector<String>          argsList;
-  int             nbMod;
   int             nbArgs;
 
   tmpEntry.rmWord(1);
@@ -174,15 +100,14 @@ void  Server::mode(Client *client, String &entry)
     if (tmpEntry.wordCount() == 0)
       return;
     
-0
-    nbArgs = parseModes(modes, nickClient, tmpEntry, entry);
-    getArgs(tmpEntry, argsList);
 
-    if (nbArgs != argsList.size())
-      throw (Xception(ERR_UNKNOWNCOMMAND(client, entry)));
+    nbArgs = parseModes(modes, nickClient, tmpEntry, entry);
+
+    if (nbArgs != tmpEntry.wordCount())
+      throw (Xception(ERR_UNKNOWNCOMMAND(nickClient, entry)));
 
     for (int i = 0; i < (int)modes.size(); i++)//execution 1 par 1
-      execMode(modes[i], channel, argsList, client, clientList, entry);
+      execMode(modes[i], channel, tmpEntry, client, clientList, entry);
   }
 
   catch (Xception &e)
