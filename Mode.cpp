@@ -25,9 +25,9 @@ static void execMode(String mode, Channel *channel, String argsList, Client *own
       if (mode == "+o" || mode == "-o")                               
         oMod(channel, owner, arg, mode[0], clientList);  
       else if (mode == "+k" || mode == "-k")                    
-        kMod(channel, owner, mode, arg);          
+        kMod(mode, channel, arg, owner);          
       else                              
-        lMod();
+        lMod(mode, channel, arg, owner);
     }
   }
 
