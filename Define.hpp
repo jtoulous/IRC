@@ -26,7 +26,8 @@
 #define RPL_NOTOPERATOR(owner, channel, victim) (": 368 " + owner + " " + channel + " " + victim + " :User is not an operator")
 
 //Error Replies
-/*  :irc.example.com 353 mon-pseudo = #exemple :utilisateur1 utilisateur2 utilisateur3 */
+/*  :serveur-irc 302 votre-pseudo :utilisateur=statut@hôte */
+#define RPL_USERHOST(client, user) (": 302 " + client + " :" + user + "\r\n")
 #define RPL_NAMREPLY(channel, client, allClient) (": 353 " + client + " = " + channel + " : " + allClient + "\r\n")
 #define ERR_NOSUCHNICK(client) (": 401 " + client + " :No such nick/channel\r\n")
 #define ERR_NOSUCHCHANNEL(client) (": 403 " + client + " :No such channel\r\n")

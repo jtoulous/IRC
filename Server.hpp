@@ -49,12 +49,14 @@ class Server
                 void    mode(Client *client, String &entry);
                 void    Topic(Client *client, String entry);
                 void    names(Client *client, String &entry);
+                void    UserHost(Client *client, String &entry);
 
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);
                 bool    IfPasswordIsOk(String name, String password);
                 bool    PasswordExist(String name);
                 bool    GuestExistForJoin(vector<Client *> GuestClient, Client *client);
+                bool    ClientExist(String name);
                 void    SendMessageToClient(int client_fd, Client *client, int index_chan);
                 Client* IfGuestExist(String name);
                 
