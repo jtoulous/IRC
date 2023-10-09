@@ -31,7 +31,7 @@ class Server
 {
         public:
                 Server();
-                Server(char **argv);
+                Server(char **argv, int argc);
                 ~Server();
 
                 void    servCheckSockets(fd_set &sockets);
