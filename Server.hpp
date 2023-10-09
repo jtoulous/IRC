@@ -61,7 +61,7 @@ class Server
                 int     getFdMax();
                 int     getEntrySocket();
                 
-                void execMode(String mode, Channel *channel, Client *Target, Client *Admin);
+                //void execMode(String mode, Channel *channel, Client *Target, Client *Admin);
 
                 vector<Client *>        clientList;
                 vector<Channel *>       channelList;
