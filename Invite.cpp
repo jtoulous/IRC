@@ -45,7 +45,8 @@ void  Server::invite(Client *client, String &entry)
     if (this->channelList[index_chan]->getOwner() == client->getFd() || this->channelList[index_chan]->FdIsAdmin(client->getFd()) == true){//check si l'invitant et admin ou opérateur
       Client* guestClient = IfGuestExist(guest);//stock l'invité dans un nouveau client
       sendMsg(RPL_INVITING(client->getNickname(), this->channelList[index_chan]->getName(), guestClient->getNickname()), client->getFd(), client->getNickname());//envoie l'invit 
-      SendMessageToClient(guestClient->getFd(), guestClient, index_chan);
+      sendMsg(RPL_GUESTINVITE(client->getNickname(), this->channelList[index_chan]->getName()), guestClient->getFd(), guestClient->getNickname());//envoie l'invit 
+      //SendMessageToClient(guestClient->getFd(), guestClient, index_chan);
       this->GuestList.push_back(guestClient); //ajoute l'invité a un vecteur d'invité dans le channel
       std::cout << "Invite OK\n";
       return;
@@ -68,3 +69,9 @@ Client* Server::IfGuestExist(String name){
   }
   return NULL;
 }
+
+/*void    Server::SendMessageToClient(int client_fd, Client *client, int index_chan) {
+    
+    String message_client = ":" + client->getNickname() + " INVITE " + this->channelList[index_chan]->getName() + "\r\n";
+    send (client_fd, message_client.c_str(), message_client.size(), 0);
+}*/
