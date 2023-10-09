@@ -25,6 +25,7 @@ class Utils
             //static void         rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList);
             static int          passSpace(String str);
             static bool                modValidChar(char ch);
+            static void         bye(Server *serv);
     private:
             Utils();
             //Utils(const Utils &ref);

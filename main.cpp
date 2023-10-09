@@ -1,6 +1,15 @@
 #include "Server.hpp"
 #include <cstdlib>
 
+Server *serverPtr = NULL;
+
+void    handleSigInt(int signal)
+{
+    (void)signal;
+    if (serverPtr != NULL)
+        Utils::bye(serverPtr);
+}
+
 int main(int argc, char **argv)
 {
     if (argc != 3) {
@@ -11,7 +20,9 @@ int main(int argc, char **argv)
     {
         Server          server(argv);   //demarrage serveur
         fd_set          sockets;    //structure qui contient tout les fd des clients et le fd d'entree au serv pour l'utilisation de select()
-
+        
+        serverPtr = &server;
+        signal(SIGINT, handleSigInt);
         while (1)
         {
             if (server.clientList.size() == 0)  //      si y a personne de connecter au serveur ca reste bloquer dans servEmpty(), jusqua que quelqun se connecte      

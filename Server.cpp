@@ -35,12 +35,7 @@ Server::Server(char **argv)
 }
 
 Server::~Server()
-{
-    for (size_t i = 0; i < this->channelList.size(); i++) {
-        delete (this->channelList[i]);
-    }
-    close (EntrySocket);
-}
+{}
 
 
 ////////////////////////////////////////////////

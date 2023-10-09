@@ -90,6 +90,20 @@ bool    Utils::modValidChar(char ch)
     return (true);
 }
 
+void    Utils::bye(Server *serv)
+{
+    for (int i = 0; i < (int)serv->channelList.size(); i++)
+        delete serv->channelList[i];
+    
+    for (int i = 0; i < (int)serv->clientList.size(); i++)
+    {
+        close (serv->clientList[i]->getFd());
+        delete serv->clientList[i];
+    }
+
+    close (serv->getEntrySocket());
+}
+
 /*void    Utils::rmFromServer(int fdTarget, vector<Client *> &clientList, vector<Channel *> &channelList)
 {
     Client *tmp;

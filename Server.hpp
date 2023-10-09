@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
-
+#include <csignal>
 #include "libX.hpp"
 #include "Client.hpp"
 #include "Utils.hpp"
