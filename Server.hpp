@@ -48,6 +48,7 @@ class Server
                 void    invite(Client *client, String &entry);
                 void    mode(Client *client, String &entry);
                 void    Topic(Client *client, String entry);
+                void    names(Client *client, String &entry);
 
                 bool    CheckChannelName(String name);
                 bool    IfChannelExist(String name);

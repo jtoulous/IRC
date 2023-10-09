@@ -17,16 +17,6 @@ static int ParseName(String entry, String name, int i) {
     return (i);
 }
 
-/*bool    Server::FdIsAdmin(int fd, int index_chan) {
-    if (this->channelList[index_chan]->Fd == 0)
-        return (false);
-    for (int i = 0; this->channelList[index_chan]->getAdminWithIndex(i); i++) {
-        if (this->channelList[index_chan]->getAdminWithIndex(i) == fd)
-            return (true);
-    }
-    return (false);
-}*/
-
 void    Server::Topic(Client *client, String entry) {
 
     int i = 0;

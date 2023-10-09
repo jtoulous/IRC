@@ -72,7 +72,6 @@ void  tMod(Channel *channel, Client *Target, String mode) {
 void  kMod(String mode, Channel *channel, String arg, Client*owner) {
   
   String  msg;
-
   if (mode == "+k") {
         channel->setPassword(arg);
         msg = "MODE " + channel->getName() + " +k" + "\r\n";
@@ -87,9 +86,8 @@ void  kMod(String mode, Channel *channel, String arg, Client*owner) {
 
 void  lMod(String mode, Channel *channel, String arg, Client*owner) {
     
-  int limit = atoi(arg.c_str());
   String  msg;
-
+  int limit = atoi(arg.c_str());
   if (mode == "+l") {
           
           channel->setLimitUsers(limit); 

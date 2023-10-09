@@ -110,27 +110,38 @@ void    Server::servTreatClient(Client *client)
         entry = client->buffer.substr(0, client->buffer.find('\n'));
         client->buffer.erase(0, client->buffer.find('\n') + 1);
         
-        cmd = entry.getWord(1);
-        if (cmd == "PASS" || cmd == "pass")
-            pass(client, entry);
-        else if (cmd == "NICK" || cmd == "nick")
-            nick(client, entry);
-        else if (cmd == "USER" || cmd == "user")
-            user(client, entry);
-        else if (cmd == "JOIN" || cmd == "join")
-            join(client, entry);
-        else if (cmd == "PRIVMSG" || cmd == "privmsg")
-            privMsg(client, entry);
-        else if (cmd == "TOPIC" || cmd == "topic")
-            Topic(client, entry);
-        else if (cmd == "INVITE" || cmd == "invite")
-            invite(client, entry);
-        else if (cmd == "MODE" || cmd == "mode")
-            mode(client, entry);
-        else if (cmd == "KICK" || cmd == "kick")
-            kick(client, entry);
-        //else if (cmd == "QUIT" || cmd == "quit")
-        //    Utils::rmFromServer(client, clientList, channelList, GuestList);
+        //if (littleCheck(entry))
+        //    sendMsg("bad input\n", client->getFd(), client->getNickname());//remplacer par le RPL qu il faut
+        //else
+        //{
+            cmd = entry.getWord(1);
+            if (cmd == "PASS" || cmd == "pass")
+                pass(client, entry);
+            else if (cmd == "NICK" || cmd == "nick")
+                nick(client, entry);
+            else if (cmd == "USER" || cmd == "user")
+                user(client, entry);
+            else if (cmd == "JOIN" || cmd == "join")
+                join(client, entry);
+            else if (cmd == "PRIVMSG" || cmd == "privmsg")
+                privMsg(client, entry);
+            else if (cmd == "TOPIC" || cmd == "topic")
+                Topic(client, entry);
+            else if (cmd == "INVITE" || cmd == "invite")
+                invite(client, entry);
+            else if (cmd == "MODE" || cmd == "mode")
+                mode(client, entry);
+            else if (cmd == "KICK" || cmd == "kick")
+                kick(client, entry);
+            else if (cmd == "QUIT" || cmd == "quit") {
+                /*  probleme boucle infini */
+            }
+            else if (cmd == "NAMES" || cmd == "names") {
+                names(client, entry);
+            }
+            //else
+            //    sendMsg(ERR_UNKNOWNCOMMAND(client->getNickname(), entry), client->getFd(), client->getNickname());
+        //} 
     }
 }
 
