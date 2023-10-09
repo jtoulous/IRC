@@ -139,8 +139,6 @@ void    Server::servTreatClient(Client *client)
             else if (cmd == "NAMES" || cmd == "names") {
                 names(client, entry);
             }
-            else if (cmd == "USERHOST" || cmd == "userhost")
-                UserHost(client, entry);
             //else
             //    sendMsg(ERR_UNKNOWNCOMMAND(client->getNickname(), entry), client->getFd(), client->getNickname());
         //} 
