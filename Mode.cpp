@@ -83,16 +83,15 @@ void  Server::mode(Client *client, String &entry)
 
   try
   {
+    if (tmpEntry.wordCount() == 0)
+      return;
+    
     if (channelIndex == -1)//channel existe pas
       throw (Xception(ERR_NOSUCHCHANNEL(nickClient)));
     channel = channelList[channelIndex];
 
     if (/*!channel->FdIsAdmin(fdClient) && */!channel->FdIsOwner(fdClient))//pas owner
       throw (Xception(ERR_NOTOWNER(nickClient, channel->getName())));
-
-    if (tmpEntry.wordCount() == 0)
-      return;
-    
 
     nbArgs = parseModes(modes, nickClient, tmpEntry, entry);
 
