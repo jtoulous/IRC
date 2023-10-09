@@ -104,7 +104,6 @@ void    Utils::bye(Server *serv)
     close (serv->getEntrySocket());
 }
 
-/*void    Utils::rmFromServer(int fdTarget, vector<Client *> &clientList, vector<Channel *> &channelList)
 void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList, vector<Client *> &GuestClient)
 {
     Client *tmp;
