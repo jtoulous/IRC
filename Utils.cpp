@@ -105,39 +105,40 @@ void    Utils::bye(Server *serv)
 }
 
 /*void    Utils::rmFromServer(int fdTarget, vector<Client *> &clientList, vector<Channel *> &channelList)
+void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList, vector<Client *> &GuestClient)
 {
     Client *tmp;
 
-    for (int i = 0; i < channelList.size(); i++) //checker les channel ou il etait
+    for (size_t i = 0; i < channelList.size(); i++) //checker les channel ou il etait
     {
         vector<int> users = channelList[i]->getUsers();
         vector<int> admins = channelList[i]->getAdmins();
         int         owner = channelList[i]->getOwner();
 
-        for (int u = 0; u < users.size(); u++)//list des users
+        for (size_t u = 0; u < users.size(); u++)//list des users
         {
-            if (users[i] == fdTarget)
+            if (users[i] == client->getFd())
             {
                 users.erase(users.begin() + i);           
                 break;
             }
         }
 
-        for (int a = 0; a < admins.size(); a++)//admin
+        for (size_t a = 0; a < admins.size(); a++)//admin
         {
-            if (admins[i] == fdTarget)
+            if (admins[i] == client->getFd())
             {
                 admins.erase(admins.begin() + i);
                 break;
             }
         }
 
-        if (owner == fdTarget)//transfert droit d'owner 
+        if (owner == client->getFd())//transfert droit d'owner 
         {
             if (admins.size() != 0)
-                channelList[i]->setOwner() = admins[0];
+                channelList[i]->setAdminFd(admins[0]);
             else if (users.size() != 0)
-                channelList[i]->setOwner() = users[0];
+                channelList[i]->setAdminFd(users[0]);
             else
             {
                 channelList.erase(channelList.begin() + i);
@@ -146,15 +147,25 @@ void    Utils::bye(Server *serv)
         }
     }
 
-
-    for (int i = 0; i < clientList.size(); i++)
+    for (size_t i = 0; i < GuestClient.size(); i++)
     {
-        if (fdTarget == clientList[i]->getFd())
+        if (client->getFd() == GuestClient[i]->getFd())
+        {
+            tmp = GuestClient[i];
+            GuestClient.erase(GuestClient.begin() + i);
+            delete tmp;
+        }
+    }      
+
+
+    for (size_t i = 0; i < clientList.size(); i++)
+    {
+        if (client->getFd() == clientList[i]->getFd())
         {
             tmp = clientList[i];
             clientList.erase(clientList.begin() + i);
-            close (fdTarget);
+            close (client->getFd());
             delete tmp;
         }
-    }    
-}*/
+    }  
+}

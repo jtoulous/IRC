@@ -22,7 +22,7 @@ class Utils
             static int          findChannelIndex(String name, vector<Channel *> &channelList);
             static bool         nicknameAvailable(String &nickname, vector<Client *> &clientList);
             static bool         usernameAvailable(String &username, vector<Client *> &clientList);
-            //static void         rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList);
+            static void         rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList, vector<Client *> &GuestClient);
             static int          passSpace(String str);
             static bool                modValidChar(char ch);
             static void         bye(Server *serv);

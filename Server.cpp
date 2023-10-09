@@ -96,11 +96,12 @@ void    Server::servTreatClient(Client *client)
     String  entry;
     String  cmd;
 
-    /*if (*/servReceive(client);/*== 0)*/
-    //{
-    //    Utils::rmFromServer(client);
-    //    return ;
-    //}
+    if (servReceive(client) == 0)
+    {
+        Utils::rmFromServer(client, clientList, channelList, GuestList);
+        return ;
+    }
+    std::cout << client->buffer << "---" << std::endl;
     while (client->buffer.find('\n') != NPOS)
     {
         entry = client->buffer.substr(0, client->buffer.find('\n'));
