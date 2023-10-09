@@ -36,7 +36,7 @@ int main(int argc, char **argv)
             if (select(server.getFdMax() + 1, &sockets, NULL, NULL, NULL) == -1)//surveille tous les fd qui sont dans le fd_set, reste bloquer ici tant que y a aucune activite de detecter
             {    
                 perror("perror: ");
-                throw (Xception("\nError: select() problemo"));
+                throw (Xception("\nError: select() problems"));
             }
             server.servCheckSockets(sockets); //check sur quel fd y a de l'activite et traite la demande du client ou la nouvelle connexion entrante
         }
