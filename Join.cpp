@@ -45,7 +45,9 @@ void    Server::join(Client *client, String &entry) {
         /*  Check si il y a une limite d'utilisateur    */
         if (this->channelList[index_chan]->getBoolLimitUsers() == true) {
             /*  Check la limite du nombre des utilisateur en fonction du MODE +l */
-            if (this->channelList[index_chan]->getLimitUsers() >= this->channelList[index_chan]->getCountUsers()) {
+            std::cout << "user_count = " << RED << this->channelList[index_chan]->getCountUsers() << std::endl;
+            std::cout << "limits_user = " << RED <<  this->channelList[index_chan]->getLimitUsers() << std::endl;
+            if (this->channelList[index_chan]->getLimitUsers() == this->channelList[index_chan]->getCountUsers()) {
                 sendMsg(ERR_CHANNELISFULL(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
                 return ;
             }
@@ -63,8 +65,8 @@ void    Server::join(Client *client, String &entry) {
         }
         this->channelList[index_chan]->setUserFd(user_fd);
 
-        if (this->channelList[index_chan]->getBoolLimitUsers() == true)
-            this->channelList[index_chan]->addCountUsers(1);
+        this->channelList[index_chan]->addCountUsers();
+        std::cout << "count user 2 = " << this->channelList[index_chan]->getCountUsers() << std::endl;
 
         SendMessageToClient(user_fd, client, index_chan);
         return ;
@@ -74,8 +76,8 @@ void    Server::join(Client *client, String &entry) {
     this->channelList.push_back(new Channel(name, password, owner_fd));
     index_chan = Utils::findChannelIndex(name, channelList);
 
-    if (this->channelList[index_chan]->getBoolLimitUsers() == true)
-        this->channelList[index_chan]->addCountUsers(1);
+    this->channelList[index_chan]->addCountUsers();
+    std::cout << "count user 2 = " << this->channelList[index_chan]->getCountUsers() << std::endl;
    
     SendMessageToClient(owner_fd, client, index_chan);
 }

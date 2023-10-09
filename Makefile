@@ -14,7 +14,7 @@ SRC		= main.cpp \
 			Topic.cpp \
 			Invite.cpp \
 			Kick.cpp \
-			iMod.cpp 
+			Mod.cpp 
 
 OBJ		= $(SRC:.cpp=.o)
 

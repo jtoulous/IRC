@@ -1,78 +1,5 @@
 #include "Server.hpp"                                                      
 
-static void oMod(Channel *channel, Client *owner, String targetNick, char operation, vector<Client *> clientList)
-{
-  int     fdTarget = Utils::findClientFd(targetNick, clientList);
-  Client  *target;
-  
-  if (fdTarget == -1)
-    throw (Xception(ERR_NOSUCHNICK(targetNick)));
-  
-  target = clientList[Utils::findClientIndex(fdTarget, clientList)];
-  
-  if (operation == '+')
-  {
-      if (!channel->FdIsAdmin(target->getFd()))
-      {
-        channel->setAdminFd(target->getFd());
-        sendMsg(RPL_NEWOPERATOR(target->getNickname(), channel->getName()), target->getFd(), target->getNickname());
-        sendMsg(RPL_NEWOPERATORFOROWNER(owner->getNickname(), target->getNickname(), channel->getName()), owner->getFd(), owner->getNickname());
-        channel->diffuseMsg(RPL_NEWOPERATORFORCHANNEL(target->getNickname(), channel->getName()), clientList, -1);
-      }
-      else
-        sendMsg(RPL_ALREADYOPERATOR(owner->getNickname(), channel->getName(), target->getNickname()), owner->getFd(), owner->getNickname());
-  }
-
-  else
-  {
-    if (channel->FdIsAdmin(target->getFd()))
-    {
-      channel->removeAdmin(target->getFd());
-      sendMsg(RPL_DEOPPED(target->getNickname(), channel->getName()), target->getFd(), target->getNickname());
-      sendMsg(RPL_DEOPPEDFOROWNER(owner->getNickname(), target->getNickname(), channel->getName()), owner->getFd(), owner->getNickname());
-      channel->diffuseMsg(RPL_DEOPPEDFORCHANNEL(target->getNickname(), channel->getName()), clientList, -1);
-    }
-    else
-      sendMsg(RPL_NOTOPERATOR(owner->getNickname(), channel->getName(), target->getNickname()), owner->getFd(), owner->getNickname());
-  }
-}
-
-void  tMod(Channel *channel, Client *Target, String mode) {
-     
-    String msg;
-    if (mode == "+t") {
-        channel->setTopicPrivilege(true);
-        msg = "MODE " + channel->getName() + " +t" + "\r\n";
-        send(Target->getFd(), msg.c_str(), msg.size(), 0);
-    }
-    else if (mode == "-t") {
-        channel->setTopicPrivilege(false);
-        msg = "MODE " + channel->getName() + " -t" + "\r\n";
-        send(Target->getFd(), msg.c_str(), msg.size(), 0);
-    }
-}
-/*
-void  kMod(Channel *channel, Client *Target, String mode) {
-  
-  //  A voir pour parser ça 
-  // MODE #chan +k password
-}*/
-
-/*
-void  lMod(Channel *channel, Client *Target, String mode) {
-    
-    // MODE #nom-du-canal +l 10
-    int limit = 0; // set la limit en fonction du parsing
-    if (mode == "+l") {
-      channel->setLimitUsers(limit);
-      channel->setBoolLimitUsers(true);
-    }
-    else if (mode == "-l") {
-      channel->setLimitUsers(0);
-      channel->setBoolLimitUsers(false);
-    }
-}*/
-
 static void execMode(String mode, Channel *channel, String arg, Client *owner, vector<Client *> clientList, String entry)
 {              
   try
@@ -81,16 +8,16 @@ static void execMode(String mode, Channel *channel, String arg, Client *owner, v
       iMod(channel, owner, mode);             
     else if (mode == "+t" || mode == "-t")                               
       tMod(channel, owner, mode);
-    //else if (mode == "+k" || mode == "-k")                    
-     // kMod(channel, owner, mode);          
-    if (mode == "+o" || mode == "-o")                               
+    else if (mode == "+k" || mode == "-k")                    
+      kMod(mode, channel, arg, owner);        
+    else if (mode == "+o" || mode == "-o")                               
     {  
       if (arg.empty())
         throw (Xception(ERR_UNKNOWNCOMMAND(owner->getNickname(), entry)));
       oMod(channel, owner, arg, mode[0], clientList);  
     }
-    //else                              
-    //  lMod();
+    else if (mode == "+l" || mode == "-l")                              
+      lMod(mode, channel, arg, owner);
   }
 
   catch (Xception &e)

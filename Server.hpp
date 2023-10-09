@@ -74,5 +74,9 @@ class Server
 };
 
 void    iMod(Channel *channel, Client *Target, String mode);
+void    oMod(Channel *channel, Client *owner, String targetNick, char operation, vector<Client *> clientList);
+void    tMod(Channel *channel, Client *Target, String mode);
+void    kMod(String mode, Channel *channel, String arg, Client*owner);
+void    lMod(String mode, Channel *channel, String arg, Client*owner);
 
 void    sendMsg(String msg, int fd, String nick);
