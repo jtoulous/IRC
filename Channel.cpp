@@ -7,7 +7,6 @@ Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic("
     topic_privilege = true;
     limit_bool = false;
     limit_users = 0;
-    count_users = 0;
 }
 
 Channel::~Channel() {}
@@ -140,4 +139,8 @@ void        Channel::setBoolLimitUsers(bool l) {
 
 bool    Channel::getBoolLimitUsers() {
     return (this->limit_bool);
+}
+
+int         Channel::getSizeUsersList() {
+    return ((int)this->users.size());
 }

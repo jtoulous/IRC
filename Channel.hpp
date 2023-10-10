@@ -29,6 +29,7 @@ class Channel
             bool        getTopicPrivilege();
             int         getLimitUsers();
             bool        getBoolLimitUsers();
+            int         getSizeUsersList();
 
             void        setUserFd(int user_fd);
             void        setAdminFd(int fd);

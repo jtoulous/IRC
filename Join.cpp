@@ -44,7 +44,7 @@ void    Server::join(Client *client, String &entry) {
         /*  Check si il y a une limite d'utilisateur    */
         if (this->channelList[index_chan]->getBoolLimitUsers() == true) {
             /*  Check la limite du nombre des utilisateur en fonction du MODE +l */
-            if (this->channelList[index_chan]->getLimitUsers() == this->channelList[index_chan]->users.size()) {
+            if (this->channelList[index_chan]->getLimitUsers() == (int)this->channelList[index_chan]->getSizeUsersList()) {
                 sendMsg(ERR_CHANNELISFULL(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
                 return ;
             }
