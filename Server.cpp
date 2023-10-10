@@ -104,7 +104,7 @@ void    Server::servTreatClient(Client *client)
         Utils::rmFromServer(client, clientList, channelList, GuestList);
         return ;
     }
-    
+
     while (client->buffer.find('\n') != NPOS)
     {
         entry = client->buffer.substr(0, client->buffer.find('\n'));
@@ -132,7 +132,10 @@ void    Server::servTreatClient(Client *client)
         else if (cmd == "NAMES" || cmd == "names")
             names(client, entry);
         else if (cmd == "QUIT" || cmd == "quit")
+        {
             Utils::rmFromServer(client, clientList, channelList, GuestList);
+            return ;    
+        }
     }
 }
 
