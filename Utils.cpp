@@ -106,7 +106,7 @@ void    Utils::bye(Server *serv)
 
 void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector<Channel *> &channelList, vector<Client *> &GuestClient)
 {
-    Client *tmp;
+    //Client *tmp;
 
     for (size_t i = 0; i < channelList.size(); i++) //checker les channel ou il etait
     {
@@ -149,22 +149,17 @@ void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector
     for (size_t i = 0; i < GuestClient.size(); i++)
     {
         if (client->getFd() == GuestClient[i]->getFd())
-        {
-            //tmp = GuestClient[i];
             GuestClient.erase(GuestClient.begin() + i);
-            //delete tmp;
-        }
     }      
-
 
     for (size_t i = 0; i < clientList.size(); i++)
     {
         if (client->getFd() == clientList[i]->getFd())
         {
-            tmp = clientList[i];
-            clientList.erase(clientList.begin() + i);
             close (client->getFd());
-            delete tmp;
+            std::cout << i << std::endl;
+            delete clientList[i];
+            clientList.erase(clientList.begin() + i);
         }
     }  
 }
