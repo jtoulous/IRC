@@ -157,7 +157,6 @@ void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector
         if (client->getFd() == clientList[i]->getFd())
         {
             close (client->getFd());
-            std::cout << i << std::endl;
             delete clientList[i];
             clientList.erase(clientList.begin() + i);
         }
