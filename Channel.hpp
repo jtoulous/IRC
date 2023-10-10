@@ -46,6 +46,7 @@ class Channel
             bool        FdIsOwner(int fd);
 
             void        removeAdmin(int fd);
+            void        removeFromChannel(int fd);
 
             void        diffuseMsg(String msg, vector<Client *> clientList, int srcFd);
             

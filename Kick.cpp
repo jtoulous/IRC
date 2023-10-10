@@ -44,7 +44,17 @@ void    Server::kick(Client *client, String &entry) {
     }
     /*  Fd du client qui se fait kick   */
     int client_fd = Utils::findClientFd(name_user, clientList);
-    String message_client = ":" + client->getNickname() + " KICK " + this->channelList[index_chan]->getName() + " " + name_user + "\r\n";
+    if (client_fd == -1) 
+    {
+        sendMsg(ERR_NOSUCHNICK(client->getNickname()), client->getFd(), client->getNickname());
+        return ;
+    }
     
-    send (client_fd, message_client.c_str(), message_client.size(), 0);
+    if (channelList[index_chan]->FdIsOwner(client_fd))
+        return; 
+
+    channelList[index_chan]->removeFromChannel(client_fd);
+
+    String message_client = ":" + client->getNickname() + " KICK " + this->channelList[index_chan]->getName() + " " + name_user + "\r\n";
+    send(client_fd, message_client.c_str(), message_client.size(), 0);
 }

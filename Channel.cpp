@@ -149,3 +149,18 @@ void        Channel::setBoolLimitUsers(bool l) {
 bool    Channel::getBoolLimitUsers() {
     return (this->limit_bool);
 }
+
+void    Channel::removeFromChannel(int fd)
+{
+    for (size_t i = 0; i < admin.size(); i++)
+    {
+        if (fd == admin[i])
+            admin.erase(admin.begin() + i);
+    }
+
+    for (size_t i = 0; i < users.size(); i++)
+    {
+        if (fd == users[i])
+            users.erase(users.begin() + i);
+    }
+}
