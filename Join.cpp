@@ -29,7 +29,6 @@ void    Server::join(Client *client, String &entry) {
     String password = entry.substr(i, entry.find('\0', name.size()));
 
     if (CheckChannelName(name) == false) {
-        std::cout << "Channel no create" << std::endl;
         sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd(), client->getNickname());
         return ;
     }
@@ -45,7 +44,7 @@ void    Server::join(Client *client, String &entry) {
         /*  Check si il y a une limite d'utilisateur    */
         if (this->channelList[index_chan]->getBoolLimitUsers() == true) {
             /*  Check la limite du nombre des utilisateur en fonction du MODE +l */
-            if (this->channelList[index_chan]->getLimitUsers() == this->channelList[index_chan]->getCountUsers()) {
+            if (this->channelList[index_chan]->getLimitUsers() == this->channelList[index_chan]->users.size()) {
                 sendMsg(ERR_CHANNELISFULL(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
                 return ;
             }
@@ -63,7 +62,6 @@ void    Server::join(Client *client, String &entry) {
         }
         this->channelList[index_chan]->setUserFd(user_fd);
 
-        this->channelList[index_chan]->addCountUsers();
         SendMessageToClient(user_fd, client, index_chan);
         return ;
     }
@@ -72,9 +70,6 @@ void    Server::join(Client *client, String &entry) {
     this->channelList.push_back(new Channel(name, password, owner_fd));
     index_chan = Utils::findChannelIndex(name, channelList);
 
-    this->channelList[index_chan]->addCountUsers();
-    std::cout << "count user 2 = " << this->channelList[index_chan]->getCountUsers() << std::endl;
-   
     SendMessageToClient(owner_fd, client, index_chan);
 }
 
