@@ -29,7 +29,7 @@ class Channel
             bool        getTopicPrivilege();
             int         getLimitUsers();
             bool        getBoolLimitUsers();
-            int         getCountUsers();
+            int         getSizeUsersList();
 
             void        setUserFd(int user_fd);
             void        setAdminFd(int fd);
@@ -39,7 +39,6 @@ class Channel
             void        setPassword(String pass);
             void        setLimitUsers(int limit);
             void        setBoolLimitUsers(bool l);
-            void        addCountUsers();
 
             bool        FdIsAdmin(int fd);
             bool        FdIsUser(int fd);
@@ -62,5 +61,4 @@ class Channel
             vector<int>    users;
 
             int      limit_users;
-            int      count_users;
 };

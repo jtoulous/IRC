@@ -12,11 +12,10 @@ static void execMode(String mode, Channel *channel, String argsList, Client *own
 
   try
   {
-    if (mode == "+i" || mode == "-i")                                          
-      iMod(channel, owner, mode);             
+    if (mode == "+i" || mode == "-i")                                      
+      iMod(channel, owner, mode);
     else if (mode == "+t" || mode == "-t")                               
       tMod(channel, owner, mode);
-    
     else
     {
       arg = argsList.extractWord(1);
