@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Server.hpp"
+#include <cctype>
+
 
 class Client
 {

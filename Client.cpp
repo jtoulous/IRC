@@ -104,10 +104,31 @@ void    Client::setIdentification(int val)
 
 void    Client::setNickname(String nick)
 {
+    if (nick.size() == 1 && nick[0] == '*'){
+        nickname = nick;
+        return;
+    }    
+    for(size_t i = 0; i != nick.size(); i++){
+        if (isalnum(nick[i]) == false){
+            nickname = "";
+            return;
+        }           
+    }
     nickname = nick;
 }
 
 void    Client::setUsername(String user)
 {
+    if (user.size() == 1 && user[0] == '*'){
+        username = user;
+        return;
+    }
+    for(size_t i = 0; i != user.size(); i++){
+        if (isalnum(user[i]) == false){
+            username = "";
+            return;
+
+        }
+    }   
     username = user;
 }
