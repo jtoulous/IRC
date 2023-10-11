@@ -24,34 +24,38 @@ void  Server::invite(Client *client, String &entry)
 {
   entry.rmWord(1);
   String guest, channel;
+  
   size_t pos = entry.find('#'); //cherche le channel dans le entry
   guest = entry.substr(0, pos - 1); //recupere l'invité
-  channel = findChannelInString(entry); 
-  if (guest.empty() || channel.empty()){ //verifie au'il y est un invité et un channel 
+  channel = findChannelInString(entry);
+
+  if (guest.empty() || channel.empty()) { //verifie au'il y est un invité et un channel 
     sendMsg(ERR_NEEDMOREPARAMS(client->getNickname(), entry), client->getFd(), client->getNickname());
     return;
   }
-  if (IfChannelExist(channel) == false){ //vérifie que le channel existe
+  if (IfChannelExist(channel) == false) { //vérifie que le channel existe
       std::cout << "Channel no exist" << std::endl;
         sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd(), client->getNickname());
         return ;
   }
-  else if (IfGuestExist(guest) == NULL){//vérifie que l'invité est dans le serveur
+  else if (IfGuestExist(guest) == NULL) { //vérifie que l'invité est dans le serveur
     std::cout << "Guest not on server" << std::endl;
     sendMsg(ERR_NOSUCHNICK(guest), client->getFd(), client->getNickname());
   }
-  else{
+  else {
     int index_chan = Utils::findChannelIndex(channel, this->channelList); //cherche le channel dans le vecteur
     if (this->channelList[index_chan]->getOwner() == client->getFd() || this->channelList[index_chan]->FdIsAdmin(client->getFd()) == true){//check si l'invitant et admin ou opérateur
       Client* guestClient = IfGuestExist(guest);//stock l'invité dans un nouveau client
+      
       sendMsg(RPL_INVITING(client->getNickname(), this->channelList[index_chan]->getName(), guestClient->getNickname()), client->getFd(), client->getNickname());//envoie l'invit 
       sendMsg(RPL_GUESTINVITE(client->getNickname(), this->channelList[index_chan]->getName()), guestClient->getFd(), guestClient->getNickname());//envoie l'invit 
+      
       //SendMessageToClient(guestClient->getFd(), guestClient, index_chan);
       this->GuestList.push_back(guestClient); //ajoute l'invité a un vecteur d'invité dans le channel
       std::cout << "Invite OK\n";
       return;
     }
-    else{
+    else {
       sendMsg(ERR_CHANOPRIVSNEEDED(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
       std::cout << "Pas les droits\n";
       return;

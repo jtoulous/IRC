@@ -57,6 +57,7 @@ class Server
                 bool    PasswordExist(String name);
                 bool    GuestExistForJoin(vector<Client *> GuestClient, Client *client);
                 bool    ClientExist(String name);
+                void    EraseGuestAfterJoin(vector<Client *> GuestClient, Client *client);
                 void    SendMessageToClient(int client_fd, Client *client, int index_chan);
                 Client* IfGuestExist(String name);
                 

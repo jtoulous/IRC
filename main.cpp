@@ -12,7 +12,7 @@ void    handleSigInt(int signal)
 
 int main(int argc, char **argv)
 {
-    if (argc > 3 || argc < 1) {
+    if (argc != 3) {
         std::cerr << "Error format : " << GREEN << "./ircserv " << ORANGE << "<port>" << RED << " <password>" << DEFAULT << std::endl;
         return (1);
     }

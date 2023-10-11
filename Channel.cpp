@@ -155,6 +155,8 @@ void    Channel::removeFromChannel(int fd)
         if (fd == users[i])
             users.erase(users.begin() + i);
     }
+}
+
 int         Channel::getSizeUsersList() {
     return ((int)this->users.size());
 }
