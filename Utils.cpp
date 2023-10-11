@@ -140,6 +140,7 @@ void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector
                 channelList[i]->setAdminFd(users[0]);
             else
             {
+                delete (channelList[i]);
                 channelList.erase(channelList.begin() + i);
                 i--;
             }
@@ -160,5 +161,5 @@ void    Utils::rmFromServer(Client *client, vector<Client *> &clientList, vector
             delete clientList[i];
             clientList.erase(clientList.begin() + i);
         }
-    }  
+    }
 }

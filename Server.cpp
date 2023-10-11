@@ -37,8 +37,7 @@ Server::Server(char **argv, int argc)
               << std::endl;
 }
 
-Server::~Server()
-{}
+Server::~Server() {}
 
 
 ////////////////////////////////////////////////

@@ -22,9 +22,10 @@ int main(int argc, char **argv)
         fd_set          sockets;    //structure qui contient tout les fd des clients et le fd d'entree au serv pour l'utilisation de select()
         
         serverPtr = &server;
-        signal(SIGINT, handleSigInt);
+
         while (1)
         {
+            signal(SIGINT, handleSigInt);
             if (server.clientList.size() == 0)  //      si y a personne de connecter au serveur ca reste bloquer dans servEmpty(), jusqua que quelqun se connecte      
                 server.servNewConnection();             //    
             
@@ -47,5 +48,5 @@ int main(int argc, char **argv)
         std::cout << e.what() << std::endl;
     }
 
-    return (69);
+    return (0);
 }
