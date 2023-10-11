@@ -39,7 +39,7 @@ class Server
                 void    servTreatClient(Client *client);
                 int     servReceive(Client *client);
 
-                void    pass(Client *client, String &entry);
+                int     pass(Client *client, String &entry);
                 void    nick(Client *client, String &entry);
                 void    user(Client *client, String &entry);
                 void    kick(Client *client, String &entry);

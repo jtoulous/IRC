@@ -1,19 +1,21 @@
 #include "Server.hpp"
 
-void    Server::pass(Client *client, String &entry)
+int    Server::pass(Client *client, String &entry)
 {
     String  entryPwd = entry.getWord(2);
 
     if (entryPwd == password)
     {
-        client->setLoggedIn(1);
+        client->setLoggedIn(true);
         sendMsg(RPL_WELCOME(client->getNickname()), client->getFd(), client->getNickname());
+        return (1);
     }
-    //else //il degage
-    //{
-    //    close (client->getFd());
-    //    Utils::removeClient(client->getFd(), clientList);
-    //}
+    else //il degage
+    {
+        close (client->getFd());
+        Utils::rmFromServer(client, clientList, channelList, GuestList);
+        return (-1);
+    }
 }
 
 void    Server::nick(Client *client, String &entry)
@@ -39,6 +41,7 @@ void    Server::user(Client *client, String &entry)
     {
         client->setUsername(username);
         sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
+        client->setIdentification(true);
         //sendMsg(RPL_WELCOME(client->getNickname()), client->getFd(), client->getNickname());
     }
 }

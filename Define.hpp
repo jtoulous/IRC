@@ -24,6 +24,7 @@
 #define RPL_DEOPPEDFORCHANNEL(nickname, channel) (":Info PRIVMSG " + channel + " :" + nickname + " was deopped\r\n")
 #define RPL_ALREADYOPERATOR(owner, channel, newOperator) (": 368 " + owner + " " + channel + " " + newOperator + " :User is already operator")
 #define RPL_NOTOPERATOR(owner, channel, victim) (": 368 " + owner + " " + channel + " " + victim + " :User is not an operator")
+#define RPL_NOTICE(client) (": NOTICE " + client + " you are not iidentified\r\n" )
 
 //Error Replies
 /*  :serveur-irc 302 votre-pseudo :utilisateur=statut@hôte */
