@@ -34,12 +34,10 @@ void  Server::invite(Client *client, String &entry)
     return;
   }
   if (IfChannelExist(channel) == false) { //vérifie que le channel existe
-      std::cout << "Channel no exist" << std::endl;
         sendMsg(ERR_NOSUCHCHANNEL(client->getNickname()), client->getFd(), client->getNickname());
         return ;
   }
   else if (IfGuestExist(guest) == NULL) { //vérifie que l'invité est dans le serveur
-    std::cout << "Guest not on server" << std::endl;
     sendMsg(ERR_NOSUCHNICK(guest), client->getFd(), client->getNickname());
   }
   else {
@@ -50,14 +48,11 @@ void  Server::invite(Client *client, String &entry)
       sendMsg(RPL_INVITING(client->getNickname(), this->channelList[index_chan]->getName(), guestClient->getNickname()), client->getFd(), client->getNickname());//envoie l'invit 
       sendMsg(RPL_GUESTINVITE(client->getNickname(), this->channelList[index_chan]->getName()), guestClient->getFd(), guestClient->getNickname());//envoie l'invit 
       
-      //SendMessageToClient(guestClient->getFd(), guestClient, index_chan);
       this->GuestList.push_back(guestClient); //ajoute l'invité a un vecteur d'invité dans le channel
-      std::cout << "Invite OK\n";
       return;
     }
     else {
       sendMsg(ERR_CHANOPRIVSNEEDED(client->getNickname(), this->channelList[index_chan]->getName()), client->getFd(), client->getNickname());
-      std::cout << "Pas les droits\n";
       return;
     }
   }  
@@ -73,9 +68,3 @@ Client* Server::IfGuestExist(String name){
   }
   return NULL;
 }
-
-/*void    Server::SendMessageToClient(int client_fd, Client *client, int index_chan) {
-    
-    String message_client = ":" + client->getNickname() + " INVITE " + this->channelList[index_chan]->getName() + "\r\n";
-    send (client_fd, message_client.c_str(), message_client.size(), 0);
-}*/

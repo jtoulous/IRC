@@ -25,8 +25,8 @@
 #define RPL_ALREADYOPERATOR(owner, channel, newOperator) (": 368 " + owner + " " + channel + " " + newOperator + " :User is already operator")
 #define RPL_NOTOPERATOR(owner, channel, victim) (": 368 " + owner + " " + channel + " " + victim + " :User is not an operator")
 #define RPL_NOTICE(client) (": NOTICE " + client + " you are not iidentified\r\n" )
+
 //Error Replies
-/*  :serveur-irc 302 votre-pseudo :utilisateur=statut@hôte */
 #define RPL_USERHOST(client, user) (": 302 " + client + " :" + user + "\r\n")
 #define RPL_NAMREPLY(channel, client, allClient) (": 353 " + client + " = " + channel + " : " + allClient + "\r\n")
 #define ERR_NOSUCHNICK(client) (": 401 " + client + " :No such nick/channel\r\n")
@@ -38,7 +38,6 @@
 #define ERR_NOTEXTTOSEND(client) (": 412 " + client + ":No text to send\r\n")
 #define ERR_UNKNOWNCOMMAND(client, cmd)(": 421 " + client + " " + cmd + " :Unknown command\r\n")
 #define ERR_ERRONEUSNICKNAME(client, nick)(": 432 " + client + " " + nick + " :Erroneus nickname\r\n")
-//#define ERR_USERNOTINCHANNEL(client, nick, channel)(": 441 " + client + " " + channel + " " + nick + " :They aren't on that channel\r\n")
 #define ERR_USERNOTINCHANNEL(client, nick, channel)(": 482 " + client + " " + channel + " " + nick + " :They aren't on that channel\r\n")
 #define ERR_NOTONCHANNEL(client, channel)(": 442 " + client + " " + channel + " :They aren't on that channel\r\n")
 #define ERR_NOTREGISTERED(client)(": 451 " + client + " :You have not registered\r\n")

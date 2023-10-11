@@ -28,7 +28,4 @@ class Utils
             static void         bye(Server *serv);
     private:
             Utils();
-            //Utils(const Utils &ref);
-            //~Utils();
-            //Utils &operator=(const Utils &ref);
 };

@@ -89,7 +89,7 @@ void  Server::mode(Client *client, String &entry)
       throw (Xception(ERR_NOSUCHCHANNEL(nickClient)));
     channel = channelList[channelIndex];
 
-    if (/*!channel->FdIsAdmin(fdClient) && */!channel->FdIsOwner(fdClient))//pas owner
+    if (!channel->FdIsOwner(fdClient))//pas owner
       throw (Xception(ERR_NOTOWNER(nickClient, channel->getName())));
 
     nbArgs = parseModes(modes, nickClient, tmpEntry, entry);

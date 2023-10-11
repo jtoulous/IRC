@@ -10,7 +10,7 @@ int    Server::pass(Client *client, String &entry)
         sendMsg(RPL_WELCOME(client->getNickname()), client->getFd(), client->getNickname());
         return (1);
     }
-    else //il degage
+    else
     {
         close (client->getFd());
         Utils::rmFromServer(client, clientList, channelList, GuestList);
@@ -50,6 +50,5 @@ void    Server::user(Client *client, String &entry)
             return;
         }
         sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
-        //sendMsg(RPL_WELCOME(client->getNickname()), client->getFd(), client->getNickname());
-    }
+        }
 }

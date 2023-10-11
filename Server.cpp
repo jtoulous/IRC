@@ -158,10 +158,7 @@ int    Server::servReceive(Client *client)
     {
         size = recv(client->getFd(), buff, 100, 0);   
         if (size == -1)
-        {
-            std::cout << "recv problem for " << client->getUsername() << std::endl;
             return (-1);
-        }
         buff[size] = '\0';
         client->buffer = client->buffer + buff;
     }

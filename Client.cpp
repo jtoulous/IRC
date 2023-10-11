@@ -19,14 +19,7 @@ Client::Client(const Client &ref)
         *this = ref;
 }
 
-Client::~Client()
-{
-    //if (fd != -1)
-    //    close (fd);
-}
-
-
-
+Client::~Client() {}
 
 ///////////////////////////////////////////
 //           OPERATORS                   //
