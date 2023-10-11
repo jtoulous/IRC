@@ -28,6 +28,7 @@ void    Server::nick(Client *client, String &entry)
     {
         client->setNickname(nickname);
         sendMsg(RPL_NICKCHANGE(nickname), client->getFd(), client->getNickname());
+        client->setIdentification(true);
     }
 }
 
@@ -41,7 +42,6 @@ void    Server::user(Client *client, String &entry)
     {
         client->setUsername(username);
         sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
-        client->setIdentification(true);
         //sendMsg(RPL_WELCOME(client->getNickname()), client->getFd(), client->getNickname());
     }
 }
