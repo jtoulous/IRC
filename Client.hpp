@@ -33,8 +33,8 @@ class Client
         private:
                 int     nb;
                 int     fd;
-                int     loggedIn;
-                int     identified;
+                bool    loggedIn;
+                bool    identified;
                 String  nickname;
                 String  username;
 };

@@ -12,6 +12,18 @@ bool    Server::GuestExistForJoin(vector<Client *> GuestClient, Client *client) 
     return (false);
 }
 
+void    Server::EraseGuestAfterJoin(vector<Client *> GuestClient, Client *client) {
+
+    (void)GuestClient;
+    for (int i = 0; i < (int)GuestList.size(); i++) {
+        if (GuestList[i]->getNickname() == client->getNickname()) {
+            GuestList.erase(GuestList.begin() + i);
+            return ;
+        }
+    }
+    return ;
+}
+
 /* probleme valeur des variable de client, nickname vide */
 void    Server::join(Client *client, String &entry) {
     
@@ -63,6 +75,9 @@ void    Server::join(Client *client, String &entry) {
         this->channelList[index_chan]->setUserFd(user_fd);
 
         SendMessageToClient(user_fd, client, index_chan);
+        if (GuestExistForJoin(GuestList, client) == true) {
+            EraseGuestAfterJoin(GuestList, client);
+        }
         return ;
     }
     owner_fd = client->getFd();

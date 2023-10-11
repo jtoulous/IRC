@@ -33,6 +33,8 @@ void    Server::kick(Client *client, String &entry) {
     String name_user = entry.substr(i, j);
     
     int index_chan = 0;
+    std::cout << "Name_channel = " << RED << name_chan << std::endl;
+    std::cout << "Name_user = " << RED << name_user << std::endl;
     if (IfChannelExist(name_chan) == true)
         index_chan = Utils::findChannelIndex(name_chan, channelList);
     /* verification des droit */
@@ -46,6 +48,7 @@ void    Server::kick(Client *client, String &entry) {
     int client_fd = Utils::findClientFd(name_user, clientList);
     if (client_fd == -1) 
     {
+        //client_fd = Utils::findClientFd(name_user, GuestList);
         sendMsg(ERR_NOSUCHNICK(client->getNickname()), client->getFd(), client->getNickname());
         return ;
     }

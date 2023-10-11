@@ -112,29 +112,39 @@ void    Server::servTreatClient(Client *client)
         
         cmd = entry.getWord(1);
         if (cmd == "PASS" || cmd == "pass")
-            pass(client, entry);
+        {
+            if (pass(client, entry) == -1)
+                return;
+        }
         else if (cmd == "NICK" || cmd == "nick")
             nick(client, entry);
         else if (cmd == "USER" || cmd == "user")
             user(client, entry);
-        else if (cmd == "JOIN" || cmd == "join")
-            join(client, entry);
-        else if (cmd == "PRIVMSG" || cmd == "privmsg")
-            privMsg(client, entry);
-        else if (cmd == "TOPIC" || cmd == "topic")
-            Topic(client, entry);
-        else if (cmd == "INVITE" || cmd == "invite")
-            invite(client, entry);
-        else if (cmd == "MODE" || cmd == "mode")
-            mode(client, entry);
-        else if (cmd == "KICK" || cmd == "kick")
-            kick(client, entry);
-        else if (cmd == "NAMES" || cmd == "names")
-            names(client, entry);
-        else if (cmd == "QUIT" || cmd == "quit")
+        else if (client->getIdentification() == true && client->getLoggedIn() == true)
+        {    
+            if (cmd == "JOIN" || cmd == "join")
+                join(client, entry);
+            else if (cmd == "PRIVMSG" || cmd == "privmsg")
+                privMsg(client, entry);
+            else if (cmd == "TOPIC" || cmd == "topic")
+                Topic(client, entry);
+            else if (cmd == "INVITE" || cmd == "invite")
+                invite(client, entry);
+            else if (cmd == "MODE" || cmd == "mode")
+                mode(client, entry);
+            else if (cmd == "KICK" || cmd == "kick")
+                kick(client, entry);
+            else if (cmd == "NAMES" || cmd == "names")
+                names(client, entry);
+            else if (cmd == "QUIT" || cmd == "quit")
+            {
+                Utils::rmFromServer(client, clientList, channelList, GuestList);
+                return ;    
+            }
+        }
+        else
         {
-            Utils::rmFromServer(client, clientList, channelList, GuestList);
-            return ;    
+            sendMsg(RPL_NOTICE(client->getNickname()), client->getFd(), client->getNickname());
         }
     }
 }

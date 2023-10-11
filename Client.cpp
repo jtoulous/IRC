@@ -6,11 +6,11 @@
 
 
 Client::Client()
-: fd(-1), loggedIn(0), identified(0), nickname("*")
+: fd(-1), loggedIn(false), identified(false), nickname("*")
 {}
 
 Client::Client(int in_fd)
-: fd(in_fd), loggedIn(0), identified(0), nickname("*")
+: fd(in_fd), loggedIn(false), identified(false), nickname("*")
 {}
 
 Client::Client(const Client &ref)
