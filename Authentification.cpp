@@ -28,7 +28,7 @@ void    Server::nick(Client *client, String &entry)
     {
         client->setNickname(nickname);
         if (client->getNickname() == ""){
-            std::cerr << "Bad definition NickName." << std::endl;
+            sendMsg(ERR_BADNICKNAME(nickname), client->getFd(), nickname);
             return;
         }
         sendMsg(RPL_NICKCHANGE(nickname), client->getFd(), client->getNickname());
@@ -46,7 +46,7 @@ void    Server::user(Client *client, String &entry)
     {
         client->setUsername(username);
         if (client->getUsername() == ""){
-            std::cerr << "Bad definition UserName." << std::endl;
+            sendMsg(ERR_BADUSERNAME(username), client->getFd(), username);
             return;
         }
         sendMsg("Username changed successfully\r\n", client->getFd(), client->getNickname());
