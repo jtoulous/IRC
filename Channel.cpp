@@ -1,5 +1,5 @@
 #include "Channel.hpp"
-
+//a
 Channel::Channel() {}
 
 Channel::Channel(String n, String pwd, int adm): name(n), password(pwd), topic(""), owner(adm) {
